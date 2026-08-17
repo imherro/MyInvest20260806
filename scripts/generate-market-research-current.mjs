@@ -73,7 +73,13 @@ export function parsePbcReportIndex(html) {
     const title = htmlToText(match[2]);
     const dataMonth = parsePbcFinancialReportTitle(title);
     if (!dataMonth) continue;
-    const following = html.slice((match.index ?? 0) + match[0].length, (match.index ?? 0) + match[0].length + 500);
+    const followingStart = (match.index ?? 0) + match[0].length;
+    const remaining = html.slice(followingStart);
+    const nextAnchorOffset = remaining.search(/<a\b/i);
+    const closingItemOffset = remaining.search(/<\/table\s*>/i);
+    const boundaryOffsets = [nextAnchorOffset, closingItemOffset].filter(offset => offset >= 0);
+    const followingEnd = boundaryOffsets.length ? followingStart + Math.min(...boundaryOffsets) : html.length;
+    const following = html.slice(followingStart, followingEnd);
     const dateMatch = following.match(/\b(\d{4}-\d{2}-\d{2})\b/);
     if (!dateMatch) throw new Error(`PBOC listing date missing for ${title}`);
     reports.push({ title, href: validatePbcReportUrl(match[1]), listingDate: dateMatch[1], dataMonth });
@@ -110,7 +116,7 @@ export function parsePbcFinancialReport(html, expectedReport) {
 }
 
 export async function fetchText(url, fetchImpl = fetch) {
-  const response = await fetchImpl(url, { headers: { accept: "text/html;charset=utf-8" } });
+  const response = await fetchImpl(url, { redirect: "error", headers: { accept: "text/html;charset=utf-8" } });
   if (!response.ok) throw new Error(`HTTP ${response.status} from ${url}`);
   const html = await response.text();
   if (!html.trim()) throw new Error(`Empty HTML from ${url}`);

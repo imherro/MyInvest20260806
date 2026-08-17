@@ -245,6 +245,20 @@ test("parses and selects the latest non-future report from a minimal PBOC index 
   assert.equal(selectLatestPublishedReport(reports, "2026-08-17").dataMonth, "202607");
   assert.equal(selectLatestPublishedReport(reports, "2026-07-20").dataMonth, "202606");
   assert.throws(() => selectLatestPublishedReport(reports, "2026-01-01"), /historical pagination is not implemented/);
+  const crossItemDate = `<a href="/diaochatongjisi/116219/116225/a/index.html" title="2026年7月金融统计数据报告">7月</a>
+    <a href="/diaochatongjisi/116219/116225/b/index.html" title="2026年8月金融统计数据报告">8月</a><span>2026-09-14</span>`;
+  assert.throws(() => parsePbcReportIndex(crossItemDate), /listing date missing for 2026年7月/);
+});
+
+test("PBOC HTML requests reject every HTTP redirect", async () => {
+  const { fetchText } = await marketGenerator();
+  let requestOptions;
+  const fakeFetch = async (_url, options) => {
+    requestOptions = options;
+    return { ok: true, text: async () => "<html>official fixture</html>" };
+  };
+  assert.equal(await fetchText("https://www.pbc.gov.cn/example", fakeFetch), "<html>official fixture</html>");
+  assert.equal(requestOptions.redirect, "error");
 });
 
 test("validates PBOC article identity, publication date and signed M1/M2 values", async () => {
@@ -302,4 +316,7 @@ test("keeps unsupported certainty language out of the user interface", async () 
   const client = await builtClientText();
   const current = await currentMarketData();
   assert.doesNotMatch(`${client}\n${JSON.stringify(current)}`, /牛市概率|熊市概率|置信度/);
+  const source = await appSource();
+  assert.doesNotMatch(source, /最新可用数据/);
+  assert.match(source, /<span>信息截止<\/span><b>\{display\(data\.asOf\)\}<\/b>/);
 });
