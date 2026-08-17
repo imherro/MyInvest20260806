@@ -66,3 +66,11 @@ Tushare财务指标同一公司、同公告日、同报告期可能因后续财�
 ```powershell
 node scripts/generate-market-research-history-f1.mjs --as-of 2026-08-17
 ```
+
+## F2 同样本盈利扩散历史
+
+阶段04H新增F2月度盈利扩散PIT历史。F2重新请求与F1相同的季度财务指标，并直接复用04G的revision规范化和current的 `buildF1Snapshot`，随后要求重建出的F1样本与checked-in F1历史逐点一致，再读取同一有效样本的 `positiveCount` / `positiveShare`。只有 `netprofit_yoy > 0` 计为正增长，0和负增长不计，缺失值不进入分母。当前只代表盈利扩散，不代表完整盈利质量。
+
+```powershell
+node scripts/generate-market-research-history-f2.mjs --as-of 2026-08-17
+```
