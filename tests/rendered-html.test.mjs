@@ -41,6 +41,11 @@ async function currentMarketData() {
   return JSON.parse(raw);
 }
 
+async function currentMarketGuard() {
+  const moduleUrl = new URL("../app/market-research-types.ts", import.meta.url);
+  return (await import(moduleUrl.href)).isMarketResearchCurrent;
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -63,7 +68,9 @@ test("loads current market research from the only current.json source", async ()
 
 test("current.json contains the complete F/L/B market research contract", async () => {
   const current = await currentMarketData();
+  const isMarketResearchCurrent = await currentMarketGuard();
 
+  assert.equal(isMarketResearchCurrent(current), true);
   assert.equal(current.schemaVersion, 1);
   assert.equal(current.source.mode, "manual_sample");
   assert.deepEqual(current.cards.map((card) => card.code), ["F", "L", "B"]);
@@ -112,6 +119,27 @@ test("defines explicit missing-value behavior", async () => {
   const source = await appSource();
   assert.match(source, /value \?\? "—"/);
   assert.match(source, /isMarketResearchCurrent/);
+});
+
+test("rejects current.json shapes that could crash the market page", async () => {
+  const current = await currentMarketData();
+  const isMarketResearchCurrent = await currentMarketGuard();
+
+  const missingSource = structuredClone(current);
+  delete missingSource.source;
+  assert.equal(isMarketResearchCurrent(missingSource), false);
+
+  const invalidStates = structuredClone(current);
+  invalidStates.diagnosis.states = "F 偏强";
+  assert.equal(isMarketResearchCurrent(invalidStates), false);
+
+  const missingCard = structuredClone(current);
+  missingCard.cards = missingCard.cards.slice(0, 2);
+  assert.equal(isMarketResearchCurrent(missingCard), false);
+
+  const wrongComponentCount = structuredClone(current);
+  wrongComponentCount.components.F = wrongComponentCount.components.F.slice(0, 3);
+  assert.equal(isMarketResearchCurrent(wrongComponentCount), false);
 });
 
 test("keeps unsupported certainty language out of the user interface", async () => {
