@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:41:48.514Z",
+  "generatedAt": "2026-08-17T08:47:32.654Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -54,8 +54,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
-    "diagnosis": "当前仅F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余3项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
+    "diagnosis": "当前仅F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余2项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -68,7 +68,7 @@
       "title": "长牛底座",
       "score": null,
       "status": "数据接入中",
-      "coverage": "1/4",
+      "coverage": "2/4",
       "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
@@ -178,9 +178,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "78.6%",
+    "coverage": "85.7%",
     "pitStatus": "待接入",
-    "warning": "仅F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余3项待接入"
+    "warning": "仅F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余2项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -189,6 +189,13 @@
       "title": "F1已披露样本盈利同比代理快照生成",
       "detail": "已披露样本归母净利润同比中位数 +21.4% / 有值 512家 / 缺失 0家",
       "group": "F1",
+      "tone": "blue"
+    },
+    {
+      "date": "08-17",
+      "title": "F2已披露样本盈利扩散代理快照生成",
+      "detail": "已披露样本归母净利润同比正增长占比 68.9% / 正增长 353家 / 有值 512家",
+      "group": "F2",
       "tone": "blue"
     },
     {
@@ -282,15 +289,15 @@
         "id": "F2",
         "name": "盈利扩散与质量",
         "score": null,
-        "raw": null,
+        "raw": "已披露样本归母净利润同比正增长占比 68.9% / 正增长 353家 / 有值 512家",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-06",
+        "release": "2026-08-17",
+        "coverage": "512/512家已披露样本",
+        "quality": "A",
+        "note": "当前仅复用F1同一批截至信息截止日可验证公告日的公司最新记录，以netprofit_yoy>0的公司占有值样本比例作为F2第一阶段盈利扩散代理；netprofit_yoy为0或负数均不计为正增长，空值不进入分母。当前仅覆盖盈利扩散，尚未覆盖盈利质量，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F2评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "F3",

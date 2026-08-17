@@ -138,7 +138,7 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real F1, L1-L5 and B1-B5 snapshots with 3 explicitly pending indicators", async () => {
+test("contains real F1-F2, L1-L5 and B1-B5 snapshots with 2 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
@@ -152,6 +152,7 @@ test("contains real F1, L1-L5 and B1-B5 snapshots with 3 explicitly pending indi
   const l4 = current.components.L.find((item) => item.id === "L4");
   const l5 = current.components.L.find((item) => item.id === "L5");
   const f1 = current.components.F.find((item) => item.id === "F1");
+  const f2 = current.components.F.find((item) => item.id === "F2");
 
   assert.equal(f1.dataStatus, "generated");
   assert.match(f1.raw, /已披露样本归母净利润同比中位数 [+-]?\d+\.\d% \/ 有值 \d+家 \/ 缺失 \d+家/);
@@ -165,6 +166,18 @@ test("contains real F1, L1-L5 and B1-B5 snapshots with 3 explicitly pending indi
   assert.match(f1.note, /公告日期缺失记录已排除/);
   assert.match(f1.note, /不是全A总利润增长率/);
   assert.match(f1.note, /不计算F1评分/);
+  assert.equal(f2.dataStatus, "generated");
+  assert.match(f2.raw, /已披露样本归母净利润同比正增长占比 \d+\.\d% \/ 正增长 \d+家 \/ 有值 \d+家/);
+  assert.equal(f2.period, f1.period);
+  assert.equal(f2.release, f1.release);
+  assert.equal(f2.score, null);
+  assert.equal(f2.position, null);
+  assert.equal(f2.trend, null);
+  assert.match(f2.note, /第一阶段盈利扩散代理/);
+  assert.match(f2.note, /仅覆盖盈利扩散/);
+  assert.match(f2.note, /尚未覆盖盈利质量/);
+  assert.match(f2.note, /空值不进入分母/);
+  assert.match(f2.note, /不计算F2评分/);
 
   assert.equal(b1.dataStatus, "generated");
   assert.match(b1.raw, /沪深300盈利收益率 \d+\.\d{2}%；创业板指盈利收益率 \d+\.\d{2}%/);
@@ -267,19 +280,19 @@ test("contains real F1, L1-L5 and B1-B5 snapshots with 3 explicitly pending indi
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 11);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 3);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 12);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 2);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "78.6%");
+  assert.equal(current.dataQuality.coverage, "85.7%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["1/4", "5/5", "5/5"]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["2/4", "5/5", "5/5"]);
   assert.equal(current.cards.find((card) => card.code === "F").updatedAt, f1.release);
   assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l4.release, l5.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only eleven indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only twelve indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -322,7 +335,7 @@ test("selects the latest common trading date and builds mixed-frequency current 
     pbc: { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" },
     mof: { ...l4, href: "https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm" },
   };
-  const f1 = { targetPeriod: "20260630", reportedCount: 3, validCount: 2, missingCount: 1, medianNetProfitYoy: 6.25, latestAnnDate: "20260815" };
+  const f1 = { targetPeriod: "20260630", reportedCount: 3, validCount: 2, missingCount: 1, medianNetProfitYoy: 6.25, latestAnnDate: "20260815", positiveCount: 1, positiveShare: 50 };
   const generated = buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
@@ -338,10 +351,13 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.equal(b2.observedCount, 2);
   assert.equal(b2.observedMarketCapWan, 100000000);
   assert.equal(b2.marketCapCoverage, 100);
-  assert.equal(generated.dataQuality.coverage, "78.6%");
+  assert.equal(generated.dataQuality.coverage, "85.7%");
   assert.match(generated.components.F[0].raw, /已披露样本归母净利润同比中位数 \+6\.3% \/ 有值 2家 \/ 缺失 1家/);
   assert.equal(generated.components.F[0].period, "2026-06");
   assert.equal(generated.components.F[0].release, "2026-08-15");
+  assert.match(generated.components.F[1].raw, /正增长占比 50\.0% \/ 正增长 1家 \/ 有值 2家/);
+  assert.equal(generated.components.F[1].period, generated.components.F[0].period);
+  assert.equal(generated.components.F[1].release, generated.components.F[0].release);
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.match(generated.components.B[0].raw, /沪深300盈利收益率 6\.96%；创业板指盈利收益率 2\.25%/);
@@ -360,9 +376,10 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
   assert.match(generated.components.L[3].raw, /12\.1047万亿元（同比 \+4\.7%）.*14\.3329万亿元（同比 \+1\.5%）/);
   assert.match(generated.components.L[4].raw, /美国10年实际国债收益率 2\.41%/);
-  assert.match(generated.diagnosis.headline, /F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
-  assert.match(generated.dataQuality.warning, /其余3项/);
+  assert.match(generated.diagnosis.headline, /F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
+  assert.match(generated.dataQuality.warning, /其余2项/);
   assert.equal(generated.recentEvents.some((event) => event.group === "F1" && event.detail === generated.components.F[0].raw), true);
+  assert.equal(generated.recentEvents.some((event) => event.group === "F2" && event.detail === generated.components.F[1].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);
@@ -408,10 +425,17 @@ test("builds F1 from latest disclosed company records and validates median input
   ];
   assert.deepEqual(buildF1Snapshot(rows, "2026-08-17", target), {
     targetPeriod: target, reportedCount: 5, validCount: 2, missingCount: 3,
-    medianNetProfitYoy: 10, latestAnnDate: "20260810", excludedMissingAnnDateCount: 3,
+    medianNetProfitYoy: 10, latestAnnDate: "20260810", excludedMissingAnnDateCount: 3, positiveCount: 1, positiveShare: 50,
   });
   const odd = rows.concat({ ts_code: "H", ann_date: "20260811", end_date: target, netprofit_yoy: 5 });
   assert.equal(buildF1Snapshot(odd, "2026-08-17", target).medianNetProfitYoy, 5);
+  const breadthRows = [-10, 0, 5, 20].map((netprofit_yoy, index) => ({ ts_code: `P${index}`, ann_date: "20260801", end_date: target, netprofit_yoy }));
+  assert.equal(buildF1Snapshot(breadthRows, "2026-08-17", target).positiveCount, 2);
+  assert.equal(buildF1Snapshot(breadthRows, "2026-08-17", target).positiveShare, 50);
+  const nonPositive = buildF1Snapshot(breadthRows.slice(0, 2), "2026-08-17", target);
+  assert.equal(nonPositive.positiveCount, 0);
+  assert.equal(nonPositive.positiveShare, 0);
+  assert.equal(buildF1Snapshot(breadthRows.slice(2), "2026-08-17", target).positiveShare, 100);
   const missingAndValue = buildF1Snapshot([
     { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: null },
     { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: 15.7025 },

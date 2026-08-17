@@ -383,11 +383,16 @@ export function buildF1Snapshot(rows, requestedAsOf, targetPeriod) {
   const values = validRecords.map(record => record.growth).sort((a, b) => a - b);
   const validCount = values.length;
   if (!validCount) throw new Error("Tushare fina_indicator_vip contains no valid netprofit_yoy sample");
+  const positiveCount = values.filter(value => value > 0).length;
+  const positiveShare = positiveCount / validCount * 100;
+  if (positiveCount < 0 || positiveCount > validCount || !Number.isFinite(positiveShare) || positiveShare < 0 || positiveShare > 100) {
+    throw new Error("F2 reported earnings-breadth result is invalid");
+  }
   const middle = Math.floor(validCount / 2);
   const medianNetProfitYoy = validCount % 2 ? values[middle] : (values[middle - 1] + values[middle]) / 2;
   const latestAnnDate = validRecords.map(record => record.annDate).sort().at(-1);
   if (!Number.isFinite(medianNetProfitYoy) || !latestAnnDate) throw new Error("F1 reported earnings-growth result is invalid");
-  return { targetPeriod, reportedCount, validCount, missingCount: reportedCount - validCount, medianNetProfitYoy, latestAnnDate, excludedMissingAnnDateCount };
+  return { targetPeriod, reportedCount, validCount, missingCount: reportedCount - validCount, medianNetProfitYoy, latestAnnDate, excludedMissingAnnDateCount, positiveCount, positiveShare };
 }
 
 export function buildL2Snapshot(rows, report, official) {
@@ -509,14 +514,15 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
   const l5Raw = `美国10年实际国债收益率 ${l5.y10.toFixed(2)}%`;
   const f1GrowthText = `${f1.medianNetProfitYoy > 0 ? "+" : ""}${f1.medianNetProfitYoy.toFixed(1)}%`;
   const f1Raw = `已披露样本归母净利润同比中位数 ${f1GrowthText} / 有值 ${f1.validCount}家 / 缺失 ${f1.missingCount}家`;
+  const f2Raw = `已披露样本归母净利润同比正增长占比 ${f1.positiveShare.toFixed(1)}% / 正增长 ${f1.positiveCount}家 / 有值 ${f1.validCount}家`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
-  components.F = components.F.map(indicator => indicator.id === "F1" ? {
-    ...indicator, raw: f1Raw, period: displayMonth(f1.targetPeriod), release: displayDate(f1.latestAnnDate),
-    coverage: `${f1.validCount}/${f1.reportedCount}家已披露样本`, quality: "A",
-    note: "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。",
-    dataStatus: "generated",
-  } : indicator);
+  components.F = components.F.map(indicator => {
+    const shared = { period: displayMonth(f1.targetPeriod), release: displayDate(f1.latestAnnDate), coverage: `${f1.validCount}/${f1.reportedCount}家已披露样本`, quality: "A", dataStatus: "generated" };
+    if (indicator.id === "F1") return { ...indicator, ...shared, raw: f1Raw, note: "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。" };
+    if (indicator.id === "F2") return { ...indicator, ...shared, raw: f2Raw, note: "当前仅复用F1同一批截至信息截止日可验证公告日的公司最新记录，以netprofit_yoy>0的公司占有值样本比例作为F2第一阶段盈利扩散代理；netprofit_yoy为0或负数均不计为正增长，空值不进入分母。当前仅覆盖盈利扩散，尚未覆盖盈利质量，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F2评分。" };
+    return indicator;
+  });
   components.L = components.L.map(indicator => {
     if (indicator.id === "L1") return { ...indicator, raw: l1Raw, period: l1.date, release: l1.date, coverage: "4/4名义期限", quality: "A", note: "当前仅接入SHIBOR隔夜、1周、3月、1年真实名义资金利率，作为L1第一阶段名义利率代理；尚未接入CPI/通胀预期和实际利率，也不计算历史分位、趋势和L1评分。", dataStatus: "generated" };
     if (indicator.id === "L2") return {
@@ -570,6 +576,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
     recentHistory: [],
     recentEvents: [
       { date: displayDate(f1.latestAnnDate).slice(5), title: "F1已披露样本盈利同比代理快照生成", detail: f1Raw, group: "F1", tone: "blue" },
+      { date: displayDate(f1.latestAnnDate).slice(5), title: "F2已披露样本盈利扩散代理快照生成", detail: f2Raw, group: "F2", tone: "blue" },
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
@@ -622,6 +629,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
   console.log(`F1: ${current.components.F.find(indicator => indicator.id === "F1").raw} (${f1.reportedCount} reported, ${f1.excludedMissingAnnDateCount} missing ann_date excluded, target ${targetPeriod}, latest ${f1.latestAnnDate})`);
+  console.log(`F2: ${current.components.F.find(indicator => indicator.id === "F2").raw}`);
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
