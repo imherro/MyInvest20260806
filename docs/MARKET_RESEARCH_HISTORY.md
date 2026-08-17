@@ -90,3 +90,11 @@ node scripts/generate-market-research-history-l1.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-l5.mjs --as-of 2026-08-17
 ```
+
+## F4 月度沪深300 ETF资金池规模代理历史
+
+04K新增F4月度沪深300 ETF历史有值样本总规模代理。B3仅提供月末asOf；另用沪深300 `index_dailybasic` 得到严格早于asOf的前一交易日，再按该交易日查询 `etf_share_size`。ETF候选同时纳入 `etf_basic` 当前状态L和D，以避免只使用当前存续ETF造成明显幸存者偏差。由于ETF基础接口没有提供历史benchmark-vintage与ETF退市日期，本历史只报告当日实际有规模记录的 `observedCount`，不虚构eligible/missing覆盖率。规模数据按交易日次日可得处理。当前仍只是沪深300 ETF被动权益资金池代理，不代表全部长期资金，也不是资金流量。
+
+```powershell
+node scripts/generate-market-research-history-f4.mjs --as-of 2026-08-17
+```

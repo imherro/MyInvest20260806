@@ -34,6 +34,8 @@ F3直接复用B2同一 `daily_basic` 有值样本的市值加权TTM股息率结�
 
 F4只表示沪深300ETF被动权益资金池的绝对规模，不代表全部长期资金、养老金、险资、社保基金、全部公募权益资金或资金净流入；基础列表也不是完整历史PIT股票池，不计算趋势、分位或评分。
 
+阶段04K的F4历史不增加API种类，继续使用 `etf_basic`、`index_dailybasic`、`etf_share_size`。`etf_basic` 支持L/D/P状态及 `list_date`；历史候选取当前L与D状态的沪深300ETF，但历史benchmark变更没有单独跟踪，因此不是完整ETF基准指数vintage数据库。`etf_share_size.total_size` 单位万元、单次最多5000条，上一交易日数据约次日8:30更新。
+
 ## L1 利率与实际利率——第一阶段名义资金利率代理
 
 - 提供方：Tushare Pro

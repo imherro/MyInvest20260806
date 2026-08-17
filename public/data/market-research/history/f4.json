@@ -1,0 +1,1296 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T10:47:47.415Z",
+  "requestedAsOf": "2026-08-17",
+  "indicator": {
+    "id": "F4",
+    "name": "长期资金",
+    "frequency": "monthly",
+    "asOfRule": "prior_trade_date_etf_size_available_by_monthly_eod"
+  },
+  "range": {
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31"
+  },
+  "source": {
+    "provider": "Tushare Pro",
+    "scheduleInput": "public/data/market-research/history/b3.json",
+    "indexCode": "000300.SH",
+    "classificationStatuses": [
+      "L",
+      "D"
+    ],
+    "classificationApi": "etf_basic",
+    "classificationFields": [
+      "ts_code",
+      "index_code",
+      "list_date",
+      "list_status"
+    ],
+    "priorDateApi": "index_dailybasic",
+    "priorDateFields": [
+      "trade_date"
+    ],
+    "sizeApi": "etf_share_size",
+    "sizeFields": [
+      "trade_date",
+      "ts_code",
+      "total_size"
+    ],
+    "releasePolicy": "trade_date_plus_one_calendar_day",
+    "classificationPolicy": "current_etf_basic_metadata_L_plus_D"
+  },
+  "points": [
+    {
+      "asOf": "2015-01-31",
+      "periodDate": "2015-01-30",
+      "releaseDate": "2015-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 4,
+      "totalSizeWan": 9666869.7551,
+      "totalSizeTrillion": 0.09666869755100001
+    },
+    {
+      "asOf": "2015-02-28",
+      "periodDate": "2015-02-27",
+      "releaseDate": "2015-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 4,
+      "totalSizeWan": 10281769.668500002,
+      "totalSizeTrillion": 0.10281769668500003
+    },
+    {
+      "asOf": "2015-03-31",
+      "periodDate": "2015-03-30",
+      "releaseDate": "2015-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 4,
+      "totalSizeWan": 10023801.447700001,
+      "totalSizeTrillion": 0.10023801447700001
+    },
+    {
+      "asOf": "2015-04-30",
+      "periodDate": "2015-04-29",
+      "releaseDate": "2015-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 5,
+      "totalSizeWan": 9108337.2799,
+      "totalSizeTrillion": 0.091083372799
+    },
+    {
+      "asOf": "2015-05-31",
+      "periodDate": "2015-05-29",
+      "releaseDate": "2015-05-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 5,
+      "totalSizeWan": 10309961.5942,
+      "totalSizeTrillion": 0.103099615942
+    },
+    {
+      "asOf": "2015-06-30",
+      "periodDate": "2015-06-29",
+      "releaseDate": "2015-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 4,
+      "totalSizeWan": 6386605.211499999,
+      "totalSizeTrillion": 0.06386605211499999
+    },
+    {
+      "asOf": "2015-07-31",
+      "periodDate": "2015-07-30",
+      "releaseDate": "2015-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 5,
+      "totalSizeWan": 8260863.374299999,
+      "totalSizeTrillion": 0.082608633743
+    },
+    {
+      "asOf": "2015-08-31",
+      "periodDate": "2015-08-28",
+      "releaseDate": "2015-08-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 5,
+      "totalSizeWan": 6629141.9394000005,
+      "totalSizeTrillion": 0.066291419394
+    },
+    {
+      "asOf": "2015-09-30",
+      "periodDate": "2015-09-29",
+      "releaseDate": "2015-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6118868.0372,
+      "totalSizeTrillion": 0.061188680372
+    },
+    {
+      "asOf": "2015-10-31",
+      "periodDate": "2015-10-30",
+      "releaseDate": "2015-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6838846.7256,
+      "totalSizeTrillion": 0.068388467256
+    },
+    {
+      "asOf": "2015-11-30",
+      "periodDate": "2015-11-27",
+      "releaseDate": "2015-11-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6522308.5188,
+      "totalSizeTrillion": 0.06522308518799999
+    },
+    {
+      "asOf": "2015-12-31",
+      "periodDate": "2015-12-30",
+      "releaseDate": "2015-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6649149.853300001,
+      "totalSizeTrillion": 0.066491498533
+    },
+    {
+      "asOf": "2016-01-31",
+      "periodDate": "2016-01-29",
+      "releaseDate": "2016-01-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5747779.291999999,
+      "totalSizeTrillion": 0.05747779291999999
+    },
+    {
+      "asOf": "2016-02-29",
+      "periodDate": "2016-02-26",
+      "releaseDate": "2016-02-27",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5813479.3092,
+      "totalSizeTrillion": 0.058134793092
+    },
+    {
+      "asOf": "2016-03-31",
+      "periodDate": "2016-03-30",
+      "releaseDate": "2016-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6363074.8637999995,
+      "totalSizeTrillion": 0.063630748638
+    },
+    {
+      "asOf": "2016-04-30",
+      "periodDate": "2016-04-29",
+      "releaseDate": "2016-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6205583.4851,
+      "totalSizeTrillion": 0.062055834851000004
+    },
+    {
+      "asOf": "2016-05-31",
+      "periodDate": "2016-05-30",
+      "releaseDate": "2016-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6081502.0542,
+      "totalSizeTrillion": 0.060815020542
+    },
+    {
+      "asOf": "2016-06-30",
+      "periodDate": "2016-06-29",
+      "releaseDate": "2016-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6058745.1844999995,
+      "totalSizeTrillion": 0.060587451844999994
+    },
+    {
+      "asOf": "2016-07-31",
+      "periodDate": "2016-07-29",
+      "releaseDate": "2016-07-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5901629.171200001,
+      "totalSizeTrillion": 0.059016291712000006
+    },
+    {
+      "asOf": "2016-08-31",
+      "periodDate": "2016-08-30",
+      "releaseDate": "2016-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5822457.0347,
+      "totalSizeTrillion": 0.058224570346999995
+    },
+    {
+      "asOf": "2016-09-30",
+      "periodDate": "2016-09-29",
+      "releaseDate": "2016-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5776425.8296,
+      "totalSizeTrillion": 0.057764258296
+    },
+    {
+      "asOf": "2016-10-31",
+      "periodDate": "2016-10-28",
+      "releaseDate": "2016-10-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5886115.5326,
+      "totalSizeTrillion": 0.058861155325999996
+    },
+    {
+      "asOf": "2016-11-30",
+      "periodDate": "2016-11-29",
+      "releaseDate": "2016-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6081765.6949000005,
+      "totalSizeTrillion": 0.060817656949
+    },
+    {
+      "asOf": "2016-12-31",
+      "periodDate": "2016-12-30",
+      "releaseDate": "2016-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5752908.256,
+      "totalSizeTrillion": 0.05752908256
+    },
+    {
+      "asOf": "2017-01-31",
+      "periodDate": "2017-01-26",
+      "releaseDate": "2017-01-27",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5962798.906099999,
+      "totalSizeTrillion": 0.059627989060999996
+    },
+    {
+      "asOf": "2017-02-28",
+      "periodDate": "2017-02-27",
+      "releaseDate": "2017-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6027753.309,
+      "totalSizeTrillion": 0.06027753309
+    },
+    {
+      "asOf": "2017-03-31",
+      "periodDate": "2017-03-30",
+      "releaseDate": "2017-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5850943.424699999,
+      "totalSizeTrillion": 0.058509434246999996
+    },
+    {
+      "asOf": "2017-04-30",
+      "periodDate": "2017-04-28",
+      "releaseDate": "2017-04-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5876169.4689,
+      "totalSizeTrillion": 0.058761694689
+    },
+    {
+      "asOf": "2017-05-31",
+      "periodDate": "2017-05-26",
+      "releaseDate": "2017-05-27",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 5978643.5822,
+      "totalSizeTrillion": 0.059786435822
+    },
+    {
+      "asOf": "2017-06-30",
+      "periodDate": "2017-06-29",
+      "releaseDate": "2017-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6113080.780099999,
+      "totalSizeTrillion": 0.06113080780099999
+    },
+    {
+      "asOf": "2017-07-31",
+      "periodDate": "2017-07-28",
+      "releaseDate": "2017-07-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6094733.1392,
+      "totalSizeTrillion": 0.060947331392
+    },
+    {
+      "asOf": "2017-08-31",
+      "periodDate": "2017-08-30",
+      "releaseDate": "2017-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6135291.778399999,
+      "totalSizeTrillion": 0.06135291778399999
+    },
+    {
+      "asOf": "2017-09-30",
+      "periodDate": "2017-09-29",
+      "releaseDate": "2017-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6111915.953499999,
+      "totalSizeTrillion": 0.06111915953499999
+    },
+    {
+      "asOf": "2017-10-31",
+      "periodDate": "2017-10-30",
+      "releaseDate": "2017-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6348634.9186,
+      "totalSizeTrillion": 0.063486349186
+    },
+    {
+      "asOf": "2017-11-30",
+      "periodDate": "2017-11-29",
+      "releaseDate": "2017-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6384310.8988,
+      "totalSizeTrillion": 0.063843108988
+    },
+    {
+      "asOf": "2017-12-31",
+      "periodDate": "2017-12-29",
+      "releaseDate": "2017-12-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 6,
+      "totalSizeWan": 6392837.7047,
+      "totalSizeTrillion": 0.063928377047
+    },
+    {
+      "asOf": "2018-01-31",
+      "periodDate": "2018-01-30",
+      "releaseDate": "2018-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 7,
+      "totalSizeWan": 7220252.046700001,
+      "totalSizeTrillion": 0.07220252046700001
+    },
+    {
+      "asOf": "2018-02-28",
+      "periodDate": "2018-02-27",
+      "releaseDate": "2018-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 7194759.7933,
+      "totalSizeTrillion": 0.071947597933
+    },
+    {
+      "asOf": "2018-03-31",
+      "periodDate": "2018-03-30",
+      "releaseDate": "2018-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 6885281.160399999,
+      "totalSizeTrillion": 0.06885281160399999
+    },
+    {
+      "asOf": "2018-04-30",
+      "periodDate": "2018-04-27",
+      "releaseDate": "2018-04-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 6775771.966599999,
+      "totalSizeTrillion": 0.06775771966599999
+    },
+    {
+      "asOf": "2018-05-31",
+      "periodDate": "2018-05-30",
+      "releaseDate": "2018-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 6711696.5888,
+      "totalSizeTrillion": 0.067116965888
+    },
+    {
+      "asOf": "2018-06-30",
+      "periodDate": "2018-06-29",
+      "releaseDate": "2018-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 6717964.645500001,
+      "totalSizeTrillion": 0.067179646455
+    },
+    {
+      "asOf": "2018-07-31",
+      "periodDate": "2018-07-30",
+      "releaseDate": "2018-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 7204233.6085,
+      "totalSizeTrillion": 0.072042336085
+    },
+    {
+      "asOf": "2018-08-31",
+      "periodDate": "2018-08-30",
+      "releaseDate": "2018-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 7102776.6263999995,
+      "totalSizeTrillion": 0.071027766264
+    },
+    {
+      "asOf": "2018-09-30",
+      "periodDate": "2018-09-28",
+      "releaseDate": "2018-09-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 7960779.060400001,
+      "totalSizeTrillion": 0.07960779060400001
+    },
+    {
+      "asOf": "2018-10-31",
+      "periodDate": "2018-10-30",
+      "releaseDate": "2018-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 8821644.2202,
+      "totalSizeTrillion": 0.088216442202
+    },
+    {
+      "asOf": "2018-11-30",
+      "periodDate": "2018-11-29",
+      "releaseDate": "2018-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 8755646.808899999,
+      "totalSizeTrillion": 0.08755646808899999
+    },
+    {
+      "asOf": "2018-12-31",
+      "periodDate": "2018-12-28",
+      "releaseDate": "2018-12-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 8777355.7984,
+      "totalSizeTrillion": 0.087773557984
+    },
+    {
+      "asOf": "2019-01-31",
+      "periodDate": "2019-01-30",
+      "releaseDate": "2019-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 9227253.582899999,
+      "totalSizeTrillion": 0.09227253582899998
+    },
+    {
+      "asOf": "2019-02-28",
+      "periodDate": "2019-02-27",
+      "releaseDate": "2019-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 9876689.069199998,
+      "totalSizeTrillion": 0.09876689069199998
+    },
+    {
+      "asOf": "2019-03-31",
+      "periodDate": "2019-03-29",
+      "releaseDate": "2019-03-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 9511518.1851,
+      "totalSizeTrillion": 0.095115181851
+    },
+    {
+      "asOf": "2019-04-30",
+      "periodDate": "2019-04-29",
+      "releaseDate": "2019-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 10235690.9118,
+      "totalSizeTrillion": 0.10235690911800001
+    },
+    {
+      "asOf": "2019-05-31",
+      "periodDate": "2019-05-30",
+      "releaseDate": "2019-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 10336951.890499998,
+      "totalSizeTrillion": 0.10336951890499999
+    },
+    {
+      "asOf": "2019-06-30",
+      "periodDate": "2019-06-28",
+      "releaseDate": "2019-06-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 11270207.1592,
+      "totalSizeTrillion": 0.11270207159199999
+    },
+    {
+      "asOf": "2019-07-31",
+      "periodDate": "2019-07-30",
+      "releaseDate": "2019-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 8,
+      "totalSizeWan": 11336791.572199998,
+      "totalSizeTrillion": 0.11336791572199999
+    },
+    {
+      "asOf": "2019-08-31",
+      "periodDate": "2019-08-30",
+      "releaseDate": "2019-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 9,
+      "totalSizeWan": 11526616.0693,
+      "totalSizeTrillion": 0.115266160693
+    },
+    {
+      "asOf": "2019-09-30",
+      "periodDate": "2019-09-27",
+      "releaseDate": "2019-09-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 9,
+      "totalSizeWan": 11280764.574199999,
+      "totalSizeTrillion": 0.11280764574199999
+    },
+    {
+      "asOf": "2019-10-31",
+      "periodDate": "2019-10-30",
+      "releaseDate": "2019-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 9,
+      "totalSizeWan": 11046511.123900002,
+      "totalSizeTrillion": 0.11046511123900002
+    },
+    {
+      "asOf": "2019-11-30",
+      "periodDate": "2019-11-29",
+      "releaseDate": "2019-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 10,
+      "totalSizeWan": 10967299.189299999,
+      "totalSizeTrillion": 0.10967299189299999
+    },
+    {
+      "asOf": "2019-12-31",
+      "periodDate": "2019-12-30",
+      "releaseDate": "2019-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 13,
+      "totalSizeWan": 13271405.080000002,
+      "totalSizeTrillion": 0.1327140508
+    },
+    {
+      "asOf": "2020-01-31",
+      "periodDate": "2020-01-23",
+      "releaseDate": "2020-01-24",
+      "revisionStatus": "not_tracked",
+      "observedCount": 14,
+      "totalSizeWan": 13049538.241600001,
+      "totalSizeTrillion": 0.130495382416
+    },
+    {
+      "asOf": "2020-02-29",
+      "periodDate": "2020-02-28",
+      "releaseDate": "2020-02-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 15,
+      "totalSizeWan": 12348021.409699999,
+      "totalSizeTrillion": 0.12348021409699998
+    },
+    {
+      "asOf": "2020-03-31",
+      "periodDate": "2020-03-30",
+      "releaseDate": "2020-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 16,
+      "totalSizeWan": 13103285.5455,
+      "totalSizeTrillion": 0.13103285545499999
+    },
+    {
+      "asOf": "2020-04-30",
+      "periodDate": "2020-04-29",
+      "releaseDate": "2020-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 16,
+      "totalSizeWan": 13829778.846599998,
+      "totalSizeTrillion": 0.13829778846599997
+    },
+    {
+      "asOf": "2020-05-31",
+      "periodDate": "2020-05-29",
+      "releaseDate": "2020-05-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 17,
+      "totalSizeWan": 13477163.446399998,
+      "totalSizeTrillion": 0.13477163446399998
+    },
+    {
+      "asOf": "2020-06-30",
+      "periodDate": "2020-06-29",
+      "releaseDate": "2020-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 17,
+      "totalSizeWan": 12400937.827100001,
+      "totalSizeTrillion": 0.12400937827100002
+    },
+    {
+      "asOf": "2020-07-31",
+      "periodDate": "2020-07-30",
+      "releaseDate": "2020-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 17,
+      "totalSizeWan": 13087744.402899997,
+      "totalSizeTrillion": 0.13087744402899998
+    },
+    {
+      "asOf": "2020-08-31",
+      "periodDate": "2020-08-28",
+      "releaseDate": "2020-08-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 17,
+      "totalSizeWan": 13114885.967500001,
+      "totalSizeTrillion": 0.131148859675
+    },
+    {
+      "asOf": "2020-09-30",
+      "periodDate": "2020-09-29",
+      "releaseDate": "2020-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 17,
+      "totalSizeWan": 12817639.999400003,
+      "totalSizeTrillion": 0.12817639999400002
+    },
+    {
+      "asOf": "2020-10-31",
+      "periodDate": "2020-10-30",
+      "releaseDate": "2020-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 12979873.9647,
+      "totalSizeTrillion": 0.129798739647
+    },
+    {
+      "asOf": "2020-11-30",
+      "periodDate": "2020-11-27",
+      "releaseDate": "2020-11-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 13715101.584800001,
+      "totalSizeTrillion": 0.13715101584800002
+    },
+    {
+      "asOf": "2020-12-31",
+      "periodDate": "2020-12-30",
+      "releaseDate": "2020-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 13739044.4132,
+      "totalSizeTrillion": 0.137390444132
+    },
+    {
+      "asOf": "2021-01-31",
+      "periodDate": "2021-01-29",
+      "releaseDate": "2021-01-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 13651996.875099996,
+      "totalSizeTrillion": 0.13651996875099995
+    },
+    {
+      "asOf": "2021-02-28",
+      "periodDate": "2021-02-26",
+      "releaseDate": "2021-02-27",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 12930719.1199,
+      "totalSizeTrillion": 0.129307191199
+    },
+    {
+      "asOf": "2021-03-31",
+      "periodDate": "2021-03-30",
+      "releaseDate": "2021-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 12422348.096400002,
+      "totalSizeTrillion": 0.12422348096400002
+    },
+    {
+      "asOf": "2021-04-30",
+      "periodDate": "2021-04-29",
+      "releaseDate": "2021-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 12538065.236100001,
+      "totalSizeTrillion": 0.12538065236100002
+    },
+    {
+      "asOf": "2021-05-31",
+      "periodDate": "2021-05-28",
+      "releaseDate": "2021-05-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 14673285.820499998,
+      "totalSizeTrillion": 0.14673285820499998
+    },
+    {
+      "asOf": "2021-06-30",
+      "periodDate": "2021-06-29",
+      "releaseDate": "2021-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 13628828.8335,
+      "totalSizeTrillion": 0.136288288335
+    },
+    {
+      "asOf": "2021-07-31",
+      "periodDate": "2021-07-30",
+      "releaseDate": "2021-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 11281361.023799999,
+      "totalSizeTrillion": 0.11281361023799999
+    },
+    {
+      "asOf": "2021-08-31",
+      "periodDate": "2021-08-30",
+      "releaseDate": "2021-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 10974420.104299996,
+      "totalSizeTrillion": 0.10974420104299996
+    },
+    {
+      "asOf": "2021-09-30",
+      "periodDate": "2021-09-29",
+      "releaseDate": "2021-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 11520680.8197,
+      "totalSizeTrillion": 0.11520680819700001
+    },
+    {
+      "asOf": "2021-10-31",
+      "periodDate": "2021-10-29",
+      "releaseDate": "2021-10-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 11757791.531799998,
+      "totalSizeTrillion": 0.11757791531799998
+    },
+    {
+      "asOf": "2021-11-30",
+      "periodDate": "2021-11-29",
+      "releaseDate": "2021-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 18,
+      "totalSizeWan": 12058787.25,
+      "totalSizeTrillion": 0.1205878725
+    },
+    {
+      "asOf": "2021-12-31",
+      "periodDate": "2021-12-30",
+      "releaseDate": "2021-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 14880878.306399997,
+      "totalSizeTrillion": 0.14880878306399997
+    },
+    {
+      "asOf": "2022-01-31",
+      "periodDate": "2022-01-28",
+      "releaseDate": "2022-01-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 14042471.8827,
+      "totalSizeTrillion": 0.140424718827
+    },
+    {
+      "asOf": "2022-02-28",
+      "periodDate": "2022-02-25",
+      "releaseDate": "2022-02-26",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 13154141.406299997,
+      "totalSizeTrillion": 0.13154141406299996
+    },
+    {
+      "asOf": "2022-03-31",
+      "periodDate": "2022-03-30",
+      "releaseDate": "2022-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 11966300.751100004,
+      "totalSizeTrillion": 0.11966300751100004
+    },
+    {
+      "asOf": "2022-04-30",
+      "periodDate": "2022-04-29",
+      "releaseDate": "2022-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 12685997.545099998,
+      "totalSizeTrillion": 0.12685997545099997
+    },
+    {
+      "asOf": "2022-05-31",
+      "periodDate": "2022-05-30",
+      "releaseDate": "2022-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 12098259.595999997,
+      "totalSizeTrillion": 0.12098259595999997
+    },
+    {
+      "asOf": "2022-06-30",
+      "periodDate": "2022-06-29",
+      "releaseDate": "2022-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 12425686.229600001,
+      "totalSizeTrillion": 0.12425686229600001
+    },
+    {
+      "asOf": "2022-07-31",
+      "periodDate": "2022-07-29",
+      "releaseDate": "2022-07-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 11416766.7139,
+      "totalSizeTrillion": 0.11416766713899999
+    },
+    {
+      "asOf": "2022-08-31",
+      "periodDate": "2022-08-30",
+      "releaseDate": "2022-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 11460627.683699999,
+      "totalSizeTrillion": 0.11460627683699999
+    },
+    {
+      "asOf": "2022-09-30",
+      "periodDate": "2022-09-29",
+      "releaseDate": "2022-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 12150289.656499999,
+      "totalSizeTrillion": 0.12150289656499999
+    },
+    {
+      "asOf": "2022-10-31",
+      "periodDate": "2022-10-28",
+      "releaseDate": "2022-10-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 11971998.779199997,
+      "totalSizeTrillion": 0.11971998779199997
+    },
+    {
+      "asOf": "2022-11-30",
+      "periodDate": "2022-11-29",
+      "releaseDate": "2022-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 14108533.783200001,
+      "totalSizeTrillion": 0.141085337832
+    },
+    {
+      "asOf": "2022-12-31",
+      "periodDate": "2022-12-30",
+      "releaseDate": "2022-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 20,
+      "totalSizeWan": 16179113.760200001,
+      "totalSizeTrillion": 0.161791137602
+    },
+    {
+      "asOf": "2023-01-31",
+      "periodDate": "2023-01-30",
+      "releaseDate": "2023-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 18046744.295900002,
+      "totalSizeTrillion": 0.18046744295900002
+    },
+    {
+      "asOf": "2023-02-28",
+      "periodDate": "2023-02-27",
+      "releaseDate": "2023-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 15443595.465800002,
+      "totalSizeTrillion": 0.15443595465800003
+    },
+    {
+      "asOf": "2023-03-31",
+      "periodDate": "2023-03-30",
+      "releaseDate": "2023-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 15065063.662999999,
+      "totalSizeTrillion": 0.15065063663
+    },
+    {
+      "asOf": "2023-04-30",
+      "periodDate": "2023-04-28",
+      "releaseDate": "2023-04-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 15202875.509700006,
+      "totalSizeTrillion": 0.15202875509700006
+    },
+    {
+      "asOf": "2023-05-31",
+      "periodDate": "2023-05-30",
+      "releaseDate": "2023-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 14715807.930800004,
+      "totalSizeTrillion": 0.14715807930800004
+    },
+    {
+      "asOf": "2023-06-30",
+      "periodDate": "2023-06-29",
+      "releaseDate": "2023-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 21,
+      "totalSizeWan": 15468236.348599998,
+      "totalSizeTrillion": 0.15468236348599998
+    },
+    {
+      "asOf": "2023-07-31",
+      "periodDate": "2023-07-28",
+      "releaseDate": "2023-07-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 18156326.336299997,
+      "totalSizeTrillion": 0.18156326336299997
+    },
+    {
+      "asOf": "2023-08-31",
+      "periodDate": "2023-08-30",
+      "releaseDate": "2023-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 23736572.998700004,
+      "totalSizeTrillion": 0.23736572998700003
+    },
+    {
+      "asOf": "2023-09-30",
+      "periodDate": "2023-09-28",
+      "releaseDate": "2023-09-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 23800285.4415,
+      "totalSizeTrillion": 0.23800285441500002
+    },
+    {
+      "asOf": "2023-10-31",
+      "periodDate": "2023-10-30",
+      "releaseDate": "2023-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 25029433.8954,
+      "totalSizeTrillion": 0.250294338954
+    },
+    {
+      "asOf": "2023-11-30",
+      "periodDate": "2023-11-29",
+      "releaseDate": "2023-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 24239693.757899996,
+      "totalSizeTrillion": 0.24239693757899997
+    },
+    {
+      "asOf": "2023-12-31",
+      "periodDate": "2023-12-29",
+      "releaseDate": "2023-12-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 28240161.313599996,
+      "totalSizeTrillion": 0.282401613136
+    },
+    {
+      "asOf": "2024-01-31",
+      "periodDate": "2024-01-30",
+      "releaseDate": "2024-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 38295972.653,
+      "totalSizeTrillion": 0.38295972653
+    },
+    {
+      "asOf": "2024-02-29",
+      "periodDate": "2024-02-28",
+      "releaseDate": "2024-02-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 51899980.162399985,
+      "totalSizeTrillion": 0.5189998016239998
+    },
+    {
+      "asOf": "2024-03-31",
+      "periodDate": "2024-03-29",
+      "releaseDate": "2024-03-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 56751499.06650001,
+      "totalSizeTrillion": 0.5675149906650001
+    },
+    {
+      "asOf": "2024-04-30",
+      "periodDate": "2024-04-29",
+      "releaseDate": "2024-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 58681801.324599996,
+      "totalSizeTrillion": 0.5868180132459999
+    },
+    {
+      "asOf": "2024-05-31",
+      "periodDate": "2024-05-30",
+      "releaseDate": "2024-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 22,
+      "totalSizeWan": 57365604.00890001,
+      "totalSizeTrillion": 0.5736560400890001
+    },
+    {
+      "asOf": "2024-06-30",
+      "periodDate": "2024-06-28",
+      "releaseDate": "2024-06-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 23,
+      "totalSizeWan": 59102638.18920001,
+      "totalSizeTrillion": 0.5910263818920001
+    },
+    {
+      "asOf": "2024-07-31",
+      "periodDate": "2024-07-30",
+      "releaseDate": "2024-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 23,
+      "totalSizeWan": 70271999.3261,
+      "totalSizeTrillion": 0.7027199932610001
+    },
+    {
+      "asOf": "2024-08-31",
+      "periodDate": "2024-08-30",
+      "releaseDate": "2024-08-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 24,
+      "totalSizeWan": 78294188.8075,
+      "totalSizeTrillion": 0.7829418880750001
+    },
+    {
+      "asOf": "2024-09-30",
+      "periodDate": "2024-09-27",
+      "releaseDate": "2024-09-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 25,
+      "totalSizeWan": 94887990.97269998,
+      "totalSizeTrillion": 0.9488799097269999
+    },
+    {
+      "asOf": "2024-10-31",
+      "periodDate": "2024-10-30",
+      "releaseDate": "2024-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 25,
+      "totalSizeWan": 100565339.11539999,
+      "totalSizeTrillion": 1.0056533911539998
+    },
+    {
+      "asOf": "2024-11-30",
+      "periodDate": "2024-11-29",
+      "releaseDate": "2024-11-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 26,
+      "totalSizeWan": 98297615.20320003,
+      "totalSizeTrillion": 0.9829761520320003
+    },
+    {
+      "asOf": "2024-12-31",
+      "periodDate": "2024-12-30",
+      "releaseDate": "2024-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 26,
+      "totalSizeWan": 100402380.40869997,
+      "totalSizeTrillion": 1.0040238040869998
+    },
+    {
+      "asOf": "2025-01-31",
+      "periodDate": "2025-01-27",
+      "releaseDate": "2025-01-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 26,
+      "totalSizeWan": 97210711.21529998,
+      "totalSizeTrillion": 0.9721071121529998
+    },
+    {
+      "asOf": "2025-02-28",
+      "periodDate": "2025-02-27",
+      "releaseDate": "2025-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 26,
+      "totalSizeWan": 98374516.23409998,
+      "totalSizeTrillion": 0.9837451623409998
+    },
+    {
+      "asOf": "2025-03-31",
+      "periodDate": "2025-03-28",
+      "releaseDate": "2025-03-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 27,
+      "totalSizeWan": 94161833.84319998,
+      "totalSizeTrillion": 0.9416183384319998
+    },
+    {
+      "asOf": "2025-04-30",
+      "periodDate": "2025-04-29",
+      "releaseDate": "2025-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 28,
+      "totalSizeWan": 103856294.76139998,
+      "totalSizeTrillion": 1.038562947614
+    },
+    {
+      "asOf": "2025-05-31",
+      "periodDate": "2025-05-30",
+      "releaseDate": "2025-05-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 28,
+      "totalSizeWan": 104477183.29210001,
+      "totalSizeTrillion": 1.044771832921
+    },
+    {
+      "asOf": "2025-06-30",
+      "periodDate": "2025-06-27",
+      "releaseDate": "2025-06-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 105300594.85180001,
+      "totalSizeTrillion": 1.0530059485180001
+    },
+    {
+      "asOf": "2025-07-31",
+      "periodDate": "2025-07-30",
+      "releaseDate": "2025-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 109291549.68019998,
+      "totalSizeTrillion": 1.0929154968019998
+    },
+    {
+      "asOf": "2025-08-31",
+      "periodDate": "2025-08-29",
+      "releaseDate": "2025-08-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 117732234.77760004,
+      "totalSizeTrillion": 1.1773223477760004
+    },
+    {
+      "asOf": "2025-09-30",
+      "periodDate": "2025-09-29",
+      "releaseDate": "2025-09-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 119367916.85049997,
+      "totalSizeTrillion": 1.1936791685049997
+    },
+    {
+      "asOf": "2025-10-31",
+      "periodDate": "2025-10-30",
+      "releaseDate": "2025-10-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 121760518.10570002,
+      "totalSizeTrillion": 1.217605181057
+    },
+    {
+      "asOf": "2025-11-30",
+      "periodDate": "2025-11-28",
+      "releaseDate": "2025-11-29",
+      "revisionStatus": "not_tracked",
+      "observedCount": 29,
+      "totalSizeWan": 116828958.54980002,
+      "totalSizeTrillion": 1.1682895854980002
+    },
+    {
+      "asOf": "2025-12-31",
+      "periodDate": "2025-12-30",
+      "releaseDate": "2025-12-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 119194147.25630002,
+      "totalSizeTrillion": 1.1919414725630002
+    },
+    {
+      "asOf": "2026-01-31",
+      "periodDate": "2026-01-30",
+      "releaseDate": "2026-01-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 61125403.44609999,
+      "totalSizeTrillion": 0.6112540344609999
+    },
+    {
+      "asOf": "2026-02-28",
+      "periodDate": "2026-02-27",
+      "releaseDate": "2026-02-28",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 59014141.94330001,
+      "totalSizeTrillion": 0.5901414194330001
+    },
+    {
+      "asOf": "2026-03-31",
+      "periodDate": "2026-03-30",
+      "releaseDate": "2026-03-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 55902093.3636,
+      "totalSizeTrillion": 0.559020933636
+    },
+    {
+      "asOf": "2026-04-30",
+      "periodDate": "2026-04-29",
+      "releaseDate": "2026-04-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 55232898.3695,
+      "totalSizeTrillion": 0.5523289836949999
+    },
+    {
+      "asOf": "2026-05-31",
+      "periodDate": "2026-05-29",
+      "releaseDate": "2026-05-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 41217056.08510001,
+      "totalSizeTrillion": 0.4121705608510001
+    },
+    {
+      "asOf": "2026-06-30",
+      "periodDate": "2026-06-29",
+      "releaseDate": "2026-06-30",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 27638666.936800003,
+      "totalSizeTrillion": 0.27638666936800005
+    },
+    {
+      "asOf": "2026-07-31",
+      "periodDate": "2026-07-30",
+      "releaseDate": "2026-07-31",
+      "revisionStatus": "not_tracked",
+      "observedCount": 30,
+      "totalSizeWan": 28700467.659399997,
+      "totalSizeTrillion": 0.287004676594
+    }
+  ]
+}

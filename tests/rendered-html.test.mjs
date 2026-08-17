@@ -140,6 +140,14 @@ async function l5HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l5.json", import.meta.url)), "utf8"));
 }
 
+async function f4HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url).href);
+}
+
+async function f4HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f4.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -1259,6 +1267,49 @@ test("missing-token L5 failure preserves L5, L1, F1-F3, B1-B5 and current files"
   const paths = ["../public/data/market-research/history/l5.json", "../public/data/market-research/history/l1.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
   const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l5.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("builds F4 month ends from L plus D candidates on strictly prior index dates", async () => {
+  const { buildCandidateBasics, buildF4MonthlyHistory } = await f4HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-07-31", endAsOf: "2026-07-31" }, points: [{ asOf: "2026-07-31" }] };
+  const basics = buildCandidateBasics(new Map([["L", [{ ts_code: "A.SH", index_code: "000300.SH", list_date: "20100101", list_status: "L" }]], ["D", [{ ts_code: "B.SH", index_code: "000300.SH", list_date: "20110101", list_status: "D" }]]]));
+  const indexRows = ["20260729", "20260730", "20260731"].map(trade_date => ({ trade_date }));
+  const shares = new Map([["20260730", [{ trade_date: "20260730", ts_code: "A.SH", total_size: 60000000 }, { trade_date: "20260730", ts_code: "B.SH", total_size: 40000000 }, { trade_date: "20260730", ts_code: "C.SH", total_size: 999000000 }]]]);
+  const result = buildF4MonthlyHistory(schedule, indexRows, basics, shares, "2026-08-17");
+  assert.deepEqual(result.points[0], { asOf: "2026-07-31", periodDate: "2026-07-30", releaseDate: "2026-07-31", revisionStatus: "not_tracked", observedCount: 2, totalSizeWan: 100000000, totalSizeTrillion: 1 });
+  shares.get("20260730")[1].total_size = null; const missing = buildF4MonthlyHistory(schedule, indexRows, basics, shares, "2026-08-17"); assert.equal(missing.points[0].observedCount, 1); assert.equal(missing.points[0].totalSizeWan, 60000000);
+  shares.get("20260730")[1].total_size = 0; const zero = buildF4MonthlyHistory(schedule, indexRows, basics, shares, "2026-08-17"); assert.equal(zero.points[0].observedCount, 2); assert.equal(zero.points[0].totalSizeWan, 60000000);
+  for (const invalid of [-1, Number.NaN, Infinity, "bad"]) { shares.get("20260730")[1].total_size = invalid; assert.throws(() => buildF4MonthlyHistory(schedule, indexRows, basics, shares, "2026-08-17"), /invalid total_size/); }
+});
+
+test("validates F4 ETF basics, index dates and exact-date share batches", async () => {
+  const { buildCandidateBasics, validateIndexDateRows, validateShareDateBatch, buildF4MonthlyHistory } = await f4HistoryGenerator();
+  const basic = (ts_code, list_status = "L", list_date = "20200101", index_code = "000300.SH") => ({ ts_code, index_code, list_date, list_status }); const batches = rows => new Map([["L", rows], ["D", []]]);
+  assert.equal(buildCandidateBasics(batches([basic("A.SH")])).size, 1); assert.equal(buildCandidateBasics(new Map([["L", [basic("A.SH")]], ["D", [basic("B.SH", "D")]]])).size, 2);
+  assert.throws(() => buildCandidateBasics(batches([basic("A.SH", "L", "20200101", "BAD")])), /wrong index_code/); assert.throws(() => buildCandidateBasics(batches([basic("A.SH", "D")])), /list_status/); assert.throws(() => buildCandidateBasics(batches([basic("")])), /empty ts_code/); assert.throws(() => buildCandidateBasics(batches([basic("A.SH"), basic("A.SH")])), /duplicate/); assert.throws(() => buildCandidateBasics(batches([basic("A.SH", "L", "")])), /invalid list_date/); assert.throws(() => buildCandidateBasics(batches(Array.from({ length: 5000 }, (_, i) => basic(`A${i}.SH`)))), /5000-row limit/);
+  assert.equal(validateIndexDateRows([{ trade_date: "20260730" }], "20260731").length, 1); assert.throws(() => validateIndexDateRows([], "20260731"), /no index dates/); assert.throws(() => validateIndexDateRows([{ trade_date: "20260230" }], "20260731"), /invalid/); assert.throws(() => validateIndexDateRows([{ trade_date: "20260801" }], "20260731"), /outside/); assert.throws(() => validateIndexDateRows([{ trade_date: "20260730" }, { trade_date: "20260730" }], "20260731"), /duplicate/); assert.throws(() => validateIndexDateRows(Array.from({ length: 3000 }, () => ({ trade_date: "20260730" })), "20260731"), /3000-row limit/);
+  const share = (ts_code = "A.SH", trade_date = "20260730") => ({ ts_code, trade_date, total_size: 1 }); assert.equal(validateShareDateBatch([share()], "20260730").length, 1); assert.throws(() => validateShareDateBatch([], "20260730"), /no rows/); assert.throws(() => validateShareDateBatch([share("A.SH", "20260729")], "20260730"), /outside/); assert.throws(() => validateShareDateBatch([share("")], "20260730"), /empty ts_code/); assert.throws(() => validateShareDateBatch([share(), share()], "20260730"), /duplicate/); assert.throws(() => validateShareDateBatch(Array.from({ length: 5000 }, (_, i) => share(`A${i}.SH`)), "20260730"), /5000-row limit/);
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-07-31", endAsOf: "2026-07-31" }, points: [{ asOf: "2026-07-31" }] }; const earlyBasic = buildCandidateBasics(batches([basic("A.SH", "L", "20260731")])); assert.throws(() => buildF4MonthlyHistory(schedule, [{ trade_date: "20260730" }], earlyBasic, new Map([["20260730", [share()]]]), "2026-08-17"), /predates list_date/);
+});
+
+test("F4 generator uses exactly 2 plus 1 plus 139 sequential API requests", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("etf_basic"/g) ?? []).length, 1); assert.match(source, /for \(const listStatus of \["L", "D"\]\)/); assert.match(source, /\{ index_code: INDEX_CODE, list_status: listStatus \}, BASIC_FIELDS/); assert.match(source, /const BASIC_FIELDS = "ts_code,index_code,list_date,list_status"/);
+  assert.equal((source.match(/callTushare\("index_dailybasic"/g) ?? []).length, 1); assert.match(source, /\{ ts_code: INDEX_CODE, start_date: INDEX_START_DATE, end_date: endDate \}, "trade_date"/); assert.equal((source.match(/callTushare\("etf_share_size"/g) ?? []).length, 1); assert.match(source, /for \(const tradeDate of priorTradeDates\)/); assert.match(source, /\{ trade_date: tradeDate \}, SIZE_FIELDS/); assert.match(source, /const SIZE_FIELDS = "trade_date,ts_code,total_size"/); assert.doesNotMatch(source, /callTushare\("(?:fund_share|fund_basic|fund_nav|etf_daily|trade_cal|stock_basic)"|Promise\.all|buildF4Snapshot/);
+  const b3 = await b3HistoryData(); assert.equal(b3.points.length, 139);
+});
+
+test("checked-in F4 history is a complete prior-date ETF pool series", async () => {
+  const [f4, b3] = await Promise.all([f4HistoryData(), b3HistoryData()]); assert.equal(f4.points.length, 139); assert.equal(f4.requestedAsOf, b3.requestedAsOf); assert.deepEqual(f4.range, b3.range);
+  assert.deepEqual({ asOf: f4.points[0].asOf, periodDate: f4.points[0].periodDate, releaseDate: f4.points[0].releaseDate }, { asOf: "2015-01-31", periodDate: "2015-01-30", releaseDate: "2015-01-31" }); assert.deepEqual({ asOf: f4.points.at(-1).asOf, periodDate: f4.points.at(-1).periodDate, releaseDate: f4.points.at(-1).releaseDate }, { asOf: "2026-07-31", periodDate: "2026-07-30", releaseDate: "2026-07-31" });
+  for (let index = 0; index < f4.points.length; index += 1) { const point = f4.points[index]; assert.equal(point.asOf, b3.points[index].asOf); assert.ok(point.periodDate < point.asOf); assert.equal(new Date(new Date(`${point.periodDate}T00:00:00Z`).valueOf() + 86400000).toISOString().slice(0, 10), point.releaseDate); assert.ok(point.releaseDate <= point.asOf); assert.equal(point.revisionStatus, "not_tracked"); assert.ok(Number.isInteger(point.observedCount) && point.observedCount > 0); assert.ok(Number.isFinite(point.totalSizeWan) && point.totalSizeWan > 0); assert.ok(Number.isFinite(point.totalSizeTrillion) && point.totalSizeTrillion > 0); assert.ok(Math.abs(point.totalSizeTrillion - point.totalSizeWan / 100000000) < 1e-12); }
+  assert.doesNotMatch(JSON.stringify(f4), /"(?:eligibleCount|missingCount|coverage|netFlow|shareChange|capitalFlow|pension|insurance|foreignCapital|score|position|trend|percentile|zScore|normalized|signal|state)"/i);
+});
+
+test("missing-token F4 failure preserves F4, L1, L5, F1-F3, B1-B5 and current files", async () => {
+  const paths = ["../public/data/market-research/history/f4.json", "../public/data/market-research/history/l1.json", "../public/data/market-research/history/l5.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {
