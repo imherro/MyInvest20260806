@@ -1,0 +1,2401 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T09:31:24.421Z",
+  "requestedAsOf": "2026-08-17",
+  "indicator": {
+    "id": "B5",
+    "name": "投机热度",
+    "frequency": "monthly",
+    "asOfRule": "aligned_to_b3_monthly_eod"
+  },
+  "range": {
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31"
+  },
+  "source": {
+    "provider": "Tushare Pro",
+    "api": "index_dailybasic",
+    "fields": [
+      "ts_code",
+      "trade_date",
+      "turnover_rate",
+      "turnover_rate_f"
+    ],
+    "dateScheduleInput": "public/data/market-research/history/b3.json",
+    "instruments": [
+      {
+        "code": "000300.SH",
+        "name": "沪深300"
+      },
+      {
+        "code": "399006.SZ",
+        "name": "创业板指"
+      }
+    ]
+  },
+  "points": [
+    {
+      "asOf": "2015-01-31",
+      "periodDate": "2015-01-30",
+      "releaseDate": "2015-01-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.91,
+          "turnoverRateF": 3.08
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.44,
+          "turnoverRateF": 3.38
+        }
+      },
+      "relativeFreeTurnover": 1.0974025974025974
+    },
+    {
+      "asOf": "2015-02-28",
+      "periodDate": "2015-02-27",
+      "releaseDate": "2015-02-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.02,
+          "turnoverRateF": 3.44
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.72,
+          "turnoverRateF": 5.17
+        }
+      },
+      "relativeFreeTurnover": 1.502906976744186
+    },
+    {
+      "asOf": "2015-03-31",
+      "periodDate": "2015-03-31",
+      "releaseDate": "2015-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.98,
+          "turnoverRateF": 6.62
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.98,
+          "turnoverRateF": 5.67
+        }
+      },
+      "relativeFreeTurnover": 0.8564954682779456
+    },
+    {
+      "asOf": "2015-04-30",
+      "periodDate": "2015-04-30",
+      "releaseDate": "2015-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.8,
+          "turnoverRateF": 5.99
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.31,
+          "turnoverRateF": 5.95
+        }
+      },
+      "relativeFreeTurnover": 0.993322203672788
+    },
+    {
+      "asOf": "2015-05-31",
+      "periodDate": "2015-05-29",
+      "releaseDate": "2015-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.91,
+          "turnoverRateF": 6.23
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.4,
+          "turnoverRateF": 6.03
+        }
+      },
+      "relativeFreeTurnover": 0.9678972712680578
+    },
+    {
+      "asOf": "2015-06-30",
+      "periodDate": "2015-06-30",
+      "releaseDate": "2015-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 2.27,
+          "turnoverRateF": 7.29
+        },
+        "399006.SZ": {
+          "turnoverRate": 5.5,
+          "turnoverRateF": 7.62
+        }
+      },
+      "relativeFreeTurnover": 1.045267489711934
+    },
+    {
+      "asOf": "2015-07-31",
+      "periodDate": "2015-07-31",
+      "releaseDate": "2015-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.95,
+          "turnoverRateF": 3.02
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.8,
+          "turnoverRateF": 5.26
+        }
+      },
+      "relativeFreeTurnover": 1.7417218543046358
+    },
+    {
+      "asOf": "2015-08-31",
+      "periodDate": "2015-08-31",
+      "releaseDate": "2015-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.19,
+          "turnoverRateF": 3.77
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.27,
+          "turnoverRateF": 4.58
+        }
+      },
+      "relativeFreeTurnover": 1.2148541114058355
+    },
+    {
+      "asOf": "2015-09-30",
+      "periodDate": "2015-09-30",
+      "releaseDate": "2015-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.33,
+          "turnoverRateF": 1.04
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.42,
+          "turnoverRateF": 3.39
+        }
+      },
+      "relativeFreeTurnover": 3.2596153846153846
+    },
+    {
+      "asOf": "2015-10-31",
+      "periodDate": "2015-10-30",
+      "releaseDate": "2015-10-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.58,
+          "turnoverRateF": 1.84
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.6,
+          "turnoverRateF": 4.98
+        }
+      },
+      "relativeFreeTurnover": 2.706521739130435
+    },
+    {
+      "asOf": "2015-11-30",
+      "periodDate": "2015-11-30",
+      "releaseDate": "2015-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.72,
+          "turnoverRateF": 2.28
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.48,
+          "turnoverRateF": 6.17
+        }
+      },
+      "relativeFreeTurnover": 2.706140350877193
+    },
+    {
+      "asOf": "2015-12-31",
+      "periodDate": "2015-12-31",
+      "releaseDate": "2015-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.42,
+          "turnoverRateF": 1.32
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.59,
+          "turnoverRateF": 3.55
+        }
+      },
+      "relativeFreeTurnover": 2.689393939393939
+    },
+    {
+      "asOf": "2016-01-31",
+      "periodDate": "2016-01-29",
+      "releaseDate": "2016-01-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.47,
+          "turnoverRateF": 1.45
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.53,
+          "turnoverRateF": 3.47
+        }
+      },
+      "relativeFreeTurnover": 2.393103448275862
+    },
+    {
+      "asOf": "2016-02-29",
+      "periodDate": "2016-02-29",
+      "releaseDate": "2016-02-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.53,
+          "turnoverRateF": 1.65
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.6,
+          "turnoverRateF": 3.57
+        }
+      },
+      "relativeFreeTurnover": 2.1636363636363636
+    },
+    {
+      "asOf": "2016-03-31",
+      "periodDate": "2016-03-31",
+      "releaseDate": "2016-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.5,
+          "turnoverRateF": 1.55
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.49,
+          "turnoverRateF": 4.8
+        }
+      },
+      "relativeFreeTurnover": 3.096774193548387
+    },
+    {
+      "asOf": "2016-04-30",
+      "periodDate": "2016-04-29",
+      "releaseDate": "2016-04-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.24,
+          "turnoverRateF": 0.74
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.46,
+          "turnoverRateF": 2.01
+        }
+      },
+      "relativeFreeTurnover": 2.716216216216216
+    },
+    {
+      "asOf": "2016-05-31",
+      "periodDate": "2016-05-31",
+      "releaseDate": "2016-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.56,
+          "turnoverRateF": 1.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.42,
+          "turnoverRateF": 4.73
+        }
+      },
+      "relativeFreeTurnover": 2.7028571428571433
+    },
+    {
+      "asOf": "2016-06-30",
+      "periodDate": "2016-06-30",
+      "releaseDate": "2016-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.32,
+          "turnoverRateF": 0.98
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.8,
+          "turnoverRateF": 3.85
+        }
+      },
+      "relativeFreeTurnover": 3.928571428571429
+    },
+    {
+      "asOf": "2016-07-31",
+      "periodDate": "2016-07-29",
+      "releaseDate": "2016-07-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.35,
+          "turnoverRateF": 1.06
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.61,
+          "turnoverRateF": 2.19
+        }
+      },
+      "relativeFreeTurnover": 2.0660377358490565
+    },
+    {
+      "asOf": "2016-08-31",
+      "periodDate": "2016-08-31",
+      "releaseDate": "2016-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.32,
+          "turnoverRateF": 0.95
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.4,
+          "turnoverRateF": 1.9
+        }
+      },
+      "relativeFreeTurnover": 2
+    },
+    {
+      "asOf": "2016-09-30",
+      "periodDate": "2016-09-30",
+      "releaseDate": "2016-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.18,
+          "turnoverRateF": 0.54
+        },
+        "399006.SZ": {
+          "turnoverRate": 0.87,
+          "turnoverRateF": 1.18
+        }
+      },
+      "relativeFreeTurnover": 2.185185185185185
+    },
+    {
+      "asOf": "2016-10-31",
+      "periodDate": "2016-10-31",
+      "releaseDate": "2016-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.28,
+          "turnoverRateF": 0.85
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.34,
+          "turnoverRateF": 1.8
+        }
+      },
+      "relativeFreeTurnover": 2.1176470588235294
+    },
+    {
+      "asOf": "2016-11-30",
+      "periodDate": "2016-11-30",
+      "releaseDate": "2016-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.71,
+          "turnoverRateF": 2.12
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.52,
+          "turnoverRateF": 3.32
+        }
+      },
+      "relativeFreeTurnover": 1.5660377358490565
+    },
+    {
+      "asOf": "2016-12-31",
+      "periodDate": "2016-12-30",
+      "releaseDate": "2016-12-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.29,
+          "turnoverRateF": 0.88
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.01,
+          "turnoverRateF": 1.34
+        }
+      },
+      "relativeFreeTurnover": 1.5227272727272727
+    },
+    {
+      "asOf": "2017-01-31",
+      "periodDate": "2017-01-26",
+      "releaseDate": "2017-01-26",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.27,
+          "turnoverRateF": 0.79
+        },
+        "399006.SZ": {
+          "turnoverRate": 0.84,
+          "turnoverRateF": 1.09
+        }
+      },
+      "relativeFreeTurnover": 1.379746835443038
+    },
+    {
+      "asOf": "2017-02-28",
+      "periodDate": "2017-02-28",
+      "releaseDate": "2017-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.31,
+          "turnoverRateF": 0.91
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.07,
+          "turnoverRateF": 1.39
+        }
+      },
+      "relativeFreeTurnover": 1.5274725274725274
+    },
+    {
+      "asOf": "2017-03-31",
+      "periodDate": "2017-03-31",
+      "releaseDate": "2017-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.37,
+          "turnoverRateF": 1.11
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.02,
+          "turnoverRateF": 1.33
+        }
+      },
+      "relativeFreeTurnover": 1.1981981981981982
+    },
+    {
+      "asOf": "2017-04-30",
+      "periodDate": "2017-04-28",
+      "releaseDate": "2017-04-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.41,
+          "turnoverRateF": 1.23
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.34,
+          "turnoverRateF": 1.73
+        }
+      },
+      "relativeFreeTurnover": 1.4065040650406504
+    },
+    {
+      "asOf": "2017-05-31",
+      "periodDate": "2017-05-31",
+      "releaseDate": "2017-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.42,
+          "turnoverRateF": 1.25
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.31,
+          "turnoverRateF": 1.72
+        }
+      },
+      "relativeFreeTurnover": 1.376
+    },
+    {
+      "asOf": "2017-06-30",
+      "periodDate": "2017-06-30",
+      "releaseDate": "2017-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.33,
+          "turnoverRateF": 0.97
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.06,
+          "turnoverRateF": 1.39
+        }
+      },
+      "relativeFreeTurnover": 1.4329896907216495
+    },
+    {
+      "asOf": "2017-07-31",
+      "periodDate": "2017-07-31",
+      "releaseDate": "2017-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.59,
+          "turnoverRateF": 1.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.86,
+          "turnoverRateF": 2.47
+        }
+      },
+      "relativeFreeTurnover": 1.4114285714285715
+    },
+    {
+      "asOf": "2017-08-31",
+      "periodDate": "2017-08-31",
+      "releaseDate": "2017-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.53,
+          "turnoverRateF": 1.56
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.48,
+          "turnoverRateF": 1.97
+        }
+      },
+      "relativeFreeTurnover": 1.2628205128205128
+    },
+    {
+      "asOf": "2017-09-30",
+      "periodDate": "2017-09-29",
+      "releaseDate": "2017-09-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.37,
+          "turnoverRateF": 1.09
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.4,
+          "turnoverRateF": 1.85
+        }
+      },
+      "relativeFreeTurnover": 1.6972477064220184
+    },
+    {
+      "asOf": "2017-10-31",
+      "periodDate": "2017-10-31",
+      "releaseDate": "2017-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.22
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.23,
+          "turnoverRateF": 1.61
+        }
+      },
+      "relativeFreeTurnover": 1.319672131147541
+    },
+    {
+      "asOf": "2017-11-30",
+      "periodDate": "2017-11-30",
+      "releaseDate": "2017-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.22
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.19,
+          "turnoverRateF": 1.57
+        }
+      },
+      "relativeFreeTurnover": 1.2868852459016393
+    },
+    {
+      "asOf": "2017-12-31",
+      "periodDate": "2017-12-29",
+      "releaseDate": "2017-12-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.35,
+          "turnoverRateF": 1.02
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.11,
+          "turnoverRateF": 1.47
+        }
+      },
+      "relativeFreeTurnover": 1.4411764705882353
+    },
+    {
+      "asOf": "2018-01-31",
+      "periodDate": "2018-01-31",
+      "releaseDate": "2018-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.56,
+          "turnoverRateF": 1.63
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.35,
+          "turnoverRateF": 3.11
+        }
+      },
+      "relativeFreeTurnover": 1.9079754601226995
+    },
+    {
+      "asOf": "2018-02-28",
+      "periodDate": "2018-02-28",
+      "releaseDate": "2018-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.42,
+          "turnoverRateF": 1.23
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.52,
+          "turnoverRateF": 3.33
+        }
+      },
+      "relativeFreeTurnover": 2.707317073170732
+    },
+    {
+      "asOf": "2018-03-31",
+      "periodDate": "2018-03-30",
+      "releaseDate": "2018-03-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.37,
+          "turnoverRateF": 1.1
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.04,
+          "turnoverRateF": 4.03
+        }
+      },
+      "relativeFreeTurnover": 3.6636363636363636
+    },
+    {
+      "asOf": "2018-04-30",
+      "periodDate": "2018-04-27",
+      "releaseDate": "2018-04-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.34,
+          "turnoverRateF": 1
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.96,
+          "turnoverRateF": 2.6
+        }
+      },
+      "relativeFreeTurnover": 2.6
+    },
+    {
+      "asOf": "2018-05-31",
+      "periodDate": "2018-05-31",
+      "releaseDate": "2018-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.35,
+          "turnoverRateF": 1.02
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.57,
+          "turnoverRateF": 2.11
+        }
+      },
+      "relativeFreeTurnover": 2.068627450980392
+    },
+    {
+      "asOf": "2018-06-30",
+      "periodDate": "2018-06-29",
+      "releaseDate": "2018-06-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.29,
+          "turnoverRateF": 0.85
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.88,
+          "turnoverRateF": 2.52
+        }
+      },
+      "relativeFreeTurnover": 2.9647058823529413
+    },
+    {
+      "asOf": "2018-07-31",
+      "periodDate": "2018-07-31",
+      "releaseDate": "2018-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.25,
+          "turnoverRateF": 0.73
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.5,
+          "turnoverRateF": 2.02
+        }
+      },
+      "relativeFreeTurnover": 2.767123287671233
+    },
+    {
+      "asOf": "2018-08-31",
+      "periodDate": "2018-08-31",
+      "releaseDate": "2018-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.28,
+          "turnoverRateF": 0.81
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.15,
+          "turnoverRateF": 1.54
+        }
+      },
+      "relativeFreeTurnover": 1.9012345679012346
+    },
+    {
+      "asOf": "2018-09-30",
+      "periodDate": "2018-09-28",
+      "releaseDate": "2018-09-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.31,
+          "turnoverRateF": 0.91
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.32,
+          "turnoverRateF": 1.78
+        }
+      },
+      "relativeFreeTurnover": 1.956043956043956
+    },
+    {
+      "asOf": "2018-10-31",
+      "periodDate": "2018-10-31",
+      "releaseDate": "2018-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.41,
+          "turnoverRateF": 1.19
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.37,
+          "turnoverRateF": 1.9
+        }
+      },
+      "relativeFreeTurnover": 1.596638655462185
+    },
+    {
+      "asOf": "2018-11-30",
+      "periodDate": "2018-11-30",
+      "releaseDate": "2018-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.26,
+          "turnoverRateF": 0.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.22,
+          "turnoverRateF": 1.62
+        }
+      },
+      "relativeFreeTurnover": 2.16
+    },
+    {
+      "asOf": "2018-12-31",
+      "periodDate": "2018-12-28",
+      "releaseDate": "2018-12-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.26,
+          "turnoverRateF": 0.77
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.37,
+          "turnoverRateF": 1.82
+        }
+      },
+      "relativeFreeTurnover": 2.3636363636363638
+    },
+    {
+      "asOf": "2019-01-31",
+      "periodDate": "2019-01-31",
+      "releaseDate": "2019-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.32,
+          "turnoverRateF": 0.92
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.6,
+          "turnoverRateF": 2.21
+        }
+      },
+      "relativeFreeTurnover": 2.402173913043478
+    },
+    {
+      "asOf": "2019-02-28",
+      "periodDate": "2019-02-28",
+      "releaseDate": "2019-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.68,
+          "turnoverRateF": 1.96
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.04,
+          "turnoverRateF": 4.17
+        }
+      },
+      "relativeFreeTurnover": 2.127551020408163
+    },
+    {
+      "asOf": "2019-03-31",
+      "periodDate": "2019-03-29",
+      "releaseDate": "2019-03-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.8,
+          "turnoverRateF": 2.28
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.79,
+          "turnoverRateF": 3.84
+        }
+      },
+      "relativeFreeTurnover": 1.6842105263157896
+    },
+    {
+      "asOf": "2019-04-30",
+      "periodDate": "2019-04-30",
+      "releaseDate": "2019-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.22
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.84,
+          "turnoverRateF": 2.52
+        }
+      },
+      "relativeFreeTurnover": 2.0655737704918034
+    },
+    {
+      "asOf": "2019-05-31",
+      "periodDate": "2019-05-31",
+      "releaseDate": "2019-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.33,
+          "turnoverRateF": 0.93
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.28,
+          "turnoverRateF": 1.74
+        }
+      },
+      "relativeFreeTurnover": 1.8709677419354838
+    },
+    {
+      "asOf": "2019-06-30",
+      "periodDate": "2019-06-28",
+      "releaseDate": "2019-06-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.31,
+          "turnoverRateF": 0.9
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.24,
+          "turnoverRateF": 1.7
+        }
+      },
+      "relativeFreeTurnover": 1.8888888888888888
+    },
+    {
+      "asOf": "2019-07-31",
+      "periodDate": "2019-07-31",
+      "releaseDate": "2019-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.3,
+          "turnoverRateF": 0.86
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.18,
+          "turnoverRateF": 1.63
+        }
+      },
+      "relativeFreeTurnover": 1.8953488372093021
+    },
+    {
+      "asOf": "2019-08-31",
+      "periodDate": "2019-08-30",
+      "releaseDate": "2019-08-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.35,
+          "turnoverRateF": 1.01
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.16,
+          "turnoverRateF": 2.99
+        }
+      },
+      "relativeFreeTurnover": 2.9603960396039604
+    },
+    {
+      "asOf": "2019-09-30",
+      "periodDate": "2019-09-30",
+      "releaseDate": "2019-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.24,
+          "turnoverRateF": 0.68
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.68,
+          "turnoverRateF": 2.34
+        }
+      },
+      "relativeFreeTurnover": 3.441176470588235
+    },
+    {
+      "asOf": "2019-10-31",
+      "periodDate": "2019-10-31",
+      "releaseDate": "2019-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.32,
+          "turnoverRateF": 0.89
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.68,
+          "turnoverRateF": 2.32
+        }
+      },
+      "relativeFreeTurnover": 2.6067415730337076
+    },
+    {
+      "asOf": "2019-11-30",
+      "periodDate": "2019-11-29",
+      "releaseDate": "2019-11-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.27,
+          "turnoverRateF": 0.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.39,
+          "turnoverRateF": 1.91
+        }
+      },
+      "relativeFreeTurnover": 2.5466666666666664
+    },
+    {
+      "asOf": "2019-12-31",
+      "periodDate": "2019-12-31",
+      "releaseDate": "2019-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.45,
+          "turnoverRateF": 1.25
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.92,
+          "turnoverRateF": 2.64
+        }
+      },
+      "relativeFreeTurnover": 2.112
+    },
+    {
+      "asOf": "2020-01-31",
+      "periodDate": "2020-01-23",
+      "releaseDate": "2020-01-23",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.58,
+          "turnoverRateF": 1.62
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.43,
+          "turnoverRateF": 4.73
+        }
+      },
+      "relativeFreeTurnover": 2.919753086419753
+    },
+    {
+      "asOf": "2020-02-29",
+      "periodDate": "2020-02-28",
+      "releaseDate": "2020-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.83,
+          "turnoverRateF": 2.31
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.67,
+          "turnoverRateF": 6.44
+        }
+      },
+      "relativeFreeTurnover": 2.787878787878788
+    },
+    {
+      "asOf": "2020-03-31",
+      "periodDate": "2020-03-31",
+      "releaseDate": "2020-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.4,
+          "turnoverRateF": 1.1
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.75,
+          "turnoverRateF": 2.43
+        }
+      },
+      "relativeFreeTurnover": 2.209090909090909
+    },
+    {
+      "asOf": "2020-04-30",
+      "periodDate": "2020-04-30",
+      "releaseDate": "2020-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.31
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.65,
+          "turnoverRateF": 3.68
+        }
+      },
+      "relativeFreeTurnover": 2.8091603053435112
+    },
+    {
+      "asOf": "2020-05-31",
+      "periodDate": "2020-05-29",
+      "releaseDate": "2020-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.34,
+          "turnoverRateF": 0.9
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.99,
+          "turnoverRateF": 2.77
+        }
+      },
+      "relativeFreeTurnover": 3.0777777777777775
+    },
+    {
+      "asOf": "2020-06-30",
+      "periodDate": "2020-06-30",
+      "releaseDate": "2020-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.46,
+          "turnoverRateF": 1.22
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.96,
+          "turnoverRateF": 4.1
+        }
+      },
+      "relativeFreeTurnover": 3.360655737704918
+    },
+    {
+      "asOf": "2020-07-31",
+      "periodDate": "2020-07-31",
+      "releaseDate": "2020-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.67,
+          "turnoverRateF": 1.78
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.05,
+          "turnoverRateF": 4.21
+        }
+      },
+      "relativeFreeTurnover": 2.365168539325843
+    },
+    {
+      "asOf": "2020-08-31",
+      "periodDate": "2020-08-31",
+      "releaseDate": "2020-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.73,
+          "turnoverRateF": 1.94
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.92,
+          "turnoverRateF": 4.01
+        }
+      },
+      "relativeFreeTurnover": 2.0670103092783503
+    },
+    {
+      "asOf": "2020-09-30",
+      "periodDate": "2020-09-30",
+      "releaseDate": "2020-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.32,
+          "turnoverRateF": 0.85
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.5,
+          "turnoverRateF": 2.06
+        }
+      },
+      "relativeFreeTurnover": 2.423529411764706
+    },
+    {
+      "asOf": "2020-10-31",
+      "periodDate": "2020-10-30",
+      "releaseDate": "2020-10-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.5,
+          "turnoverRateF": 1.32
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.27,
+          "turnoverRateF": 3.08
+        }
+      },
+      "relativeFreeTurnover": 2.3333333333333335
+    },
+    {
+      "asOf": "2020-11-30",
+      "periodDate": "2020-11-30",
+      "releaseDate": "2020-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.93,
+          "turnoverRateF": 2.44
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.37,
+          "turnoverRateF": 3.2
+        }
+      },
+      "relativeFreeTurnover": 1.3114754098360657
+    },
+    {
+      "asOf": "2020-12-31",
+      "periodDate": "2020-12-31",
+      "releaseDate": "2020-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.63,
+          "turnoverRateF": 1.64
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.06,
+          "turnoverRateF": 2.79
+        }
+      },
+      "relativeFreeTurnover": 1.7012195121951221
+    },
+    {
+      "asOf": "2021-01-31",
+      "periodDate": "2021-01-29",
+      "releaseDate": "2021-01-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.66,
+          "turnoverRateF": 1.7
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.55,
+          "turnoverRateF": 3.44
+        }
+      },
+      "relativeFreeTurnover": 2.023529411764706
+    },
+    {
+      "asOf": "2021-02-28",
+      "periodDate": "2021-02-26",
+      "releaseDate": "2021-02-26",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.77,
+          "turnoverRateF": 1.97
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.14,
+          "turnoverRateF": 2.88
+        }
+      },
+      "relativeFreeTurnover": 1.4619289340101522
+    },
+    {
+      "asOf": "2021-03-31",
+      "periodDate": "2021-03-31",
+      "releaseDate": "2021-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.51,
+          "turnoverRateF": 1.31
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.27,
+          "turnoverRateF": 1.72
+        }
+      },
+      "relativeFreeTurnover": 1.3129770992366412
+    },
+    {
+      "asOf": "2021-04-30",
+      "periodDate": "2021-04-30",
+      "releaseDate": "2021-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.58,
+          "turnoverRateF": 1.5
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.67,
+          "turnoverRateF": 2.27
+        }
+      },
+      "relativeFreeTurnover": 1.5133333333333334
+    },
+    {
+      "asOf": "2021-05-31",
+      "periodDate": "2021-05-31",
+      "releaseDate": "2021-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.52,
+          "turnoverRateF": 1.31
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.86,
+          "turnoverRateF": 2.53
+        }
+      },
+      "relativeFreeTurnover": 1.931297709923664
+    },
+    {
+      "asOf": "2021-06-30",
+      "periodDate": "2021-06-30",
+      "releaseDate": "2021-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.38,
+          "turnoverRateF": 0.95
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.52,
+          "turnoverRateF": 2.05
+        }
+      },
+      "relativeFreeTurnover": 2.1578947368421053
+    },
+    {
+      "asOf": "2021-07-31",
+      "periodDate": "2021-07-30",
+      "releaseDate": "2021-07-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.66,
+          "turnoverRateF": 1.68
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.33,
+          "turnoverRateF": 3.14
+        }
+      },
+      "relativeFreeTurnover": 1.8690476190476193
+    },
+    {
+      "asOf": "2021-08-31",
+      "periodDate": "2021-08-31",
+      "releaseDate": "2021-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.85,
+          "turnoverRateF": 2.17
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.12,
+          "turnoverRateF": 2.9
+        }
+      },
+      "relativeFreeTurnover": 1.336405529953917
+    },
+    {
+      "asOf": "2021-09-30",
+      "periodDate": "2021-09-30",
+      "releaseDate": "2021-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.53,
+          "turnoverRateF": 1.37
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.27,
+          "turnoverRateF": 1.74
+        }
+      },
+      "relativeFreeTurnover": 1.27007299270073
+    },
+    {
+      "asOf": "2021-10-31",
+      "periodDate": "2021-10-29",
+      "releaseDate": "2021-10-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.58,
+          "turnoverRateF": 1.53
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.97,
+          "turnoverRateF": 2.68
+        }
+      },
+      "relativeFreeTurnover": 1.7516339869281046
+    },
+    {
+      "asOf": "2021-11-30",
+      "periodDate": "2021-11-30",
+      "releaseDate": "2021-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.46,
+          "turnoverRateF": 1.2
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.92,
+          "turnoverRateF": 2.63
+        }
+      },
+      "relativeFreeTurnover": 2.191666666666667
+    },
+    {
+      "asOf": "2021-12-31",
+      "periodDate": "2021-12-31",
+      "releaseDate": "2021-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.44,
+          "turnoverRateF": 1.14
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.56,
+          "turnoverRateF": 2.17
+        }
+      },
+      "relativeFreeTurnover": 1.9035087719298247
+    },
+    {
+      "asOf": "2022-01-31",
+      "periodDate": "2022-01-28",
+      "releaseDate": "2022-01-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.45,
+          "turnoverRateF": 1.17
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.44,
+          "turnoverRateF": 2.01
+        }
+      },
+      "relativeFreeTurnover": 1.7179487179487178
+    },
+    {
+      "asOf": "2022-02-28",
+      "periodDate": "2022-02-28",
+      "releaseDate": "2022-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.24
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.47,
+          "turnoverRateF": 2.04
+        }
+      },
+      "relativeFreeTurnover": 1.6451612903225807
+    },
+    {
+      "asOf": "2022-03-31",
+      "periodDate": "2022-03-31",
+      "releaseDate": "2022-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.23
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.4,
+          "turnoverRateF": 1.95
+        }
+      },
+      "relativeFreeTurnover": 1.5853658536585367
+    },
+    {
+      "asOf": "2022-04-30",
+      "periodDate": "2022-04-29",
+      "releaseDate": "2022-04-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.64,
+          "turnoverRateF": 1.67
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.37,
+          "turnoverRateF": 3.27
+        }
+      },
+      "relativeFreeTurnover": 1.9580838323353293
+    },
+    {
+      "asOf": "2022-05-31",
+      "periodDate": "2022-05-31",
+      "releaseDate": "2022-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.26
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.91,
+          "turnoverRateF": 2.63
+        }
+      },
+      "relativeFreeTurnover": 2.087301587301587
+    },
+    {
+      "asOf": "2022-06-30",
+      "periodDate": "2022-06-30",
+      "releaseDate": "2022-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.56,
+          "turnoverRateF": 1.47
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.93,
+          "turnoverRateF": 2.71
+        }
+      },
+      "relativeFreeTurnover": 1.8435374149659864
+    },
+    {
+      "asOf": "2022-07-31",
+      "periodDate": "2022-07-29",
+      "releaseDate": "2022-07-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.41,
+          "turnoverRateF": 1.07
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.44,
+          "turnoverRateF": 2.02
+        }
+      },
+      "relativeFreeTurnover": 1.8878504672897196
+    },
+    {
+      "asOf": "2022-08-31",
+      "periodDate": "2022-08-31",
+      "releaseDate": "2022-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.46,
+          "turnoverRateF": 1.22
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.45,
+          "turnoverRateF": 2.03
+        }
+      },
+      "relativeFreeTurnover": 1.6639344262295082
+    },
+    {
+      "asOf": "2022-09-30",
+      "periodDate": "2022-09-30",
+      "releaseDate": "2022-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.27,
+          "turnoverRateF": 0.72
+        },
+        "399006.SZ": {
+          "turnoverRate": 0.92,
+          "turnoverRateF": 1.29
+        }
+      },
+      "relativeFreeTurnover": 1.7916666666666667
+    },
+    {
+      "asOf": "2022-10-31",
+      "periodDate": "2022-10-31",
+      "releaseDate": "2022-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.25
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.59,
+          "turnoverRateF": 2.23
+        }
+      },
+      "relativeFreeTurnover": 1.784
+    },
+    {
+      "asOf": "2022-11-30",
+      "periodDate": "2022-11-30",
+      "releaseDate": "2022-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.55,
+          "turnoverRateF": 1.44
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.28,
+          "turnoverRateF": 1.79
+        }
+      },
+      "relativeFreeTurnover": 1.2430555555555556
+    },
+    {
+      "asOf": "2022-12-31",
+      "periodDate": "2022-12-30",
+      "releaseDate": "2022-12-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.28,
+          "turnoverRateF": 0.73
+        },
+        "399006.SZ": {
+          "turnoverRate": 0.86,
+          "turnoverRateF": 1.2
+        }
+      },
+      "relativeFreeTurnover": 1.643835616438356
+    },
+    {
+      "asOf": "2023-01-31",
+      "periodDate": "2023-01-31",
+      "releaseDate": "2023-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.16
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.44,
+          "turnoverRateF": 2.01
+        }
+      },
+      "relativeFreeTurnover": 1.732758620689655
+    },
+    {
+      "asOf": "2023-02-28",
+      "periodDate": "2023-02-28",
+      "releaseDate": "2023-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.38,
+          "turnoverRateF": 1.02
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.06,
+          "turnoverRateF": 1.48
+        }
+      },
+      "relativeFreeTurnover": 1.4509803921568627
+    },
+    {
+      "asOf": "2023-03-31",
+      "periodDate": "2023-03-31",
+      "releaseDate": "2023-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.48,
+          "turnoverRateF": 1.27
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.71,
+          "turnoverRateF": 2.41
+        }
+      },
+      "relativeFreeTurnover": 1.8976377952755907
+    },
+    {
+      "asOf": "2023-04-30",
+      "periodDate": "2023-04-28",
+      "releaseDate": "2023-04-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.61,
+          "turnoverRateF": 1.63
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.82,
+          "turnoverRateF": 2.54
+        }
+      },
+      "relativeFreeTurnover": 1.5582822085889572
+    },
+    {
+      "asOf": "2023-05-31",
+      "periodDate": "2023-05-31",
+      "releaseDate": "2023-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.15
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.35,
+          "turnoverRateF": 1.89
+        }
+      },
+      "relativeFreeTurnover": 1.6434782608695653
+    },
+    {
+      "asOf": "2023-06-30",
+      "periodDate": "2023-06-30",
+      "releaseDate": "2023-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.34,
+          "turnoverRateF": 0.91
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.3,
+          "turnoverRateF": 1.82
+        }
+      },
+      "relativeFreeTurnover": 2
+    },
+    {
+      "asOf": "2023-07-31",
+      "periodDate": "2023-07-31",
+      "releaseDate": "2023-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.65,
+          "turnoverRateF": 1.78
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.01,
+          "turnoverRateF": 2.81
+        }
+      },
+      "relativeFreeTurnover": 1.5786516853932584
+    },
+    {
+      "asOf": "2023-08-31",
+      "periodDate": "2023-08-31",
+      "releaseDate": "2023-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.39,
+          "turnoverRateF": 1.06
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.11,
+          "turnoverRateF": 1.56
+        }
+      },
+      "relativeFreeTurnover": 1.471698113207547
+    },
+    {
+      "asOf": "2023-09-30",
+      "periodDate": "2023-09-28",
+      "releaseDate": "2023-09-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.28,
+          "turnoverRateF": 0.77
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.13,
+          "turnoverRateF": 1.59
+        }
+      },
+      "relativeFreeTurnover": 2.064935064935065
+    },
+    {
+      "asOf": "2023-10-31",
+      "periodDate": "2023-10-31",
+      "releaseDate": "2023-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.37,
+          "turnoverRateF": 1.06
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.47,
+          "turnoverRateF": 2.05
+        }
+      },
+      "relativeFreeTurnover": 1.933962264150943
+    },
+    {
+      "asOf": "2023-11-30",
+      "periodDate": "2023-11-30",
+      "releaseDate": "2023-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.33,
+          "turnoverRateF": 0.96
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.03,
+          "turnoverRateF": 1.43
+        }
+      },
+      "relativeFreeTurnover": 1.4895833333333333
+    },
+    {
+      "asOf": "2023-12-31",
+      "periodDate": "2023-12-29",
+      "releaseDate": "2023-12-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.37,
+          "turnoverRateF": 1.07
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.3,
+          "turnoverRateF": 1.82
+        }
+      },
+      "relativeFreeTurnover": 1.7009345794392523
+    },
+    {
+      "asOf": "2024-01-31",
+      "periodDate": "2024-01-31",
+      "releaseDate": "2024-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.49,
+          "turnoverRateF": 1.43
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.5,
+          "turnoverRateF": 2.09
+        }
+      },
+      "relativeFreeTurnover": 1.4615384615384615
+    },
+    {
+      "asOf": "2024-02-29",
+      "periodDate": "2024-02-29",
+      "releaseDate": "2024-02-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.5,
+          "turnoverRateF": 1.45
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.95,
+          "turnoverRateF": 2.72
+        }
+      },
+      "relativeFreeTurnover": 1.8758620689655174
+    },
+    {
+      "asOf": "2024-03-31",
+      "periodDate": "2024-03-29",
+      "releaseDate": "2024-03-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.42,
+          "turnoverRateF": 1.2
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.21,
+          "turnoverRateF": 1.69
+        }
+      },
+      "relativeFreeTurnover": 1.4083333333333334
+    },
+    {
+      "asOf": "2024-04-30",
+      "periodDate": "2024-04-30",
+      "releaseDate": "2024-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.62,
+          "turnoverRateF": 1.78
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.54,
+          "turnoverRateF": 2.18
+        }
+      },
+      "relativeFreeTurnover": 1.2247191011235956
+    },
+    {
+      "asOf": "2024-05-31",
+      "periodDate": "2024-05-31",
+      "releaseDate": "2024-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.36,
+          "turnoverRateF": 1.04
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.24,
+          "turnoverRateF": 1.75
+        }
+      },
+      "relativeFreeTurnover": 1.6826923076923077
+    },
+    {
+      "asOf": "2024-06-30",
+      "periodDate": "2024-06-28",
+      "releaseDate": "2024-06-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.43,
+          "turnoverRateF": 1.25
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.55,
+          "turnoverRateF": 2.18
+        }
+      },
+      "relativeFreeTurnover": 1.7440000000000002
+    },
+    {
+      "asOf": "2024-07-31",
+      "periodDate": "2024-07-31",
+      "releaseDate": "2024-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.55,
+          "turnoverRateF": 1.6
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.02,
+          "turnoverRateF": 2.85
+        }
+      },
+      "relativeFreeTurnover": 1.78125
+    },
+    {
+      "asOf": "2024-08-31",
+      "periodDate": "2024-08-30",
+      "releaseDate": "2024-08-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.6,
+          "turnoverRateF": 1.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.95,
+          "turnoverRateF": 2.73
+        }
+      },
+      "relativeFreeTurnover": 1.56
+    },
+    {
+      "asOf": "2024-09-30",
+      "periodDate": "2024-09-30",
+      "releaseDate": "2024-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.62,
+          "turnoverRateF": 4.75
+        },
+        "399006.SZ": {
+          "turnoverRate": 6.27,
+          "turnoverRateF": 8.78
+        }
+      },
+      "relativeFreeTurnover": 1.8484210526315787
+    },
+    {
+      "asOf": "2024-10-31",
+      "periodDate": "2024-10-31",
+      "releaseDate": "2024-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.95,
+          "turnoverRateF": 2.8
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.28,
+          "turnoverRateF": 6.01
+        }
+      },
+      "relativeFreeTurnover": 2.1464285714285714
+    },
+    {
+      "asOf": "2024-11-30",
+      "periodDate": "2024-11-29",
+      "releaseDate": "2024-11-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.59,
+          "turnoverRateF": 1.73
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.16,
+          "turnoverRateF": 4.44
+        }
+      },
+      "relativeFreeTurnover": 2.5664739884393066
+    },
+    {
+      "asOf": "2024-12-31",
+      "periodDate": "2024-12-31",
+      "releaseDate": "2024-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.58,
+          "turnoverRateF": 1.68
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.51,
+          "turnoverRateF": 3.52
+        }
+      },
+      "relativeFreeTurnover": 2.0952380952380953
+    },
+    {
+      "asOf": "2025-01-31",
+      "periodDate": "2025-01-27",
+      "releaseDate": "2025-01-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.46,
+          "turnoverRateF": 1.33
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.17,
+          "turnoverRateF": 3.04
+        }
+      },
+      "relativeFreeTurnover": 2.2857142857142856
+    },
+    {
+      "asOf": "2025-02-28",
+      "periodDate": "2025-02-28",
+      "releaseDate": "2025-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.61,
+          "turnoverRateF": 1.78
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.15,
+          "turnoverRateF": 4.41
+        }
+      },
+      "relativeFreeTurnover": 2.4775280898876404
+    },
+    {
+      "asOf": "2025-03-31",
+      "periodDate": "2025-03-31",
+      "releaseDate": "2025-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.51,
+          "turnoverRateF": 1.46
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.63,
+          "turnoverRateF": 2.23
+        }
+      },
+      "relativeFreeTurnover": 1.5273972602739727
+    },
+    {
+      "asOf": "2025-04-30",
+      "periodDate": "2025-04-30",
+      "releaseDate": "2025-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.44,
+          "turnoverRateF": 1.28
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.6,
+          "turnoverRateF": 2.22
+        }
+      },
+      "relativeFreeTurnover": 1.7343750000000002
+    },
+    {
+      "asOf": "2025-05-31",
+      "periodDate": "2025-05-30",
+      "releaseDate": "2025-05-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.34,
+          "turnoverRateF": 1
+        },
+        "399006.SZ": {
+          "turnoverRate": 1.43,
+          "turnoverRateF": 1.98
+        }
+      },
+      "relativeFreeTurnover": 1.98
+    },
+    {
+      "asOf": "2025-06-30",
+      "periodDate": "2025-06-30",
+      "releaseDate": "2025-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.44,
+          "turnoverRateF": 1.3
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.49,
+          "turnoverRateF": 3.42
+        }
+      },
+      "relativeFreeTurnover": 2.6307692307692307
+    },
+    {
+      "asOf": "2025-07-31",
+      "periodDate": "2025-07-31",
+      "releaseDate": "2025-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.81,
+          "turnoverRateF": 2.39
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.44,
+          "turnoverRateF": 4.73
+        }
+      },
+      "relativeFreeTurnover": 1.9790794979079498
+    },
+    {
+      "asOf": "2025-08-31",
+      "periodDate": "2025-08-29",
+      "releaseDate": "2025-08-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.07,
+          "turnoverRateF": 3.17
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.44,
+          "turnoverRateF": 6.21
+        }
+      },
+      "relativeFreeTurnover": 1.9589905362776026
+    },
+    {
+      "asOf": "2025-09-30",
+      "periodDate": "2025-09-30",
+      "releaseDate": "2025-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.76,
+          "turnoverRateF": 2.25
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.27,
+          "turnoverRateF": 4.57
+        }
+      },
+      "relativeFreeTurnover": 2.031111111111111
+    },
+    {
+      "asOf": "2025-10-31",
+      "periodDate": "2025-10-31",
+      "releaseDate": "2025-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.86,
+          "turnoverRateF": 2.56
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.47,
+          "turnoverRateF": 4.83
+        }
+      },
+      "relativeFreeTurnover": 1.88671875
+    },
+    {
+      "asOf": "2025-11-30",
+      "periodDate": "2025-11-28",
+      "releaseDate": "2025-11-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.44,
+          "turnoverRateF": 1.3
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.29,
+          "turnoverRateF": 3.21
+        }
+      },
+      "relativeFreeTurnover": 2.4692307692307693
+    },
+    {
+      "asOf": "2025-12-31",
+      "periodDate": "2025-12-31",
+      "releaseDate": "2025-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.52,
+          "turnoverRateF": 1.54
+        },
+        "399006.SZ": {
+          "turnoverRate": 3,
+          "turnoverRateF": 4.2
+        }
+      },
+      "relativeFreeTurnover": 2.7272727272727275
+    },
+    {
+      "asOf": "2026-01-31",
+      "periodDate": "2026-01-30",
+      "releaseDate": "2026-01-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.97,
+          "turnoverRateF": 2.88
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.24,
+          "turnoverRateF": 5.93
+        }
+      },
+      "relativeFreeTurnover": 2.0590277777777777
+    },
+    {
+      "asOf": "2026-02-28",
+      "periodDate": "2026-02-27",
+      "releaseDate": "2026-02-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.79,
+          "turnoverRateF": 2.35
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.31,
+          "turnoverRateF": 4.64
+        }
+      },
+      "relativeFreeTurnover": 1.9744680851063827
+    },
+    {
+      "asOf": "2026-03-31",
+      "periodDate": "2026-03-31",
+      "releaseDate": "2026-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.68,
+          "turnoverRateF": 2.01
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.54,
+          "turnoverRateF": 3.56
+        }
+      },
+      "relativeFreeTurnover": 1.7711442786069653
+    },
+    {
+      "asOf": "2026-04-30",
+      "periodDate": "2026-04-30",
+      "releaseDate": "2026-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.76,
+          "turnoverRateF": 2.23
+        },
+        "399006.SZ": {
+          "turnoverRate": 2.89,
+          "turnoverRateF": 4.03
+        }
+      },
+      "relativeFreeTurnover": 1.8071748878923768
+    },
+    {
+      "asOf": "2026-05-31",
+      "periodDate": "2026-05-29",
+      "releaseDate": "2026-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 1.01,
+          "turnoverRateF": 2.97
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.56,
+          "turnoverRateF": 4.97
+        }
+      },
+      "relativeFreeTurnover": 1.6734006734006732
+    },
+    {
+      "asOf": "2026-06-30",
+      "periodDate": "2026-06-30",
+      "releaseDate": "2026-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.92,
+          "turnoverRateF": 2.66
+        },
+        "399006.SZ": {
+          "turnoverRate": 3.59,
+          "turnoverRateF": 4.99
+        }
+      },
+      "relativeFreeTurnover": 1.8759398496240602
+    },
+    {
+      "asOf": "2026-07-31",
+      "periodDate": "2026-07-31",
+      "releaseDate": "2026-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "turnoverRate": 0.8333,
+          "turnoverRateF": 2.7648
+        },
+        "399006.SZ": {
+          "turnoverRate": 4.2454,
+          "turnoverRateF": 6.0719
+        }
+      },
+      "relativeFreeTurnover": 2.196144386574074
+    }
+  ]
+}

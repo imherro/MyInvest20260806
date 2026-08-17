@@ -89,6 +89,8 @@ SHIBOR属于名义银行间资金利率，官方在每个交易日11:00发布。
 
 Tushare在 `index_dailybasic` 中将 `turnover_rate` 定义为换手率、`turnover_rate_f` 定义为基于自由流通股本的换手率。目前B5只是两类指数的真实换手率代理，不是完整投机热度指标；未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不评分、不判断高温或低温。
 
+阶段04C的B5月度历史仍使用现有 `index_dailybasic`，没有新增API种类；历史请求字段为 `ts_code,trade_date,turnover_rate,turnover_rate_f`。其日期严格继承B3月度PIT日程，B3指定日期缺少任一指数记录时失败，禁止寻找邻近日或回退。历史同样只保存换手率原值与确定性比值，不评分、不判断投机冷热。
+
 ## L2 M1/M2货币活化
 
 - 结构化数值：Tushare Pro `cn_m`，字段 `month,m1_yoy,m2_yoy`。

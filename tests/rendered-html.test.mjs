@@ -76,6 +76,14 @@ async function b1HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b1.json", import.meta.url)), "utf8"));
 }
 
+async function b5HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-b5.mjs", import.meta.url).href);
+}
+
+async function b5HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b5.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -631,6 +639,102 @@ test("B1 requestedAsOf failure preserves B1, B3 and current files", async () => 
   assert.match(result.stderr, /requestedAsOf/);
   const after = await Promise.all(paths.map(value => readFile(value)));
   assert.deepEqual(after, before);
+});
+
+test("validates the B3 schedule contract before building B5 history", async () => {
+  const { validateB3Schedule } = await b5HistoryGenerator();
+  const fixture = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" },
+    range: { startAsOf: "2026-01-31", endAsOf: "2026-02-28" },
+    points: [
+      { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked" },
+      { asOf: "2026-02-28", periodDate: "2026-02-27", releaseDate: "2026-02-27", revisionStatus: "not_tracked" },
+    ],
+  };
+  assert.equal(validateB3Schedule(fixture, "2026-08-17"), fixture);
+  assert.throws(() => validateB3Schedule({ ...fixture, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/);
+  assert.throws(() => validateB3Schedule({ ...fixture, points: [fixture.points[0], fixture.points[0]], range: { ...fixture.range, endAsOf: fixture.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  assert.throws(() => validateB3Schedule({ ...fixture, points: [...fixture.points].reverse(), range: { startAsOf: fixture.range.endAsOf, endAsOf: fixture.range.startAsOf } }, "2026-08-17"), /unique and strictly ascending/);
+  for (const [key, value] of [["releaseDate", "2026-01-29"], ["periodDate", "2025-12-31"]]) {
+    const broken = structuredClone(fixture); broken.points[0][key] = value;
+    assert.throws(() => validateB3Schedule(broken, "2026-08-17"), /PIT dates/);
+  }
+  const revision = structuredClone(fixture); revision.points[0].revisionStatus = "final";
+  assert.throws(() => validateB3Schedule(revision, "2026-08-17"), /revisionStatus/);
+});
+
+test("builds B5 on exact B3 dates, validates API rows and never falls back", async () => {
+  const { buildB5MonthlyHistory } = await b5HistoryGenerator();
+  const b3 = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" },
+    range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" },
+    points: [{ asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked" }],
+  };
+  const row = (ts_code, trade_date, turnover_rate = 1, turnover_rate_f = 2) => ({ ts_code, trade_date, turnover_rate, turnover_rate_f });
+  const rows = {
+    "000300.SH": [row("000300.SH", "20260129", 9, 10), row("000300.SH", "20260130", 1, 2)],
+    "399006.SZ": [row("399006.SZ", "20260129", 19, 20), row("399006.SZ", "20260130", 3, 6)],
+  };
+  const result = buildB5MonthlyHistory(b3, rows, "2026-08-17", "2026-08-17T00:00:00.000Z");
+  assert.deepEqual(result.points[0].values, { "000300.SH": { turnoverRate: 1, turnoverRateF: 2 }, "399006.SZ": { turnoverRate: 3, turnoverRateF: 6 } });
+  assert.equal(result.points[0].relativeFreeTurnover, 3);
+  assert.equal(result.points[0].periodDate, "2026-01-30");
+
+  const onlyPrior = structuredClone(rows); onlyPrior["399006.SZ"] = onlyPrior["399006.SZ"].filter(item => item.trade_date === "20260129");
+  assert.throws(() => buildB5MonthlyHistory(b3, onlyPrior, "2026-08-17"), /fallback is forbidden/);
+  const mutations = [
+    ["unexpected ts_code", { ...rows, "000300.SH": [{ ...rows["000300.SH"][0], ts_code: "BAD" }] }],
+    ["invalid trade_date", { ...rows, "000300.SH": [{ ...rows["000300.SH"][0], trade_date: "20260230" }] }],
+    ["outside B5 history range", { ...rows, "000300.SH": [{ ...rows["000300.SH"][0], trade_date: "20141231" }] }],
+    ["duplicate trade_date", { ...rows, "000300.SH": [rows["000300.SH"][0], rows["000300.SH"][0]] }],
+    ["no B5 history rows", { ...rows, "000300.SH": [] }],
+  ];
+  for (const [message, broken] of mutations) assert.throws(() => buildB5MonthlyHistory(b3, broken, "2026-08-17"), new RegExp(message));
+  assert.throws(() => buildB5MonthlyHistory(b3, { ...rows, "000300.SH": Array.from({ length: 3000 }, () => rows["000300.SH"][0]) }, "2026-08-17"), /3000-row limit/);
+
+  for (const field of ["turnover_rate", "turnover_rate_f"]) for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", -1]) {
+    const broken = structuredClone(rows); broken["399006.SZ"][1][field] = invalid;
+    assert.throws(() => buildB5MonthlyHistory(b3, broken, "2026-08-17"), new RegExp(`Invalid ${field}`));
+  }
+  const zeros = structuredClone(rows); zeros["399006.SZ"][1].turnover_rate = 0; zeros["399006.SZ"][1].turnover_rate_f = 0;
+  assert.equal(buildB5MonthlyHistory(b3, zeros, "2026-08-17").points[0].relativeFreeTurnover, 0);
+  const zeroDenominator = structuredClone(rows); zeroDenominator["000300.SH"][1].turnover_rate_f = 0;
+  assert.throws(() => buildB5MonthlyHistory(b3, zeroDenominator, "2026-08-17"), /must be positive/);
+});
+
+test("B5 generator has exactly two strict index requests and no alternate API", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-b5.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("index_dailybasic"/g) ?? []).length, 1);
+  assert.match(source, /MARKET_INDEX_INSTRUMENTS\.map/);
+  assert.match(source, /\{ ts_code: instrument\.code, start_date: START_DATE, end_date: compactDate\(b3\.range\.endAsOf\) \}, FIELDS/);
+  assert.match(source, /const START_DATE = "20150101"/);
+  assert.match(source, /const FIELDS = "ts_code,trade_date,turnover_rate,turnover_rate_f"/);
+  assert.doesNotMatch(source, /callTushare\("(?:index_daily|trade_cal|daily_basic)"/);
+  assert.doesNotMatch(source, /pe_ttm|\bpb\b/);
+});
+
+test("checked-in B5 history is aligned point-for-point with B3 without scoring", async () => {
+  const [b5, b3] = await Promise.all([b5HistoryData(), b3HistoryData()]);
+  assert.equal(b5.points.length, 139);
+  assert.equal(b5.points.length, b3.points.length);
+  assert.equal(b5.requestedAsOf, b3.requestedAsOf);
+  assert.deepEqual(b5.range, b3.range);
+  for (let index = 0; index < b5.points.length; index += 1) {
+    for (const key of ["asOf", "periodDate", "releaseDate", "revisionStatus"]) assert.equal(b5.points[index][key], b3.points[index][key]);
+    const point = b5.points[index];
+    assert.ok(Math.abs(point.relativeFreeTurnover - point.values["399006.SZ"].turnoverRateF / point.values["000300.SH"].turnoverRateF) < 1e-12);
+  }
+  assert.doesNotMatch(JSON.stringify(b5), /"(?:score|position|trend|percentile|zScore|normalized|signal|state|temperature|riskLevel)"/);
+});
+
+test("missing-token B5 failure preserves B5, B3, B1 and current files", async () => {
+  const paths = ["../public/data/market-research/history/b5.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b5.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /TUSHARE_TOKEN is required/);
+  assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {

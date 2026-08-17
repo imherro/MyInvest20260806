@@ -1,6 +1,6 @@
 # 市场研究历史数据
 
-阶段04A实现B3“PE/PB与估值分化”的月度历史PIT试点；阶段04B从B3确定性派生B1指数盈利收益率历史。产物分别为 `history/b3.json` 与 `history/b1.json`，均与当前状态文件 `current.json` 完全分离。
+阶段04A实现B3“PE/PB与估值分化”的月度历史PIT试点；阶段04B从B3确定性派生B1指数盈利收益率历史；阶段04C严格复用B3日期，接入B5月度交易活跃度历史。产物分别为 `history/b3.json`、`history/b1.json` 与 `history/b5.json`，均与当前状态文件 `current.json` 完全分离。
 
 - 范围从2015-01开始，结束于信息截止日当日或之前最后一个完整自然月。
 - 每个 `asOf` 为自然月末；在该月内选择沪深300与创业板指均有数据的最新共同交易日作为 `periodDate`。
@@ -23,4 +23,12 @@ B1历史生成器只读取B3历史文件，不访问网络、不需要Token，�
 
 ```powershell
 node scripts/generate-market-research-history-b1.mjs --as-of 2026-08-17
+```
+
+## B5 同日交易活跃度历史
+
+B5历史以B3为唯一月度日期日程表，逐点继承日期、范围与 `revisionStatus`，再用两只指数各一次 `index_dailybasic` 请求精确查询B3已经指定的交易日；指定日期缺失即失败，不回退。每点保存沪深300、创业板指的实际 `turnover_rate`、`turnover_rate_f` 和两者自由流通换手率比值。当前只表示交易活跃度代理，不评分，也不判断投机冷热。
+
+```powershell
+node scripts/generate-market-research-history-b5.mjs --as-of 2026-08-17
 ```
