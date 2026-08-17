@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-17T07:38:15.682Z",
+  "generatedAt": "2026-08-17T07:47:13.434Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 cross-verified by PBOC",
@@ -12,7 +12,8 @@
       "index_dailybasic",
       "cn_m",
       "shibor",
-      "sf_month"
+      "sf_month",
+      "us_trycr"
     ],
     "instruments": [
       {
@@ -43,8 +44,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L1、L2、L3、B3、B5已生成",
-    "diagnosis": "当前仅L1、L2、L3、B3、B5已由真实数据生成，其余9项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L1、L2、L3、L5、B3、B5已生成",
+    "diagnosis": "当前仅L1、L2、L3、L5、B3、B5已由真实数据生成，其余8项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -71,7 +72,7 @@
       "title": "货币信用",
       "score": null,
       "status": "数据接入中",
-      "coverage": "3/5",
+      "coverage": "4/5",
       "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
@@ -167,9 +168,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "35.7%",
+    "coverage": "42.9%",
     "pitStatus": "待接入",
-    "warning": "仅L1、L2、L3、B3、B5已由真实数据生成，其余9项待接入"
+    "warning": "仅L1、L2、L3、L5、B3、B5已由真实数据生成，其余8项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -192,6 +193,13 @@
       "title": "L3社会融资规模代理快照生成",
       "detail": "社融当月增量 1.4017万亿元 / 年内累计 22.25万亿元 / 存量 463.27万亿元 / 存量同比 7.4%",
       "group": "L3",
+      "tone": "blue"
+    },
+    {
+      "date": "08-14",
+      "title": "L5外部金融条件代理快照生成",
+      "detail": "美国10年实际国债收益率 2.41%",
+      "group": "L5",
       "tone": "blue"
     },
     {
@@ -329,15 +337,15 @@
         "id": "L5",
         "name": "外部金融条件",
         "score": null,
-        "raw": null,
+        "raw": "美国10年实际国债收益率 2.41%",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-14",
+        "coverage": "1/1美国实际利率",
+        "quality": "A",
+        "note": "当前仅接入美国10年期实际国债收益率，作为L5第一阶段外部金融条件代理；采用跨时区保守日期规则，仅使用早于中国信息截止日的美国数据，当前系统不处理精确小时级PIT。尚未接入美元、波动率、信用利差和全球流动性，因此不计算历史分位、趋势或L5评分。",
+        "dataStatus": "generated"
       }
     ],
     "B": [

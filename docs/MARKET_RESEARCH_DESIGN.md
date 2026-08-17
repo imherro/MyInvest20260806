@@ -1,7 +1,7 @@
 # 市场研究三表体系：设计共识
 
 > 状态：已与原方案 ChatGPT 会话完成澄清，可直接实施  
-> 范围：任务03E已接入L1、L2、L3、B3、B5五项真实指标；其余9项指标、F/L/B评分、历史PIT和回测仍待后续实现
+> 范围：任务03F已接入L1、L2、L3、L5、B3、B5六项真实指标；其余8项指标、F/L/B评分、历史PIT和回测仍待后续实现
 
 ## 1. 产品定位
 
@@ -100,7 +100,7 @@
 
 ## 6. current.json 文件契约
 
-任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。任务03B将契约升级为schema v3并接入L2与B3；任务03C复用B3的共同指数快照接入B5第一阶段交易活跃度代理；任务03D接入L1第一阶段SHIBOR名义资金利率代理；任务03E复用L2的同一份PBOC金融统计报告并接入Tushare `sf_month`，生成L3第一阶段社会融资规模代理。L2/L3均需官方与结构化数据一致才生成。当前真实指标为5/14（L1、L2、L3、B3、B5），其余9项pending。详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
+任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。任务03B将契约升级为schema v3并接入L2与B3；任务03C复用B3的共同指数快照接入B5第一阶段交易活跃度代理；任务03D接入L1第一阶段SHIBOR名义资金利率代理；任务03E接入L3第一阶段社会融资规模代理；任务03F接入L5第一阶段美国10年实际利率外部金融条件代理。当前真实指标为6/14（L1、L2、L3、L5、B3、B5），其余8项pending。详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
 
 ## 7. 实施共识
 
@@ -111,7 +111,7 @@
 - F/L/B 合计预留14项量化指标；字段遵循数据字典。
 - 实现总览、历史诊断、关键时期审计、方法与数据四个二级页面。
 - 总览显示数据质量摘要；严重缺失或 PIT 问题显式警告。
-- L1、L2、L3、B3、B5标注“真实快照 / 真实数据”；尚未接入的9项标注 `pending`，历史静态曲线和其他示例内容继续标注“示例”。
+- L1、L2、L3、L5、B3、B5标注“真实快照 / 真实数据”；尚未接入的8项标注 `pending`，历史静态曲线和其他示例内容继续标注“示例”。
 - 当前市场状态只允许来自 `current.json`；读取失败时显式报错，不回退 TypeScript Mock。
 - 仓位只表达倾向，明确市场研究是仓位系统上游而非交易指令。
 
@@ -125,7 +125,7 @@
 
 ### LATER
 
-- 继续用 Tushare、BaoStock与官方宏观数据接入其余9项指标，并接入月度 PIT 历史。
+- 继续用 Tushare、BaoStock与官方宏观数据接入其余8项指标，并接入月度 PIT 历史。
 - 实现真实评分、滚动分位、Z-score、财报公告日、历史股票池和回测。
 - 实现关键时期真实审计、Forward Return、Maximum Drawdown、Walk-forward和严格样本外验证。
 - 验证统计有效性后再调整权重并接入总体仓位控制。

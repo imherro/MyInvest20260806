@@ -84,7 +84,7 @@ test("current.json contains the complete F/L/B market research contract", async 
   assert.equal(current.schemaVersion, 3);
   assert.equal(current.source.mode, "generated");
   assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行"]);
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"]);
   assert.equal("api" in current.source, false);
   assert.equal(current.source.releaseEvidence.L2.provider, "中国人民银行");
   assert.doesNotMatch(JSON.stringify(current.source), /cn_schedule/);
@@ -136,7 +136,7 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real L1, L2, L3, B3 and B5 snapshots with 9 explicitly pending indicators", async () => {
+test("contains real L1, L2, L3, L5, B3 and B5 snapshots with 8 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
@@ -144,6 +144,7 @@ test("contains real L1, L2, L3, B3 and B5 snapshots with 9 explicitly pending in
   const b5 = current.components.B.find((item) => item.id === "B5");
   const l1 = current.components.L.find((item) => item.id === "L1");
   const l3 = current.components.L.find((item) => item.id === "L3");
+  const l5 = current.components.L.find((item) => item.id === "L5");
 
   assert.equal(b3.dataStatus, "generated");
   assert.match(b3.raw, /沪深300 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}；创业板指 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}/);
@@ -179,6 +180,16 @@ test("contains real L1, L2, L3, B3 and B5 snapshots with 9 explicitly pending in
   assert.match(l3.note, /第一阶段信用规模代理/);
   assert.match(l3.note, /未做.*GDP归一化/);
   assert.match(l3.note, /不计算L3评分/);
+  assert.equal(l5.dataStatus, "generated");
+  assert.match(l5.raw, /美国10年实际国债收益率 -?\d+\.\d{2}%/);
+  assert.ok(l5.period < current.asOf);
+  assert.equal(l5.release, l5.period);
+  assert.equal(l5.score, null);
+  assert.equal(l5.position, null);
+  assert.equal(l5.trend, null);
+  assert.match(l5.note, /第一阶段外部金融条件代理/);
+  assert.match(l5.note, /跨时区保守/);
+  assert.match(l5.note, /不计算.*L5评分/);
   assert.equal(b5.dataStatus, "generated");
   assert.match(b5.raw, /沪深300换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；创业板指换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；自由流通换手比 \d+\.\d{2}x/);
   assert.equal(b5.period, b3.period);
@@ -188,18 +199,18 @@ test("contains real L1, L2, L3, B3 and B5 snapshots with 9 explicitly pending in
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 5);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 9);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 6);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 8);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "35.7%");
+  assert.equal(current.dataQuality.coverage, "42.9%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "3/5", "2/5"]);
-  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release].sort().reverse()[0]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "4/5", "2/5"]);
+  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l5.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only five indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only six indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -229,33 +240,36 @@ test("selects the latest common trading date and builds mixed-frequency current 
   const l2 = { m1Yoy: 4, m2Yoy: 7.7, gap: -3.7, period: "2026-07", release: "2026-08-14" };
   const l1 = { date: "2026-08-14", overnight: 1.2345, oneWeek: 1.3456, threeMonth: 1.4567, oneYear: 1.5678, termSpread: 0.3333 };
   const l3 = { month: "202607", incMonth: 12345, incCumval: 222500, stock: 463.27, incMonthTrillion: 1.2345, incCumTrillion: 22.25, stockYoy: 7.4, stockDifference: 0, cumulativeDifference: 0, period: "2026-07", release: "2026-08-14" };
+  const l5 = { date: "2026-08-14", y10: 2.41 };
   const evidence = { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" };
-  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
+  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
   assert.equal(generated.asOf, "2026-08-17");
   assert.equal(generated.components.B[2].period, "2026-08-14");
   assert.equal(generated.components.L[1].period, "2026-07");
   assert.deepEqual(snapshot.values["000300.SH"], { peTtm: 14.3637, pb: 1.4639, turnoverRate: 0.5, turnoverRateF: 1 });
-  assert.equal(generated.dataQuality.coverage, "35.7%");
+  assert.equal(generated.dataQuality.coverage, "42.9%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.equal(generated.components.B[4].period, generated.components.B[2].period);
   assert.equal(generated.components.B[4].release, generated.components.B[2].release);
   assert.match(generated.components.L[0].raw, /1\.2345%.*1\.3456%.*1\.4567%.*1\.5678%.*\+0\.3333pct/);
   assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
-  assert.match(generated.diagnosis.headline, /L1、L2、L3、B3、B5/);
-  assert.match(generated.dataQuality.warning, /其余9项/);
+  assert.match(generated.components.L[4].raw, /美国10年实际国债收益率 2\.41%/);
+  assert.match(generated.diagnosis.headline, /L1、L2、L3、L5、B3、B5/);
+  assert.match(generated.dataQuality.warning, /其余8项/);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);
+  assert.equal(generated.recentEvents.some((event) => event.group === "L5" && event.detail === generated.components.L[4].raw), true);
 });
 
-test("requests index turnover fields and records the exact four APIs", async () => {
+test("requests index turnover fields and records the exact five APIs", async () => {
   const source = await generatorSource();
   assert.match(source, /"ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f"/);
   const current = await currentMarketData();
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"]);
 });
 
 test("selects and validates the latest SHIBOR row within the 30-day as-of window", async () => {
@@ -276,6 +290,25 @@ test("selects and validates the latest SHIBOR row within the 30-day as-of window
 test("requests the exact SHIBOR fields", async () => {
   const source = await generatorSource();
   assert.match(source, /callTushare\("shibor",[^\n]+"date,on,1w,3m,1y"/);
+});
+
+test("selects the latest US real yield strictly before the China as-of date", async () => {
+  const { selectLatestUsRealYieldSnapshot } = await marketGenerator();
+  const row = (date, y10 = 2.4) => ({ date, y10 });
+  assert.deepEqual(selectLatestUsRealYieldSnapshot([row("20260817", 9), row("20260818", 8), row("20260814", 2.41), row("20260813", 2.39)], "2026-08-17"), { date: "2026-08-14", y10: 2.41 });
+  assert.equal(selectLatestUsRealYieldSnapshot([row("20260814")], "2026-08-17").date, "2026-08-14");
+  assert.equal(selectLatestUsRealYieldSnapshot([row("20260814", -0.25)], "2026-08-17").y10, -0.25);
+  assert.throws(() => selectLatestUsRealYieldSnapshot([row("20260817"), row("20260818"), row("invalid")], "2026-08-17"), /30-day window/);
+  assert.throws(() => selectLatestUsRealYieldSnapshot([row("20260701")], "2026-08-17"), /30-day window/);
+  assert.throws(() => selectLatestUsRealYieldSnapshot([row("20260814"), row("20260814")], "2026-08-17"), /exactly one row/);
+  for (const invalid of [null, "", "not-a-number", Infinity]) {
+    assert.throws(() => selectLatestUsRealYieldSnapshot([row("20260814", invalid)], "2026-08-17"), /Invalid US 10Y/);
+  }
+});
+
+test("requests the exact us_trycr fields", async () => {
+  const source = await generatorSource();
+  assert.match(source, /callTushare\("us_trycr",[^\n]+"date,y10"/);
 });
 
 test("requests the exact sf_month fields without another PBOC report fetch", async () => {
@@ -455,6 +488,6 @@ test("keeps unsupported certainty language out of the user interface", async () 
   const source = await appSource();
   assert.doesNotMatch(source, /最新可用数据/);
   assert.match(source, /<span>信息截止<\/span><b>\{display\(data\.asOf\)\}<\/b>/);
-  assert.match(source, /当前为真实数据快照（L2经PBOC交叉验证）/);
+  assert.match(source, /当前为真实数据快照（L2\/L3经PBOC交叉验证）/);
   assert.doesNotMatch(source, /当前为双源校验真实快照/);
 });

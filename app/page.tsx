@@ -96,7 +96,7 @@ function Market() {
   const totalIndicatorCount=allIndicators.length;
   return <>
     {header}
-    <div className="prototype-banner"><span>VERIFIED DATA SNAPSHOT</span><b>当前为真实数据快照（L2经PBOC交叉验证）</b><em>{data.source.providers.join(" + ")} · {data.source.apis.join(" / ")}</em><small>信息截止 {display(data.asOf)} · 质量 {display(data.dataQuality.grade)} · 覆盖率 {display(data.dataQuality.coverage)}</small></div>
+    <div className="prototype-banner"><span>VERIFIED DATA SNAPSHOT</span><b>当前为真实数据快照（L2/L3经PBOC交叉验证）</b><em>{data.source.providers.join(" + ")} · {data.source.apis.join(" / ")}</em><small>信息截止 {display(data.asOf)} · 质量 {display(data.dataQuality.grade)} · 覆盖率 {display(data.dataQuality.coverage)}</small></div>
     <div className="tabs regime-tabs">{[["overview","总览"],["history","历史诊断"],["episodes","关键时期审计"],["method","方法与数据"]].map(([id,label])=><button key={id} className={marketTab===id?"active":""} onClick={()=>selectMarketTab(id as "overview"|"history"|"episodes"|"method")}>{label}</button>)}</div>
     {marketTab==="overview"&&<>
     <section className="regime-diagnosis">

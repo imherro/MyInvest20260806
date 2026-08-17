@@ -253,7 +253,27 @@ export function selectLatestShiborSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), overnight, oneWeek, threeMonth, oneYear, termSpread };
 }
 
-export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
+  const requested = compactDate(requestedAsOf);
+  const windowStart = compactDate(subtractDays(requestedAsOf, 30));
+  const validDate = value => {
+    if (!/^\d{8}$/.test(String(value ?? ""))) return false;
+    const displayed = displayDate(String(value));
+    const parsed = new Date(`${displayed}T00:00:00Z`);
+    return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === displayed;
+  };
+  const selectedDate = rows.map(row => String(row?.date ?? ""))
+    .filter(date => validDate(date) && date >= windowStart && date < requested).sort().reverse()[0];
+  if (!selectedDate) throw new Error(`No valid Tushare us_trycr row found before ${requestedAsOf} in the 30-day window`);
+  const matches = rows.filter(row => String(row?.date) === selectedDate);
+  if (matches.length !== 1) throw new Error(`Tushare us_trycr must contain exactly one row for ${selectedDate}`);
+  const value = matches[0].y10;
+  const y10 = value === null || value === undefined || value === "" ? Number.NaN : Number(value);
+  if (!Number.isFinite(y10)) throw new Error(`Invalid US 10Y real yield for ${selectedDate}`);
+  return { date: displayDate(selectedDate), y10 };
+}
+
+export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -266,6 +286,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, 
   const spreadText = `${l1.termSpread >= 0 ? "+" : ""}${l1.termSpread.toFixed(4)}pct`;
   const l1Raw = `SHIBOR隔夜 ${l1.overnight.toFixed(4)}% / 1周 ${l1.oneWeek.toFixed(4)}% / 3月 ${l1.threeMonth.toFixed(4)}% / 1年 ${l1.oneYear.toFixed(4)}% / 1Y-ON期限差 ${spreadText}`;
   const l3Raw = `社融当月增量 ${l3.incMonthTrillion.toFixed(4)}万亿元 / 年内累计 ${l3.incCumTrillion.toFixed(2)}万亿元 / 存量 ${l3.stock.toFixed(2)}万亿元 / 存量同比 ${l3.stockYoy.toFixed(1)}%`;
+  const l5Raw = `美国10年实际国债收益率 ${l5.y10.toFixed(2)}%`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
   components.L = components.L.map(indicator => {
@@ -277,6 +298,10 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, 
     if (indicator.id === "L3") return {
       ...indicator, raw: l3Raw, period: l3.period, release: l3.release, coverage: "1/1全国社融", quality: "A",
       note: "当前接入全国社会融资规模当月增量、累计增量、存量及存量同比，作为L3第一阶段信用规模代理；尚未计算真正的信用脉冲——未做历史增量变化、名义GDP归一化或滚动标准化，因此不计算L3评分。", dataStatus: "generated",
+    };
+    if (indicator.id === "L5") return {
+      ...indicator, raw: l5Raw, period: l5.date, release: l5.date, coverage: "1/1美国实际利率", quality: "A",
+      note: "当前仅接入美国10年期实际国债收益率，作为L5第一阶段外部金融条件代理；采用跨时区保守日期规则，仅使用早于中国信息截止日的美国数据，当前系统不处理精确小时级PIT。尚未接入美元、波动率、信用利差和全球流动性，因此不计算历史分位、趋势或L5评分。", dataStatus: "generated",
     };
     return indicator;
   });
@@ -300,7 +325,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, 
   });
   return {
     ...template, schemaVersion: 3, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2/L3 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2/L3 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
     asOf: requestedAsOf,
     diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
@@ -312,6 +337,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, 
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
+      { date: l5.date.slice(5), title: "L5外部金融条件代理快照生成", detail: l5Raw, group: "L5", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
     ].sort((a, b) => b.date.localeCompare(a.date)), components,
@@ -337,9 +363,10 @@ export async function main(argv = process.argv.slice(2)) {
   const shiborStartDate = subtractDays(requestedAsOf, 30);
   const l1 = selectLatestShiborSnapshot(await callTushare("shibor", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,on,1w,3m,1y", token), requestedAsOf);
   const l3 = buildL3Snapshot(await callTushare("sf_month", { m: report.dataMonth }, "month,inc_month,inc_cumval,stk_endval", token), report, official);
+  const l5 = selectLatestUsRealYieldSnapshot(await callTushare("us_trycr", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,y10", token), requestedAsOf);
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
@@ -347,6 +374,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
+  console.log(`L5: ${current.components.L.find(indicator => indicator.id === "L5").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
 }
