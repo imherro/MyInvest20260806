@@ -11,6 +11,7 @@
     "start": "vinext start --host 0.0.0.0 --port 9800",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "market:generate": "node scripts/generate-market-research-current.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

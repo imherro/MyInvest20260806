@@ -100,7 +100,7 @@
 
 ## 6. current.json 文件契约
 
-任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。当前文件仍是人工样例，详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
+任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。任务03A已将契约升级为schema v2并接入首个真实指标B3；详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
 
 ## 7. 实施共识
 

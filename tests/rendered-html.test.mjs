@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -46,6 +47,10 @@ async function currentMarketGuard() {
   return (await import(moduleUrl.href)).isMarketResearchCurrent;
 }
 
+async function marketGenerator() {
+  return import(new URL("../scripts/generate-market-research-current.mjs", import.meta.url).href);
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -71,8 +76,10 @@ test("current.json contains the complete F/L/B market research contract", async 
   const isMarketResearchCurrent = await currentMarketGuard();
 
   assert.equal(isMarketResearchCurrent(current), true);
-  assert.equal(current.schemaVersion, 1);
-  assert.equal(current.source.mode, "manual_sample");
+  assert.equal(current.schemaVersion, 2);
+  assert.equal(current.source.mode, "generated");
+  assert.equal(current.source.provider, "Tushare Pro");
+  assert.equal(current.source.api, "index_dailybasic");
   assert.deepEqual(current.cards.map((card) => card.code), ["F", "L", "B"]);
 
   for (const text of [
@@ -119,6 +126,65 @@ test("defines explicit missing-value behavior", async () => {
   const source = await appSource();
   assert.match(source, /value \?\? "—"/);
   assert.match(source, /isMarketResearchCurrent/);
+});
+
+test("contains one real B3 snapshot and 13 explicitly pending indicators", async () => {
+  const current = await currentMarketData();
+  const components = [...current.components.F, ...current.components.L, ...current.components.B];
+  const b3 = current.components.B.find((item) => item.id === "B3");
+
+  assert.equal(b3.dataStatus, "generated");
+  assert.match(b3.raw, /沪深300 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}；创业板指 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}/);
+  assert.equal(b3.period, current.asOf);
+  assert.equal(b3.position, null);
+  assert.equal(b3.score, null);
+  assert.match(b3.note, /历史分位和最终B3评分尚未实现/);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 1);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 13);
+  assert.ok(current.cards.every((card) => card.score === null));
+  assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
+});
+
+test("disables unsupported aggregate diagnoses while only B3 is generated", async () => {
+  const current = await currentMarketData();
+  const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
+
+  assert.doesNotMatch(serialized, /F 偏强|L 偏正|B 温热|黄金环境|热牛阶段/);
+  assert.equal(current.diagnosis.investmentImplication, null);
+  assert.equal(current.diagnosis.positionBias, null);
+  assert.equal(current.jointState.nearestState, null);
+});
+
+test("selects the latest common trading date and builds B3 without network access", async () => {
+  const { buildGeneratedCurrent, selectLatestCommonSnapshot } = await marketGenerator();
+  const template = await currentMarketData();
+  const rows = {
+    "000300.SH": [
+      { trade_date: "20260815", pe_ttm: 15, pb: 1.5 },
+      { trade_date: "20260814", pe_ttm: 14.3637, pb: 1.4639 },
+    ],
+    "399006.SZ": [{ trade_date: "20260814", pe_ttm: 44.4014, pb: 6.0352 }],
+  };
+  const snapshot = selectLatestCommonSnapshot(rows, "2026-08-17");
+  const generated = buildGeneratedCurrent(template, snapshot, "2026-08-17T10:00:00.000Z");
+
+  assert.equal(snapshot.tradeDate, "20260814");
+  assert.equal(generated.asOf, "2026-08-14");
+  assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
+});
+
+test("generator refuses to run without exposing or fabricating a Tushare token", () => {
+  const env = { ...process.env };
+  delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, ["scripts/generate-market-research-current.mjs", "--as-of", "2026-08-17"], {
+    cwd: fileURLToPath(new URL("..", import.meta.url)),
+    encoding: "utf8",
+    env,
+  });
+
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /TUSHARE_TOKEN is required/);
+  assert.doesNotMatch(result.stdout, /Generated public/);
 });
 
 test("rejects current.json shapes that could crash the market page", async () => {

@@ -1,5 +1,6 @@
 export type MarketCardCode = "F" | "L" | "B";
 export type DisplayValue = string | null;
+export type IndicatorDataStatus = "generated" | "pending" | "manual_sample";
 
 export type RegimeIndicator = {
   id: string;
@@ -13,12 +14,19 @@ export type RegimeIndicator = {
   coverage: DisplayValue;
   quality: DisplayValue;
   note: DisplayValue;
+  dataStatus: IndicatorDataStatus;
 };
 
 export type MarketResearchCurrent = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   generatedAt: string;
-  source: { mode: "manual_sample" | "generated"; label: string };
+  source: {
+    mode: "generated";
+    label: string;
+    provider: "Tushare Pro";
+    api: "index_dailybasic";
+    instruments: Array<{ code: string; name: string; role: "broad" | "technology" }>;
+  };
   asOf: DisplayValue;
   diagnosis: {
     states: string[];
@@ -66,16 +74,22 @@ const isStringArray = (value: unknown): value is string[] => Array.isArray(value
 const isNumberArray = (value: unknown): value is number[] => Array.isArray(value) && value.every(item => typeof item === "number");
 
 function isIndicator(value: unknown): value is RegimeIndicator {
-  if (!isObject(value) || !isString(value.id) || !isString(value.name)) return false;
+  if (!isObject(value) || !isString(value.id) || !isString(value.name)
+    || (value.dataStatus !== "generated" && value.dataStatus !== "pending" && value.dataStatus !== "manual_sample")) return false;
   return ["score", "raw", "position", "trend", "period", "release", "coverage", "quality", "note"]
     .every(field => isDisplayValue(value[field]));
 }
 
 export function isMarketResearchCurrent(value: unknown): value is MarketResearchCurrent {
-  if (!isObject(value) || value.schemaVersion !== 1 || !isString(value.generatedAt) || !isDisplayValue(value.asOf)) return false;
+  if (!isObject(value) || value.schemaVersion !== 2 || !isString(value.generatedAt) || !isDisplayValue(value.asOf)) return false;
 
   const source = value.source;
-  if (!isObject(source) || (source.mode !== "manual_sample" && source.mode !== "generated") || !isString(source.label)) return false;
+  if (!isObject(source) || source.mode !== "generated" || !isString(source.label)
+    || source.provider !== "Tushare Pro" || source.api !== "index_dailybasic"
+    || !Array.isArray(source.instruments) || source.instruments.length !== 2
+    || !source.instruments.every(instrument => isObject(instrument)
+      && isString(instrument.code) && isString(instrument.name)
+      && (instrument.role === "broad" || instrument.role === "technology"))) return false;
 
   const diagnosis = value.diagnosis;
   if (!isObject(diagnosis) || !isStringArray(diagnosis.states)) return false;
