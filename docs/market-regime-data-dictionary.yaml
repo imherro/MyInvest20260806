@@ -1,0 +1,110 @@
+version: 1
+status: prototype_consensus
+score_range: [0, 10]
+point_in_time_rule: "Only observations with release_date <= as_of may be used"
+
+foundation:
+  direction: higher_is_better
+  update_frequency: monthly_or_quarterly
+  components:
+    - id: F1
+      name: 全A盈利趋势
+      formula: "50% × 全A TTM净利润同比 + 50% × 非金融全A TTM净利润同比"
+      source: Tushare上市公司财报
+      pit: 按ann_date生效
+      missing: 两个子项均缺失时该项缺失并重分配权重
+    - id: F2
+      name: 盈利扩散与质量
+      formula: "盈利增长公司占比、ROE趋势、经营现金流TTM/净利润TTM的等权组合"
+      source: Tushare上市公司财报
+      pit: 按ann_date生效，使用当时历史股票池
+      missing: 可用子项等权，披露coverage
+    - id: F3
+      name: 股东回报与股权融资
+      formula: "过去12个月(现金分红+实际完成回购)/(IPO+增发+配股)"
+      source: Tushare与交易所公告
+      pit: 仅使用实际发生金额与当时可见公告
+      missing: 分母为零时单独标记，不使用无穷值
+    - id: F4
+      name: 长期资金
+      formula: "保险、社保、养老金、公募与长期ETF资金的可得组合"
+      source: 监管披露、基金与持仓数据
+      pit: 按公开披露日期生效
+      missing: 支持available/partial/unavailable并重分配权重
+
+bubble:
+  direction: higher_is_more_dangerous
+  update_frequency: weekly_or_monthly
+  components:
+    - id: B1
+      name: 股权风险溢价 ERP
+      formula: "1/PE - 中国10Y国债收益率；沪深300与全A作为子指标"
+      source: Tushare/BaoStock与中国债券数据
+      normalization: rolling_10y_percentile_min_5y
+      score_direction: ERP越低，泡沫分越高
+    - id: B2
+      name: 股息率利差
+      formula: "股息率 - 中国10Y国债收益率"
+      source: 指数估值与中国债券数据
+      normalization: rolling_10y_percentile_min_5y
+      score_direction: 利差越低，泡沫分越高
+    - id: B3
+      name: PE/PB估值与行业分化
+      formula: "PE分位、PB分位与行业估值离散度的组合"
+      source: Tushare/BaoStock
+      normalization: rolling_10y_percentile_min_5y
+      score_direction: 估值分位和高估行业集中度越高，泡沫分越高
+    - id: B4
+      name: A股总市值/GDP
+      formula: "A股总市值/过去四季度名义GDP"
+      source: Tushare与国家统计局
+      normalization: rolling_10y_percentile_min_5y
+      score_direction: 历史分位越高，泡沫分越高
+    - id: B5
+      name: 投机热度
+      formula: "融资余额/流通市值、20日平均换手率、20日成交额历史分位的等权组合"
+      source: Tushare/BaoStock/交易所
+      normalization: expanding_or_rolling_percentile
+      score_direction: 越活跃和杠杆化，泡沫分越高
+
+liquidity:
+  direction: higher_is_more_supportive
+  update_frequency: monthly
+  components:
+    - id: L1
+      name: 利率与实际利率
+      formula: "10Y国债、1Y国债、实际10Y利率(10Y-CPI同比)与短期市场利率趋势"
+      source: 中国债券数据、国家统计局、人民银行
+      normalization: rolling_5y_zscore
+      score_direction: 金融条件越宽松，得分越高
+    - id: L2
+      name: M1/M2货币活化
+      formula: "M1同比、M2同比、M1-M2剪刀差"
+      source: 中国人民银行
+      normalization: rolling_5y_zscore_by_series_version
+      pit: 按发布日期生效；2025年前后M1分版本标准化
+    - id: L3
+      name: 信用脉冲
+      formula: "过去12个月新增社融/过去4季度名义GDP，相对3个月和6个月前变化后平滑"
+      source: 中国人民银行、国家统计局
+      normalization: rolling_5y_zscore
+      score_direction: 信用加速越强，得分越高
+    - id: L4
+      name: 财政脉冲
+      formula: "政府债券12个月净融资/GDP及其变化"
+      source: 财政部、人民银行、国家统计局
+      normalization: rolling_5y_zscore
+      score_direction: 财政扩张越强，得分越高
+    - id: L5
+      name: 外部金融条件
+      formula: "DXY、USD/CNY、美国10Y实际利率的低权重组合"
+      source: FRED/yfinance/外汇数据
+      normalization: rolling_5y_zscore
+      score_direction: 美元弱、美国实际利率下降、人民币压力小则得分更高
+
+policy_overlay:
+  quantitative: false
+  range: [-2, 2]
+  bands: [restrictive, neutral, supportive]
+  rule: 保持定性理由列表，不参与第一阶段历史拟合
+
