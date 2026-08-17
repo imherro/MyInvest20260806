@@ -48,3 +48,11 @@ node scripts/generate-market-research-history-b2.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-b4.mjs --as-of 2026-08-17
 ```
+
+## F3 现金分红股东回报代理历史
+
+阶段04F从B2历史零网络派生F3现金分红股东回报代理历史，日期、样本数量、覆盖率和市值加权TTM股息率全部继承B2，仅将 `weightedDividendYield` 语义映射为 `cashDividendYield`，不做数值变换。当前只覆盖现金分红，不覆盖股票回购、注销式回购及IPO、增发、配股、可转债等股权融资或稀释，因此不是完整的“股东回报 / 股权融资”指标。
+
+```powershell
+node scripts/generate-market-research-history-f3.mjs --as-of 2026-08-17
+```

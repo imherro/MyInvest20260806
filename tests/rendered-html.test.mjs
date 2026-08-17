@@ -100,6 +100,14 @@ async function b4HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b4.json", import.meta.url)), "utf8"));
 }
 
+async function f3HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-f3.mjs", import.meta.url).href);
+}
+
+async function f3HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f3.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -895,6 +903,73 @@ test("B4 requestedAsOf failure preserves B4, B2, B5, B3, B1 and current files", 
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b4.mjs", import.meta.url)), "--as-of", "2026-08-16"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /requestedAsOf/);
+  assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("derives the F3 cash-dividend proxy exactly from B2 coverage facts", async () => {
+  const { buildF3MonthlyHistory } = await f3HistoryGenerator();
+  const fixture = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B2", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" },
+    source: { provider: "Tushare Pro", api: "daily_basic" },
+    points: [{ asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", stockCount: 100, observedCount: 80, missingCount: 20, marketCapCoverage: 90, weightedDividendYield: 2.5 }],
+  };
+  const result = buildF3MonthlyHistory(fixture, "2026-08-17", "2026-08-17T00:00:00.000Z");
+  assert.deepEqual(result.points[0], { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", stockCount: 100, observedCount: 80, missingCount: 20, marketCapCoverage: 90, cashDividendYield: 2.5 });
+  assert.equal(result.points[0].cashDividendYield, fixture.points[0].weightedDividendYield);
+  for (const [field, invalids] of [["stockCount", [0, -1, 1.5, null, "bad"]], ["observedCount", [0, -1, 1.5, null, "bad"]], ["missingCount", [-1, 1.5, null, "bad"]]]) for (const invalid of invalids) {
+    const broken = structuredClone(fixture); broken.points[0][field] = invalid;
+    assert.throws(() => buildF3MonthlyHistory(broken, "2026-08-17"), new RegExp(field));
+  }
+  const mismatch = structuredClone(fixture); mismatch.points[0].missingCount = 19;
+  assert.throws(() => buildF3MonthlyHistory(mismatch, "2026-08-17"), /missingCount/);
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", 0, -1, 100.01]) {
+    const broken = structuredClone(fixture); broken.points[0].marketCapCoverage = invalid;
+    assert.throws(() => buildF3MonthlyHistory(broken, "2026-08-17"), /marketCapCoverage/);
+  }
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", -1]) {
+    const broken = structuredClone(fixture); broken.points[0].weightedDividendYield = invalid;
+    assert.throws(() => buildF3MonthlyHistory(broken, "2026-08-17"), /weightedDividendYield/);
+  }
+  const zero = structuredClone(fixture); zero.points[0].weightedDividendYield = 0;
+  assert.equal(buildF3MonthlyHistory(zero, "2026-08-17").points[0].cashDividendYield, 0);
+});
+
+test("F3 derivation fails closed on damaged B2 identity and PIT schedule", async () => {
+  const { buildF3MonthlyHistory } = await f3HistoryGenerator();
+  const point = (asOf, periodDate) => ({ asOf, periodDate, releaseDate: periodDate, revisionStatus: "not_tracked", stockCount: 2, observedCount: 1, missingCount: 1, marketCapCoverage: 50, weightedDividendYield: 1 });
+  const fixture = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B2", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-02-28" }, source: { provider: "Tushare Pro", api: "daily_basic" }, points: [point("2026-01-31", "2026-01-30"), point("2026-02-28", "2026-02-27")] };
+  for (const broken of [{ ...fixture, schemaVersion: 2 }, { ...fixture, indicator: { ...fixture.indicator, id: "B3" } }, { ...fixture, indicator: { ...fixture.indicator, frequency: "daily" } }]) assert.throws(() => buildF3MonthlyHistory(broken, "2026-08-17"), /identity/);
+  assert.throws(() => buildF3MonthlyHistory(fixture, "2026-08-16"), /requestedAsOf/);
+  assert.throws(() => buildF3MonthlyHistory({ ...fixture, points: [] }, "2026-08-17"), /range or points/);
+  assert.throws(() => buildF3MonthlyHistory({ ...fixture, points: [fixture.points[0], fixture.points[0]], range: { ...fixture.range, endAsOf: fixture.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  assert.throws(() => buildF3MonthlyHistory({ ...fixture, points: [...fixture.points].reverse(), range: { startAsOf: fixture.range.endAsOf, endAsOf: fixture.range.startAsOf } }, "2026-08-17"), /unique and strictly ascending/);
+  for (const [key, value] of [["releaseDate", "2026-01-29"], ["releaseDate", "2026-02-01"], ["periodDate", "2025-12-31"]]) {
+    const broken = structuredClone(fixture); broken.points[0][key] = value;
+    assert.throws(() => buildF3MonthlyHistory(broken, "2026-08-17"), /PIT dates/);
+  }
+  const revision = structuredClone(fixture); revision.points[0].revisionStatus = "final";
+  assert.throws(() => buildF3MonthlyHistory(revision, "2026-08-17"), /revisionStatus/);
+  assert.throws(() => buildF3MonthlyHistory({ ...fixture, range: { ...fixture.range, startAsOf: "2025-12-31" } }, "2026-08-17"), /range does not match/);
+});
+
+test("checked-in F3 history exactly maps B2 with zero network and no complete-F3 claims", async () => {
+  const [f3, b2] = await Promise.all([f3HistoryData(), b2HistoryData()]);
+  assert.equal(f3.points.length, 139); assert.equal(f3.points.length, b2.points.length); assert.equal(f3.requestedAsOf, b2.requestedAsOf); assert.deepEqual(f3.range, b2.range);
+  for (let index = 0; index < f3.points.length; index += 1) {
+    const actual = f3.points[index]; const input = b2.points[index];
+    for (const key of ["asOf", "periodDate", "releaseDate", "revisionStatus", "stockCount", "observedCount", "missingCount", "marketCapCoverage"]) assert.equal(actual[key], input[key]);
+    assert.equal(actual.cashDividendYield, input.weightedDividendYield);
+  }
+  assert.doesNotMatch(JSON.stringify(f3), /"(?:buyback|repurchase|ipo|seasonedOffering|equityFinancing|netEquityIssuance|shareholderYield|netShareholderYield|score|position|trend|percentile|zScore|normalized|signal|state)"/i);
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-f3.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /callTushare\(|fetch\(|TUSHARE_TOKEN/);
+});
+
+test("F3 requestedAsOf failure preserves F3, B4, B2, B5, B3, B1 and current files", async () => {
+  const paths = ["../public/data/market-research/history/f3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f3.mjs", import.meta.url)), "--as-of", "2026-08-16"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
+  assert.notEqual(result.status, 0); assert.match(result.stderr, /requestedAsOf/);
   assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
