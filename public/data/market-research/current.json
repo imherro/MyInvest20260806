@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:15:29.131Z",
+  "generatedAt": "2026-08-17T08:22:34.007Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -14,7 +14,8 @@
       "cn_m",
       "shibor",
       "sf_month",
-      "us_trycr"
+      "us_trycr",
+      "daily_basic"
     ],
     "instruments": [
       {
@@ -52,8 +53,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B1、B3、B5已生成",
-    "diagnosis": "当前仅L1、L2、L3、L4、L5、B1、B3、B5已由真实数据生成，其余6项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B1、B3、B4、B5已生成",
+    "diagnosis": "当前仅L1、L2、L3、L4、L5、B1、B3、B4、B5已由真实数据生成，其余5项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -94,7 +95,7 @@
       "title": "估值泡沫",
       "score": null,
       "status": "数据接入中",
-      "coverage": "3/5",
+      "coverage": "4/5",
       "updatedAt": "2026-08-14",
       "tone": "pending",
       "trend": [],
@@ -176,9 +177,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "57.1%",
+    "coverage": "64.3%",
     "pitStatus": "待接入",
-    "warning": "仅L1、L2、L3、L4、L5、B1、B3、B5已由真实数据生成，其余6项待接入"
+    "warning": "仅L1、L2、L3、L4、L5、B1、B3、B4、B5已由真实数据生成，其余5项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -222,6 +223,13 @@
       "title": "B3真实估值截面生成",
       "detail": "沪深300 PE TTM 14.36 / PB 1.46；创业板指 PE TTM 44.40 / PB 6.04",
       "group": "B3",
+      "tone": "blue"
+    },
+    {
+      "date": "08-14",
+      "title": "B4 A股总市值代理快照生成",
+      "detail": "A股当日记录总市值 130.10万亿元 / 覆盖 5540只股票",
+      "group": "B4",
       "tone": "blue"
     },
     {
@@ -417,15 +425,15 @@
         "id": "B4",
         "name": "总市值/GDP",
         "score": null,
-        "raw": null,
+        "raw": "A股当日记录总市值 130.10万亿元 / 覆盖 5540只股票",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-14",
+        "coverage": "5540只当日记录股票",
+        "quality": "A",
+        "note": "当前仅汇总与B3/B5相同交易日中Tushare daily_basic实际返回股票的total_mv，作为B4第一阶段A股当日总市值代理；尚未接入GDP分母，也未证明停牌或缺失记录股票全部覆盖，因此当前不是总市值/GDP，也不是巴菲特指标，不计算历史分位、趋势或B4评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "B5",

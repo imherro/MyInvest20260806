@@ -10,13 +10,13 @@
 - 指标 `release`：公开发布日期/可用日期。
 - `generatedAt`：文件生成时间，不能代替指标数据时间。
 - `source.providers`：当前为 `Tushare Pro`、`中国人民银行`、`中华人民共和国财政部`。
-- `source.apis`：当前为 `index_dailybasic`、`cn_m`、`shibor`、`sf_month`、`us_trycr`；PBOC为HTML发布证据，不伪装成API。
+- `source.apis`：当前为 `index_dailybasic`、`cn_m`、`shibor`、`sf_month`、`us_trycr`、`daily_basic`；PBOC和财政部为HTML发布证据，不伪装成API。
 - `source.releaseEvidence.L2`：保存PBOC栏目URL、实际报告标题、文章URL和完整发布时间。L2/L3本轮共用同一份金融统计报告及其发布日期；暂不为了一个共享URL重构schema。
 - `source.releaseEvidence.L4`：保存财政部统计数据栏目URL、实际财政收支报告标题、文章URL和首页/文章一致的发布日期（`YYYY-MM-DD`）。财政部HTML页面不进入 `source.apis`。
 - `dataStatus`：`generated`为真实生成，`pending`为尚未接入；`manual_sample`仅保留类型枚举。
 - 暂无值使用JSON `null`，界面统一显示 `—`。
 
-当前8/14项为真实数据：L1、L2、L3、L4、L5、B1、B3、B5；其余6项为 `pending`。B1/B3/B5共享同一 `trade_date` 快照；B1只用原始PE TTM计算指数盈利收益率，没有中国长期无风险利率，因此不是ERP。即使L卡覆盖率达到5/5、B卡达到3/5，F/L/B一级评分、联合市场判断、投资含义和仓位倾向仍为 `null`，PIT状态仍为“待接入”。其他指标的第一阶段代理限制保持不变。
+当前9/14项为真实数据：L1、L2、L3、L4、L5、B1、B3、B4、B5；其余5项为 `pending`。B1/B3/B4/B5共享同一 `trade_date`；B4仅汇总该日 `daily_basic` 实际返回记录的总市值，未接GDP，不是总市值/GDP或巴菲特指标。即使L卡覆盖率达到5/5、B卡达到4/5，F/L/B一级评分、联合市场判断、投资含义和仓位倾向仍为 `null`，PIT状态仍为“待接入”。
 
 ## 生成方式
 
