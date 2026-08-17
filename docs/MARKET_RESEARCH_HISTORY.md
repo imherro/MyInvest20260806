@@ -56,3 +56,13 @@ node scripts/generate-market-research-history-b4.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-f3.mjs --as-of 2026-08-17
 ```
+
+## F1 公告日 PIT 盈利趋势历史
+
+阶段04G新增F1月度公告日PIT历史。每个自然月末固定使用当时最新已经结束的报告期，并只纳入 `ann_date <= asOf` 的公司记录；同一季度在不同月末会按各自的信息边界重新计算。若最新报告期截至月末尚无任何公司披露，该月明确标记为 `unavailable`，不退回旧季度。
+
+Tushare财务指标同一公司、同公告日、同报告期可能因后续财务修正返回多个记录。04G请求 `update_flag`；当同键数值冲突且存在唯一可确定的 `update_flag=0` 初始版本时，历史侧使用初始版本，避免在没有修正日期的条件下把已知修正版回填到原公告日。若无法唯一确定初始值，则保留该公司该公告为“已披露但指标缺失”，不参与有效中位数，也不回退使用该公司的更早公告值。当前F1仍只是已披露样本归母净利润同比中位数，不代表完整全A总体利润增长；`revisionStatus=not_tracked` 表示尚未实现修正生效时间和完整财报revision-vintage PIT。
+
+```powershell
+node scripts/generate-market-research-history-f1.mjs --as-of 2026-08-17
+```

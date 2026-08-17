@@ -108,6 +108,14 @@ async function f3HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f3.json", import.meta.url)), "utf8"));
 }
 
+async function f1HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-f1.mjs", import.meta.url).href);
+}
+
+async function f1HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f1.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -971,6 +979,121 @@ test("F3 requestedAsOf failure preserves F3, B4, B2, B5, B3, B1 and current file
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f3.mjs", import.meta.url)), "--as-of", "2026-08-16"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
   assert.notEqual(result.status, 0); assert.match(result.stderr, /requestedAsOf/);
   assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("maps the checked-in monthly schedule to 47 exact ended quarters", async () => {
+  const { validateMonthlySchedule } = await f1HistoryGenerator();
+  const b3 = await b3HistoryData(); validateMonthlySchedule(b3, "2026-08-17");
+  const { quarterEndOnOrBefore } = await marketGenerator();
+  assert.equal(quarterEndOnOrBefore("2015-01-31"), "20141231");
+  assert.equal(quarterEndOnOrBefore("2015-02-28"), "20141231");
+  assert.equal(quarterEndOnOrBefore("2015-03-31"), "20150331");
+  assert.equal(quarterEndOnOrBefore("2015-04-30"), "20150331");
+  assert.equal(quarterEndOnOrBefore("2026-07-31"), "20260630");
+  const periods = [...new Set(b3.points.map(point => quarterEndOnOrBefore(point.asOf)))].sort();
+  assert.equal(b3.points.length, 139); assert.equal(periods.length, 47); assert.equal(periods[0], "20141231"); assert.equal(periods.at(-1), "20260630");
+  assert.throws(() => validateMonthlySchedule({ ...b3, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/);
+  assert.throws(() => validateMonthlySchedule({ ...b3, points: [b3.points[0], b3.points[0]], range: { ...b3.range, endAsOf: b3.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  assert.throws(() => validateMonthlySchedule({ ...b3, range: { ...b3.range, startAsOf: "2014-12-31" } }, "2026-08-17"), /range does not match/);
+});
+
+test("builds F1 monthly PIT without leaking future announcements", async () => {
+  const { buildF1MonthlyHistory } = await f1HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-04-30", endAsOf: "2026-05-31" }, points: [{ asOf: "2026-04-30" }, { asOf: "2026-05-31" }] };
+  const rows = [{ ts_code: "A", ann_date: "20260420", end_date: "20260331", netprofit_yoy: 10 }, { ts_code: "B", ann_date: "20260515", end_date: "20260331", netprofit_yoy: 30 }];
+  const history = buildF1MonthlyHistory(schedule, new Map([["20260331", rows]]), "2026-08-17", "2026-08-17T00:00:00.000Z");
+  assert.deepEqual(history.points[0], { asOf: "2026-04-30", periodDate: "2026-03-31", releaseDate: "2026-04-20", revisionStatus: "not_tracked", dataStatus: "generated", reportedCount: 1, validCount: 1, missingCount: 0, medianNetProfitYoy: 10 });
+  assert.deepEqual(history.points[1], { asOf: "2026-05-31", periodDate: "2026-03-31", releaseDate: "2026-05-15", revisionStatus: "not_tracked", dataStatus: "generated", reportedCount: 2, validCount: 2, missingCount: 0, medianNetProfitYoy: 20 });
+});
+
+test("marks the latest ended quarter unavailable without falling back", async () => {
+  const { buildF1MonthlyHistory } = await f1HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-03-31", endAsOf: "2026-03-31" }, points: [{ asOf: "2026-03-31" }] };
+  const batches = new Map([["20260331", [{ ts_code: "A", ann_date: "20260420", end_date: "20260331", netprofit_yoy: 10 }]], ["20251231", [{ ts_code: "OLD", ann_date: "20260301", end_date: "20251231", netprofit_yoy: 99 }]]]);
+  assert.deepEqual(buildF1MonthlyHistory(schedule, batches, "2026-08-17").points[0], { asOf: "2026-03-31", periodDate: "2026-03-31", releaseDate: null, revisionStatus: "not_tracked", dataStatus: "unavailable", reportedCount: 0, validCount: 0, missingCount: 0, medianNetProfitYoy: null });
+  const failures = [
+    [[{ ts_code: "A", ann_date: "20260301", end_date: "20260331", netprofit_yoy: null }], /no valid netprofit_yoy/],
+    [[{ ts_code: "A", ann_date: "bad", end_date: "20260331", netprofit_yoy: 1 }], /invalid ann_date/],
+    [[{ ts_code: "A", ann_date: "20260301", end_date: "20260331", netprofit_yoy: "bad" }], /invalid netprofit_yoy/],
+    [[{ ts_code: "", ann_date: "20260301", end_date: "20260331", netprofit_yoy: 1 }], /empty ts_code/],
+    [[{ ts_code: "A", ann_date: "20260301", end_date: "20260331", netprofit_yoy: 1 }, { ts_code: "A", ann_date: "20260301", end_date: "20260331", netprofit_yoy: 2 }], /conflicting netprofit_yoy/],
+  ];
+  for (const [rows, expected] of failures) {
+    assert.throws(() => buildF1MonthlyHistory(schedule, new Map([["20260331", rows]]), "2026-08-17"), expected);
+  }
+});
+
+test("validates each F1 quarter batch without invented row limits", async () => {
+  const { validateQuarterBatch } = await f1HistoryGenerator();
+  const row = end_date => ({ ts_code: "A", ann_date: "20260701", end_date, netprofit_yoy: 1 });
+  assert.equal(validateQuarterBatch([row("20260630")], "20260630").length, 1);
+  assert.throws(() => validateQuarterBatch([], "20260630"), /no rows/);
+  for (const invalid of ["20260331", null, undefined, "", "20260230", "bad"]) assert.throws(() => validateQuarterBatch([row(invalid)], "20260630"), /invalid or mismatched end_date/);
+});
+
+test("resolves same-day F1 revisions by official initial-version semantics", async () => {
+  const { resolveF1SameDayRevisions } = await f1HistoryGenerator();
+  const base = { ts_code: "300367.SZ", ann_date: "20160203", end_date: "20151231" };
+  const conflict = [{ ...base, netprofit_yoy: 81.7464, update_flag: "1" }, { ...base, netprofit_yoy: 83.0011, update_flag: "0" }];
+  for (const rows of [conflict, [...conflict].reverse()]) assert.equal(resolveF1SameDayRevisions(rows, "20151231")[0].netprofit_yoy, 83.0011);
+  const same = [{ ...base, netprofit_yoy: 20, update_flag: 0 }, { ...base, netprofit_yoy: 20, update_flag: 1 }];
+  assert.equal(resolveF1SameDayRevisions(same, "20151231")[0].netprofit_yoy, 20);
+  const nullAndFiniteInitial = [{ ...base, netprofit_yoy: null, update_flag: 0 }, { ...base, netprofit_yoy: 20, update_flag: "0" }, { ...base, netprofit_yoy: 30, update_flag: "1" }];
+  assert.equal(resolveF1SameDayRevisions(nullAndFiniteInitial, "20151231")[0].netprofit_yoy, 20);
+  const ambiguousInitial = [{ ...base, netprofit_yoy: 20, update_flag: 0 }, { ...base, netprofit_yoy: 30, update_flag: 0 }, { ...base, netprofit_yoy: 40, update_flag: 1 }];
+  assert.equal(resolveF1SameDayRevisions(ambiguousInitial, "20151231")[0].netprofit_yoy, null);
+  assert.throws(() => resolveF1SameDayRevisions([{ ...base, netprofit_yoy: 20, update_flag: "2" }], "20151231"), /invalid update_flag/);
+});
+
+test("maps unresolved F1 revision conflicts to reported missing without old-announcement fallback", async () => {
+  const { resolveF1SameDayRevisions, buildF1MonthlyHistory } = await f1HistoryGenerator();
+  const period = "20260331";
+  const rows = [
+    { ts_code: "A", ann_date: "20260420", end_date: period, netprofit_yoy: 10, update_flag: 0 },
+    { ts_code: "A", ann_date: "20260515", end_date: period, netprofit_yoy: 20, update_flag: 1 },
+    { ts_code: "A", ann_date: "20260515", end_date: period, netprofit_yoy: 30, update_flag: 1 },
+    { ts_code: "B", ann_date: "20260510", end_date: period, netprofit_yoy: 40, update_flag: 0 },
+  ];
+  const canonical = resolveF1SameDayRevisions(rows, period);
+  const unresolved = canonical.find(row => row.ts_code === "A" && row.ann_date === "20260515"); assert.equal(unresolved.netprofit_yoy, null);
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-05-31", endAsOf: "2026-05-31" }, points: [{ asOf: "2026-05-31" }] };
+  const point = buildF1MonthlyHistory(schedule, new Map([[period, canonical]]), "2026-08-17").points[0];
+  assert.equal(point.dataStatus, "generated"); assert.equal(point.reportedCount, 2); assert.equal(point.validCount, 1); assert.equal(point.missingCount, 1); assert.equal(point.medianNetProfitYoy, 40);
+});
+
+test("F1 history generator has one sequential 47-period API expression and reuses production logic", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-f1.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("fina_indicator_vip"/g) ?? []).length, 1);
+  assert.match(source, /for \(const period of targetPeriods\)/);
+  assert.match(source, /callTushare\("fina_indicator_vip", \{ period \}, FIELDS, token\)/);
+  assert.match(source, /const FIELDS = "ts_code,ann_date,end_date,netprofit_yoy,update_flag"/);
+  assert.match(source, /buildF1Snapshot/); assert.match(source, /quarterEndOnOrBefore/);
+  assert.doesNotMatch(source, /callTushare\("(?:fina_indicator|income|forecast|express|daily_basic|trade_cal)"/);
+  assert.doesNotMatch(source, /latestByCompany|positiveCount|positiveShare|Promise\.all/);
+});
+
+test("checked-in F1 history is a complete announcement-date PIT series", async () => {
+  const [f1, b3] = await Promise.all([f1HistoryData(), b3HistoryData()]);
+  const { quarterEndOnOrBefore } = await marketGenerator();
+  assert.equal(f1.schemaVersion, 1); assert.equal(f1.requestedAsOf, b3.requestedAsOf); assert.deepEqual(f1.range, b3.range); assert.equal(f1.points.length, 139);
+  let generatedCount = 0; let unavailableCount = 0;
+  for (let index = 0; index < f1.points.length; index += 1) {
+    const point = f1.points[index]; assert.equal(point.asOf, b3.points[index].asOf); assert.equal(point.periodDate, `${quarterEndOnOrBefore(point.asOf).slice(0, 4)}-${quarterEndOnOrBefore(point.asOf).slice(4, 6)}-${quarterEndOnOrBefore(point.asOf).slice(6, 8)}`); assert.equal(point.revisionStatus, "not_tracked");
+    if (point.dataStatus === "generated") { generatedCount += 1; assert.ok(point.releaseDate >= point.periodDate && point.releaseDate <= point.asOf); assert.ok(Number.isInteger(point.reportedCount) && point.reportedCount > 0); assert.ok(Number.isInteger(point.validCount) && point.validCount > 0); assert.ok(Number.isInteger(point.missingCount) && point.missingCount >= 0); assert.equal(point.validCount + point.missingCount, point.reportedCount); assert.ok(Number.isFinite(point.medianNetProfitYoy)); }
+    else { unavailableCount += 1; assert.equal(point.dataStatus, "unavailable"); assert.equal(point.releaseDate, null); assert.equal(point.reportedCount, 0); assert.equal(point.validCount, 0); assert.equal(point.missingCount, 0); assert.equal(point.medianNetProfitYoy, null); }
+  }
+  assert.equal(generatedCount + unavailableCount, 139);
+  assert.deepEqual(f1.source.fields, ["ts_code", "ann_date", "end_date", "netprofit_yoy", "update_flag"]);
+  assert.equal(f1.source.revisionField, "update_flag");
+  assert.doesNotMatch(JSON.stringify(f1), /"(?:positiveCount|positiveShare|score|position|trend|percentile|zScore|normalized|signal|state|growthState|riskLevel)"/);
+});
+
+test("missing-token F1 failure preserves F1, F3, B1-B5 and current files", async () => {
+  const paths = ["../public/data/market-research/history/f1.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f1.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
+  assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {
