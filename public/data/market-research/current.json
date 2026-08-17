@@ -1,12 +1,13 @@
 {
-  "schemaVersion": 3,
-  "generatedAt": "2026-08-17T07:47:13.434Z",
+  "schemaVersion": 4,
+  "generatedAt": "2026-08-17T08:03:11.392Z",
   "source": {
     "mode": "generated",
-    "label": "Real current snapshot; L2/L3 cross-verified by PBOC",
+    "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
     "providers": [
       "Tushare Pro",
-      "中国人民银行"
+      "中国人民银行",
+      "中华人民共和国财政部"
     ],
     "apis": [
       "index_dailybasic",
@@ -34,6 +35,13 @@
         "reportTitle": "2026年7月金融统计数据报告",
         "reportUrl": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/2026081416320925645/index.html",
         "publishedAt": "2026-08-14 16:30:05"
+      },
+      "L4": {
+        "provider": "中华人民共和国财政部",
+        "indexUrl": "https://gks.mof.gov.cn/tongjishuju/",
+        "reportTitle": "2026年上半年财政收支情况",
+        "reportUrl": "https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm",
+        "publishedAt": "2026-07-22"
       }
     }
   },
@@ -44,8 +52,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L1、L2、L3、L5、B3、B5已生成",
-    "diagnosis": "当前仅L1、L2、L3、L5、B3、B5已由真实数据生成，其余8项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B3、B5已生成",
+    "diagnosis": "当前仅L1、L2、L3、L4、L5、B3、B5已由真实数据生成，其余7项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -72,7 +80,7 @@
       "title": "货币信用",
       "score": null,
       "status": "数据接入中",
-      "coverage": "4/5",
+      "coverage": "5/5",
       "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
@@ -168,9 +176,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "42.9%",
+    "coverage": "50.0%",
     "pitStatus": "待接入",
-    "warning": "仅L1、L2、L3、L5、B3、B5已由真实数据生成，其余8项待接入"
+    "warning": "仅L1、L2、L3、L4、L5、B3、B5已由真实数据生成，其余7项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -214,6 +222,13 @@
       "title": "B5交易活跃度代理快照生成",
       "detail": "沪深300换手率 0.53%（自由流通 1.77%）；创业板指换手率 3.08%（自由流通 4.41%）；自由流通换手比 2.50x",
       "group": "B5",
+      "tone": "blue"
+    },
+    {
+      "date": "07-22",
+      "title": "L4财政收支规模代理快照生成",
+      "detail": "一般公共预算累计收入 12.1047万亿元（同比 +4.7%） / 累计支出 14.3329万亿元（同比 +1.5%）",
+      "group": "L4",
       "tone": "blue"
     }
   ],
@@ -323,15 +338,15 @@
         "id": "L4",
         "name": "财政脉冲",
         "score": null,
-        "raw": null,
+        "raw": "一般公共预算累计收入 12.1047万亿元（同比 +4.7%） / 累计支出 14.3329万亿元（同比 +1.5%）",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-06",
+        "release": "2026-07-22",
+        "coverage": "1/1全国一般公共预算",
+        "quality": "A",
+        "note": "当前仅接入财政部全国一般公共预算累计收入、累计支出及各自同比，作为L4第一阶段财政收支规模代理；尚未计算真正的财政脉冲——未做GDP归一化、历史边际变化、政府性基金合并或滚动标准化，因此不计算L4评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "L5",

@@ -5,6 +5,7 @@ import { isMarketResearchCurrent } from "../app/market-research-types.ts";
 
 export const TUSHARE_ENDPOINT = "https://api.tushare.pro";
 export const PBOC_INDEX_URL = "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html";
+export const MOF_INDEX_URL = "https://gks.mof.gov.cn/tongjishuju/";
 export const MARKET_INDEX_INSTRUMENTS = [
   { code: "000300.SH", name: "沪深300", role: "broad" },
   { code: "399006.SZ", name: "创业板指", role: "technology" },
@@ -92,6 +93,92 @@ export function selectLatestPublishedReport(reports, requestedAsOf) {
   const selected = reports.filter(report => report.listingDate <= requestedAsOf).sort((a, b) => b.listingDate.localeCompare(a.listingDate))[0];
   if (!selected) throw new Error("PBOC recent financial-report index does not cover requested as-of; historical pagination is not implemented in task03B");
   return selected;
+}
+
+export function parseMofFiscalReportTitle(title) {
+  const normalized = htmlToText(title);
+  let match = normalized.match(/^(\d{4})年1-(\d{1,2})月财政收支情况$/);
+  if (match) {
+    const month = Number(match[2]);
+    return month >= 2 && month <= 11 ? `${match[1]}${String(month).padStart(2, "0")}` : null;
+  }
+  match = normalized.match(/^(\d{4})年(一季度|上半年|前三季度)财政收支情况$/);
+  if (match) return `${match[1]}${{ 一季度: "03", 上半年: "06", 前三季度: "09" }[match[2]]}`;
+  match = normalized.match(/^(\d{4})年财政收支情况$/);
+  return match ? `${match[1]}12` : null;
+}
+
+export function validateMofReportUrl(href) {
+  const url = new URL(href, MOF_INDEX_URL);
+  const isColumnHome = url.pathname === "/tongjishuju/index.htm";
+  if (url.protocol !== "https:" || url.hostname !== "gks.mof.gov.cn"
+    || !url.pathname.startsWith("/tongjishuju/") || !url.pathname.endsWith(".htm") || isColumnHome) {
+    throw new Error(`Unsafe MOF fiscal report URL: ${url.href}`);
+  }
+  return url.href;
+}
+
+export function parseMofFiscalReportIndex(html) {
+  if (typeof html !== "string" || !html.trim()) throw new Error("MOF fiscal-report index returned empty HTML");
+  const reports = [];
+  const anchors = [...html.matchAll(/<a\b([^>]*)>[\s\S]*?<\/a>/gi)];
+  for (let index = 0; index < anchors.length; index += 1) {
+    const match = anchors[index];
+    const hrefMatch = match[1].match(/\bhref=["']([^"']+)["']/i);
+    const titleMatch = match[1].match(/\btitle=["']([^"']+)["']/i);
+    if (!hrefMatch || !titleMatch) continue;
+    const title = htmlToText(titleMatch[1]);
+    const dataMonth = parseMofFiscalReportTitle(title);
+    if (!dataMonth) continue;
+    const followingStart = (match.index ?? 0) + match[0].length;
+    const followingEnd = index + 1 < anchors.length ? anchors[index + 1].index : html.length;
+    const dateMatch = html.slice(followingStart, followingEnd).match(/\b(\d{4}-\d{2}-\d{2})\b/);
+    if (!dateMatch) throw new Error(`MOF listing date missing for ${title}`);
+    reports.push({ title, href: validateMofReportUrl(hrefMatch[1]), listingDate: dateMatch[1], dataMonth });
+  }
+  if (!reports.length) throw new Error("MOF fiscal-report index contains no supported reports");
+  return reports;
+}
+
+export function selectLatestMofFiscalReport(reports, requestedAsOf) {
+  const earliest = reports.map(report => report.listingDate).sort()[0];
+  if (!earliest || requestedAsOf < earliest) {
+    throw new Error("MOF recent fiscal-report index does not cover requested as-of; historical pagination is not implemented in task03G");
+  }
+  const selected = reports.filter(report => report.listingDate <= requestedAsOf)
+    .sort((a, b) => b.listingDate.localeCompare(a.listingDate))[0];
+  if (!selected) throw new Error("MOF fiscal-report index contains no report on or before requested as-of");
+  return selected;
+}
+
+function parseMofFiscalValue(text, label) {
+  const escapedLabel = label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const prefix = `${escapedLabel}\\s*([0-9]+(?:\\.[0-9]+)?)\\s*亿元\\s*[，,]?\\s*同比`;
+  let match = text.match(new RegExp(`${prefix}\\s*(增长|下降)\\s*([0-9]+(?:\\.[0-9]+)?)\\s*%`));
+  if (match) return { value: Number(match[1]), yoy: (match[2] === "下降" ? -1 : 1) * Number(match[3]) };
+  match = text.match(new RegExp(`${prefix}\\s*持平`));
+  if (match) return { value: Number(match[1]), yoy: 0 };
+  throw new Error(`Unable to parse MOF ${label}`);
+}
+
+export function parseMofFiscalReport(html, expectedReport) {
+  if (typeof html !== "string" || !html.trim()) throw new Error("MOF fiscal report returned empty HTML");
+  const titleMatch = html.match(/<meta\s+name=["']ArticleTitle["']\s+content=["']([^"']+)["']/i)
+    ?? html.match(/<h2\b[^>]*class=["'][^"']*title_con[^"']*["'][^>]*>([\s\S]*?)<\/h2>/i)
+    ?? html.match(/<title>([^<]+)<\/title>/i);
+  const title = titleMatch ? htmlToText(titleMatch[1]) : null;
+  if (title !== expectedReport.title) throw new Error(`MOF article title mismatch: expected ${expectedReport.title}, received ${title ?? "missing"}`);
+  const text = htmlToText(html).replace(/(\d)\s*\.\s*(\d)/g, "$1.$2");
+  const publishedMatch = text.match(/发布日期[：:]\s*(\d{4})年(\d{2})月(\d{2})日/);
+  if (!publishedMatch) throw new Error("MOF article published date is missing");
+  const publishedAt = `${publishedMatch[1]}-${publishedMatch[2]}-${publishedMatch[3]}`;
+  if (publishedAt !== expectedReport.listingDate) throw new Error("MOF article date does not match its listing date");
+  const revenue = parseMofFiscalValue(text, "全国一般公共预算收入");
+  const expenditure = parseMofFiscalValue(text, "全国一般公共预算支出");
+  const values = [revenue.value, revenue.yoy, expenditure.value, expenditure.yoy];
+  if (!values.every(Number.isFinite)) throw new Error("MOF fiscal values are not finite");
+  if (revenue.value <= 0 || expenditure.value <= 0) throw new Error("MOF fiscal revenue and expenditure must be greater than zero");
+  return { title, publishedAt, revenue: revenue.value, revenueYoy: revenue.yoy, expenditure: expenditure.value, expenditureYoy: expenditure.yoy };
 }
 
 function parseYearOnYear(text, label) {
@@ -273,7 +360,7 @@ export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), y10 };
 }
 
-export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -286,6 +373,8 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, eviden
   const spreadText = `${l1.termSpread >= 0 ? "+" : ""}${l1.termSpread.toFixed(4)}pct`;
   const l1Raw = `SHIBOR隔夜 ${l1.overnight.toFixed(4)}% / 1周 ${l1.oneWeek.toFixed(4)}% / 3月 ${l1.threeMonth.toFixed(4)}% / 1年 ${l1.oneYear.toFixed(4)}% / 1Y-ON期限差 ${spreadText}`;
   const l3Raw = `社融当月增量 ${l3.incMonthTrillion.toFixed(4)}万亿元 / 年内累计 ${l3.incCumTrillion.toFixed(2)}万亿元 / 存量 ${l3.stock.toFixed(2)}万亿元 / 存量同比 ${l3.stockYoy.toFixed(1)}%`;
+  const signedYoy = value => `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+  const l4Raw = `一般公共预算累计收入 ${(l4.revenue / 10000).toFixed(4)}万亿元（同比 ${signedYoy(l4.revenueYoy)}） / 累计支出 ${(l4.expenditure / 10000).toFixed(4)}万亿元（同比 ${signedYoy(l4.expenditureYoy)}）`;
   const l5Raw = `美国10年实际国债收益率 ${l5.y10.toFixed(2)}%`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
@@ -298,6 +387,10 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, eviden
     if (indicator.id === "L3") return {
       ...indicator, raw: l3Raw, period: l3.period, release: l3.release, coverage: "1/1全国社融", quality: "A",
       note: "当前接入全国社会融资规模当月增量、累计增量、存量及存量同比，作为L3第一阶段信用规模代理；尚未计算真正的信用脉冲——未做历史增量变化、名义GDP归一化或滚动标准化，因此不计算L3评分。", dataStatus: "generated",
+    };
+    if (indicator.id === "L4") return {
+      ...indicator, raw: l4Raw, period: displayMonth(l4.dataMonth), release: l4.listingDate, coverage: "1/1全国一般公共预算", quality: "A",
+      note: "当前仅接入财政部全国一般公共预算累计收入、累计支出及各自同比，作为L4第一阶段财政收支规模代理；尚未计算真正的财政脉冲——未做GDP归一化、历史边际变化、政府性基金合并或滚动标准化，因此不计算L4评分。", dataStatus: "generated",
     };
     if (indicator.id === "L5") return {
       ...indicator, raw: l5Raw, period: l5.date, release: l5.date, coverage: "1/1美国实际利率", quality: "A",
@@ -324,8 +417,8 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, eviden
     return { ...card, score: null, status: generated.length ? "数据接入中" : "待计算", coverage: `${generated.length}/${indicators.length}`, updatedAt, tone: "pending", trend: [], drivers: [], risks: [] };
   });
   return {
-    ...template, schemaVersion: 3, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2/L3 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
+    ...template, schemaVersion: 4, generatedAt,
+    source: { mode: "generated", label: "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official", providers: ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.pbc.title, reportUrl: evidence.pbc.href, publishedAt: evidence.pbc.publishedAt }, L4: { provider: "中华人民共和国财政部", indexUrl: MOF_INDEX_URL, reportTitle: evidence.mof.title, reportUrl: evidence.mof.href, publishedAt: evidence.mof.publishedAt } } },
     asOf: requestedAsOf,
     diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
@@ -337,6 +430,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, eviden
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
+      { date: l4.listingDate.slice(5), title: "L4财政收支规模代理快照生成", detail: l4Raw, group: "L4", tone: "blue" },
       { date: l5.date.slice(5), title: "L5外部金融条件代理快照生成", detail: l5Raw, group: "L5", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
@@ -364,9 +458,12 @@ export async function main(argv = process.argv.slice(2)) {
   const l1 = selectLatestShiborSnapshot(await callTushare("shibor", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,on,1w,3m,1y", token), requestedAsOf);
   const l3 = buildL3Snapshot(await callTushare("sf_month", { m: report.dataMonth }, "month,inc_month,inc_cumval,stk_endval", token), report, official);
   const l5 = selectLatestUsRealYieldSnapshot(await callTushare("us_trycr", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,y10", token), requestedAsOf);
+  const mofReport = selectLatestMofFiscalReport(parseMofFiscalReportIndex(await fetchText(MOF_INDEX_URL)), requestedAsOf);
+  const mofOfficial = parseMofFiscalReport(await fetchText(mofReport.href), mofReport);
+  const l4 = { ...mofOfficial, dataMonth: mofReport.dataMonth, listingDate: mofReport.listingDate };
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
@@ -374,6 +471,8 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
+  console.log(`MOF: ${mofReport.title} (${mofOfficial.publishedAt}) ${mofReport.href}`);
+  console.log(`L4: ${current.components.L.find(indicator => indicator.id === "L4").raw}`);
   console.log(`L5: ${current.components.L.find(indicator => indicator.id === "L5").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);

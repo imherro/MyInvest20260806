@@ -81,12 +81,13 @@ test("current.json contains the complete F/L/B market research contract", async 
   const isMarketResearchCurrent = await currentMarketGuard();
 
   assert.equal(isMarketResearchCurrent(current), true);
-  assert.equal(current.schemaVersion, 3);
+  assert.equal(current.schemaVersion, 4);
   assert.equal(current.source.mode, "generated");
-  assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行"]);
+  assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"]);
   assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr"]);
   assert.equal("api" in current.source, false);
   assert.equal(current.source.releaseEvidence.L2.provider, "中国人民银行");
+  assert.equal(current.source.releaseEvidence.L4.provider, "中华人民共和国财政部");
   assert.doesNotMatch(JSON.stringify(current.source), /cn_schedule/);
   assert.deepEqual(current.cards.map((card) => card.code), ["F", "L", "B"]);
 
@@ -136,7 +137,7 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real L1, L2, L3, L5, B3 and B5 snapshots with 8 explicitly pending indicators", async () => {
+test("contains real L1-L5, B3 and B5 snapshots with 7 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
@@ -144,6 +145,7 @@ test("contains real L1, L2, L3, L5, B3 and B5 snapshots with 8 explicitly pendin
   const b5 = current.components.B.find((item) => item.id === "B5");
   const l1 = current.components.L.find((item) => item.id === "L1");
   const l3 = current.components.L.find((item) => item.id === "L3");
+  const l4 = current.components.L.find((item) => item.id === "L4");
   const l5 = current.components.L.find((item) => item.id === "L5");
 
   assert.equal(b3.dataStatus, "generated");
@@ -180,6 +182,15 @@ test("contains real L1, L2, L3, L5, B3 and B5 snapshots with 8 explicitly pendin
   assert.match(l3.note, /第一阶段信用规模代理/);
   assert.match(l3.note, /未做.*GDP归一化/);
   assert.match(l3.note, /不计算L3评分/);
+  assert.equal(l4.dataStatus, "generated");
+  assert.equal(l4.period, "2026-06");
+  assert.equal(l4.release, "2026-07-22");
+  assert.match(l4.raw, /12\.1047万亿元（同比 \+4\.7%）.*14\.3329万亿元（同比 \+1\.5%）/);
+  assert.equal(l4.score, null);
+  assert.equal(l4.position, null);
+  assert.equal(l4.trend, null);
+  assert.match(l4.note, /第一阶段财政收支规模代理/);
+  assert.match(l4.note, /不计算L4评分/);
   assert.equal(l5.dataStatus, "generated");
   assert.match(l5.raw, /美国10年实际国债收益率 -?\d+\.\d{2}%/);
   assert.ok(l5.period < current.asOf);
@@ -199,18 +210,18 @@ test("contains real L1, L2, L3, L5, B3 and B5 snapshots with 8 explicitly pendin
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 6);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 8);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 7);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 7);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "42.9%");
+  assert.equal(current.dataQuality.coverage, "50.0%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "4/5", "2/5"]);
-  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l5.release].sort().reverse()[0]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "5/5", "2/5"]);
+  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l4.release, l5.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only six indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only seven indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -241,27 +252,33 @@ test("selects the latest common trading date and builds mixed-frequency current 
   const l1 = { date: "2026-08-14", overnight: 1.2345, oneWeek: 1.3456, threeMonth: 1.4567, oneYear: 1.5678, termSpread: 0.3333 };
   const l3 = { month: "202607", incMonth: 12345, incCumval: 222500, stock: 463.27, incMonthTrillion: 1.2345, incCumTrillion: 22.25, stockYoy: 7.4, stockDifference: 0, cumulativeDifference: 0, period: "2026-07", release: "2026-08-14" };
   const l5 = { date: "2026-08-14", y10: 2.41 };
-  const evidence = { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" };
-  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
+  const l4 = { title: "2026年上半年财政收支情况", dataMonth: "202606", listingDate: "2026-07-22", publishedAt: "2026-07-22", revenue: 121047, revenueYoy: 4.7, expenditure: 143329, expenditureYoy: 1.5 };
+  const evidence = {
+    pbc: { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" },
+    mof: { ...l4, href: "https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm" },
+  };
+  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
   assert.equal(generated.asOf, "2026-08-17");
   assert.equal(generated.components.B[2].period, "2026-08-14");
   assert.equal(generated.components.L[1].period, "2026-07");
   assert.deepEqual(snapshot.values["000300.SH"], { peTtm: 14.3637, pb: 1.4639, turnoverRate: 0.5, turnoverRateF: 1 });
-  assert.equal(generated.dataQuality.coverage, "42.9%");
+  assert.equal(generated.dataQuality.coverage, "50.0%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.equal(generated.components.B[4].period, generated.components.B[2].period);
   assert.equal(generated.components.B[4].release, generated.components.B[2].release);
   assert.match(generated.components.L[0].raw, /1\.2345%.*1\.3456%.*1\.4567%.*1\.5678%.*\+0\.3333pct/);
   assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
+  assert.match(generated.components.L[3].raw, /12\.1047万亿元（同比 \+4\.7%）.*14\.3329万亿元（同比 \+1\.5%）/);
   assert.match(generated.components.L[4].raw, /美国10年实际国债收益率 2\.41%/);
-  assert.match(generated.diagnosis.headline, /L1、L2、L3、L5、B3、B5/);
-  assert.match(generated.dataQuality.warning, /其余8项/);
+  assert.match(generated.diagnosis.headline, /L1、L2、L3、L4、L5、B3、B5/);
+  assert.match(generated.dataQuality.warning, /其余7项/);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);
+  assert.equal(generated.recentEvents.some((event) => event.group === "L4" && event.detail === generated.components.L[3].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L5" && event.detail === generated.components.L[4].raw), true);
 });
 
@@ -453,6 +470,58 @@ test("builds L3 only from one exact sf_month row and dual-source agreement", asy
   assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingIncrementCum: 22.256 }), /cumulative increment values differ/);
 });
 
+test("parses only exact MOF fiscal-report titles and enforces report URL safety", async () => {
+  const { parseMofFiscalReportTitle, validateMofReportUrl } = await marketGenerator();
+  assert.equal(parseMofFiscalReportTitle("2026年1-5月财政收支情况"), "202605");
+  assert.equal(parseMofFiscalReportTitle("2026年一季度财政收支情况"), "202603");
+  assert.equal(parseMofFiscalReportTitle("2026年上半年财政收支情况"), "202606");
+  assert.equal(parseMofFiscalReportTitle("2026年前三季度财政收支情况"), "202609");
+  assert.equal(parseMofFiscalReportTitle("2026年财政收支情况"), "202612");
+  assert.equal(parseMofFiscalReportTitle("2026年彩票销售情况"), null);
+  assert.equal(parseMofFiscalReportTitle("2026年中央政府收支及融资数据"), null);
+  assert.equal(validateMofReportUrl("./202607/t20260722_3993943.htm"), "https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm");
+  assert.throws(() => validateMofReportUrl("https://example.com/tongjishuju/a.htm"), /Unsafe MOF/);
+  assert.throws(() => validateMofReportUrl("https://gks.mof.gov.cn/tongjishuju/"), /Unsafe MOF/);
+  assert.throws(() => validateMofReportUrl("https://gks.mof.gov.cn/tongjishuju/index.htm"), /Unsafe MOF/);
+  assert.throws(() => validateMofReportUrl("https://gks.mof.gov.cn/other/a.htm"), /Unsafe MOF/);
+});
+
+test("selects the latest non-future MOF listing without borrowing the next item date", async () => {
+  const { parseMofFiscalReportIndex, selectLatestMofFiscalReport } = await marketGenerator();
+  const fixture = `
+    <li><a href="./202606/a.htm" title="2026年1-5月财政收支情况">1-5月</a><span>2026-06-22</span></li>
+    <li><a href="./202607/b.htm" title="2026年上半年财政收支情况">上半年</a><span>2026-07-22</span></li>
+    <li><a href="./202609/c.htm" title="2026年1-8月财政收支情况">1-8月</a><span>2026-09-20</span></li>`;
+  const reports = parseMofFiscalReportIndex(fixture);
+  assert.equal(selectLatestMofFiscalReport(reports, "2026-08-17").dataMonth, "202606");
+  assert.equal(selectLatestMofFiscalReport(reports, "2026-06-30").dataMonth, "202605");
+  assert.throws(() => selectLatestMofFiscalReport(reports, "2026-01-01"), /historical pagination is not implemented in task03G/);
+  const crossItemDate = `<a href="./202607/a.htm" title="2026年上半年财政收支情况">上半年</a>
+    <a href="./202609/b.htm" title="2026年前三季度财政收支情况">前三季度</a><span>2026-10-22</span>`;
+  assert.throws(() => parseMofFiscalReportIndex(crossItemDate), /listing date missing/);
+});
+
+test("validates MOF article identity and parses signed fiscal values", async () => {
+  const { parseMofFiscalReport } = await marketGenerator();
+  const expected = { title: "2026年上半年财政收支情况", listingDate: "2026-07-22" };
+  const article = (revenue, expenditure, title = expected.title, date = "2026年07月22日") => `
+    <meta name="ArticleTitle" content="${title}"><p>${revenue}</p><p>${expenditure}</p><span>发布日期：${date}</span>`;
+  const positive = article("全国一般公共预算收入121047亿元，同比增长4.7%", "全国一般公共预算支出143329亿元，同比增长1.5%");
+  assert.deepEqual(parseMofFiscalReport(positive, expected), {
+    title: expected.title, publishedAt: "2026-07-22", revenue: 121047, revenueYoy: 4.7, expenditure: 143329, expenditureYoy: 1.5,
+  });
+  assert.equal(parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比下降4.7%", "全国一般公共预算支出143329亿元，同比持平"), expected).revenueYoy, -4.7);
+  assert.equal(parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比持平", "全国一般公共预算支出143329亿元，同比下降1.5%"), expected).revenueYoy, 0);
+  assert.equal(parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比持平", "全国一般公共预算支出143329亿元，同比下降1.5%"), expected).expenditureYoy, -1.5);
+  assert.throws(() => parseMofFiscalReport(positive, { ...expected, title: "错误标题" }), /title mismatch/);
+  assert.throws(() => parseMofFiscalReport(positive, { ...expected, listingDate: "2026-07-21" }), /does not match/);
+  assert.throws(() => parseMofFiscalReport(article("收入缺失", "全国一般公共预算支出143329亿元，同比增长1.5%"), expected), /预算收入/);
+  assert.throws(() => parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比增长4.7%", "支出缺失"), expected), /预算支出/);
+  assert.throws(() => parseMofFiscalReport(article("全国一般公共预算收入0亿元，同比增长4.7%", "全国一般公共预算支出143329亿元，同比增长1.5%"), expected), /greater than zero/);
+  assert.throws(() => parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比增长4.7%", "全国一般公共预算支出0亿元，同比增长1.5%"), expected), /greater than zero/);
+  assert.throws(() => parseMofFiscalReport(article("全国一般公共预算收入121047亿元，同比增长NaN%", "全国一般公共预算支出143329亿元，同比增长1.5%"), expected), /预算收入/);
+});
+
 test("rejects future as-of dates", async () => {
   const { parseAsOf } = await marketGenerator();
   assert.equal(parseAsOf(["--as-of", "2026-08-17"], "2026-08-17"), "2026-08-17");
@@ -467,6 +536,14 @@ test("rejects current.json shapes that could crash the market page", async () =>
   const missingSource = structuredClone(current);
   delete missingSource.source;
   assert.equal(isMarketResearchCurrent(missingSource), false);
+
+  const missingMofEvidence = structuredClone(current);
+  delete missingMofEvidence.source.releaseEvidence.L4;
+  assert.equal(isMarketResearchCurrent(missingMofEvidence), false);
+
+  const emptyMofEvidenceField = structuredClone(current);
+  emptyMofEvidenceField.source.releaseEvidence.L4.reportUrl = "";
+  assert.equal(isMarketResearchCurrent(emptyMofEvidenceField), false);
 
   const invalidStates = structuredClone(current);
   invalidStates.diagnosis.states = "F 偏强";
@@ -488,6 +565,6 @@ test("keeps unsupported certainty language out of the user interface", async () 
   const source = await appSource();
   assert.doesNotMatch(source, /最新可用数据/);
   assert.match(source, /<span>信息截止<\/span><b>\{display\(data\.asOf\)\}<\/b>/);
-  assert.match(source, /当前为真实数据快照（L2\/L3经PBOC交叉验证）/);
+  assert.match(source, /当前为真实数据快照（L2\/L3经PBOC交叉验证，L4来自财政部官方）/);
   assert.doesNotMatch(source, /当前为双源校验真实快照/);
 });
