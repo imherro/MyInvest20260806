@@ -74,3 +74,11 @@ node scripts/generate-market-research-history-f1.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-f2.mjs --as-of 2026-08-17
 ```
+
+## L1 月度 SHIBOR 名义利率历史
+
+阶段04I新增L1月度SHIBOR名义利率代理历史。使用B3月末 `asOf` 作为日程，每个 `asOf` 调用现有 `selectLatestShiborSnapshot` 取得截至该日30天窗口内最新SHIBOR。底层数据按自然年顺序请求，当前2015—2026共12个年度batch。当前仍只有名义利率期限结构，没有CPI或通胀预期，因此不是完整实际利率指标。
+
+```powershell
+node scripts/generate-market-research-history-l1.mjs --as-of 2026-08-17
+```

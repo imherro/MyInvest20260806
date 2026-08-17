@@ -124,6 +124,14 @@ async function f2HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f2.json", import.meta.url)), "utf8"));
 }
 
+async function l1HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-l1.mjs", import.meta.url).href);
+}
+
+async function l1HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l1.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -1159,6 +1167,48 @@ test("missing-token F2 failure preserves F2, F1, F3, B1-B5 and current files", a
   const paths = ["../public/data/market-research/history/f2.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
   const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f2.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("builds L1 month ends with the production SHIBOR selector", async () => {
+  const { buildL1MonthlyHistory } = await l1HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-07-31" }, points: [{ asOf: "2026-01-31" }, { asOf: "2026-07-31" }] };
+  const rows = [{ date: "20260129", on: 1.1, "1w": 1.2, "3m": 1.3, "1y": 1.4 }, { date: "20260130", on: 1.2, "1w": 1.3, "3m": 1.4, "1y": 1.6 }];
+  const july = [{ date: "20260731", on: -0.2, "1w": -0.1, "3m": 0, "1y": 0.1 }];
+  const result = buildL1MonthlyHistory(schedule, new Map([["2026", [...rows, ...july]]]), "2026-08-17");
+  assert.deepEqual(result.points[0], { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", overnight: 1.2, oneWeek: 1.3, threeMonth: 1.4, oneYear: 1.6, termSpread: 0.40000000000000013 });
+  assert.deepEqual(result.points[1], { asOf: "2026-07-31", periodDate: "2026-07-31", releaseDate: "2026-07-31", revisionStatus: "not_tracked", overnight: -0.2, oneWeek: -0.1, threeMonth: 0, oneYear: 0.1, termSpread: 0.30000000000000004 });
+  for (const field of ["on", "1w", "3m", "1y"]) for (const invalid of [null, "", Number.NaN, Infinity, "bad"]) { const broken = structuredClone(rows); broken[1][field] = invalid; assert.throws(() => buildL1MonthlyHistory({ ...schedule, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" }, points: [schedule.points[0]] }, new Map([["2026", broken]]), "2026-08-17"), /Invalid SHIBOR/); }
+});
+
+test("validates annual SHIBOR batches and the monthly schedule", async () => {
+  const { validateMonthlySchedule, validateShiborYearBatch } = await l1HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" }, points: [{ asOf: "2026-01-31" }] };
+  assert.equal(validateMonthlySchedule(schedule, "2026-08-17"), schedule); assert.throws(() => validateMonthlySchedule({ ...schedule, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/); assert.throws(() => validateMonthlySchedule({ ...schedule, points: [schedule.points[0], schedule.points[0]] }, "2026-08-17"), /unique and strictly ascending/);
+  const row = date => ({ date, on: 1, "1w": 1, "3m": 1, "1y": 1 });
+  assert.equal(validateShiborYearBatch([row("20260130")], "2026", "20260101", "20260731").length, 1);
+  assert.throws(() => validateShiborYearBatch([], "2026", "20260101", "20260731"), /no rows/);
+  assert.throws(() => validateShiborYearBatch([row("20260230")], "2026", "20260101", "20260731"), /invalid date/);
+  assert.throws(() => validateShiborYearBatch([row("20260801")], "2026", "20260101", "20260731"), /outside/);
+  assert.throws(() => validateShiborYearBatch([row("20260130"), row("20260130")], "2026", "20260101", "20260731"), /duplicate date/);
+  assert.throws(() => validateShiborYearBatch(Array.from({ length: 2000 }, (_, index) => row(String(20260101 + index))), "2026", "20260101", "20260731"), /2000-row limit/);
+});
+
+test("L1 generator makes one sequential SHIBOR request per calendar year", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-l1.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("shibor"/g) ?? []).length, 1); assert.match(source, /for \(const year of years\)/); assert.match(source, /callTushare\("shibor", \{ start_date: startDate, end_date: endDate \}, FIELDS, token\)/); assert.match(source, /const FIELDS = "date,on,1w,3m,1y"/); assert.match(source, /selectLatestShiborSnapshot/); assert.doesNotMatch(source, /callTushare\("(?:shibor_quote|shibor_lpr|trade_cal|cn_cpi)"|Promise\.all/);
+  const b3 = await b3HistoryData(); const first = Number(b3.range.startAsOf.slice(0, 4)); const last = Number(b3.range.endAsOf.slice(0, 4)); const years = Array.from({ length: last - first + 1 }, (_, index) => String(first + index)); assert.equal(years.length, 12); assert.equal(years[0], "2015"); assert.equal(years.at(-1), "2026");
+});
+
+test("checked-in L1 history is a complete nominal SHIBOR monthly series", async () => {
+  const [l1, b3] = await Promise.all([l1HistoryData(), b3HistoryData()]); assert.equal(l1.points.length, 139); assert.equal(l1.requestedAsOf, b3.requestedAsOf); assert.deepEqual(l1.range, b3.range);
+  for (let index = 0; index < l1.points.length; index += 1) { const point = l1.points[index]; assert.equal(point.asOf, b3.points[index].asOf); assert.equal(point.releaseDate, point.periodDate); assert.ok(point.releaseDate <= point.asOf); assert.equal(point.revisionStatus, "not_tracked"); for (const field of ["overnight", "oneWeek", "threeMonth", "oneYear", "termSpread"]) assert.ok(Number.isFinite(point[field])); assert.ok(Math.abs(point.termSpread - (point.oneYear - point.overnight)) < 1e-12); const elapsed = (new Date(`${point.asOf}T00:00:00Z`) - new Date(`${point.periodDate}T00:00:00Z`)) / 86400000; assert.ok(elapsed >= 0 && elapsed <= 30); }
+  assert.doesNotMatch(JSON.stringify(l1), /"(?:cpi|inflation|realRate|score|position|trend|percentile|zScore|normalized|signal|state|liquidityState)"/i);
+});
+
+test("missing-token L1 failure preserves L1, F1-F3, B1-B5 and current files", async () => {
+  const paths = ["../public/data/market-research/history/l1.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l1.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {
