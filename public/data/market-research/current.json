@@ -1,9 +1,9 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-17T07:00:51.014Z",
+  "generatedAt": "2026-08-17T07:19:17.045Z",
   "source": {
     "mode": "generated",
-    "label": "Tushare + PBOC verified current snapshot",
+    "label": "Real current snapshot; L2 cross-verified by PBOC",
     "providers": [
       "Tushare Pro",
       "中国人民银行"
@@ -41,8 +41,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L2、B3已生成",
-    "diagnosis": "当前仅L2和B3已由真实数据生成，其余12项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L2、B3、B5已生成",
+    "diagnosis": "当前仅L2、B3、B5已由真实数据生成，其余11项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -83,7 +83,7 @@
       "title": "估值泡沫",
       "score": null,
       "status": "数据接入中",
-      "coverage": "1/5",
+      "coverage": "2/5",
       "updatedAt": "2026-08-14",
       "tone": "pending",
       "trend": [],
@@ -165,9 +165,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "14.3%",
+    "coverage": "21.4%",
     "pitStatus": "待接入",
-    "warning": "仅L2、B3已由真实数据生成，其余12项待接入"
+    "warning": "仅L2、B3、B5已由真实数据生成，其余11项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -183,6 +183,13 @@
       "title": "B3真实估值截面生成",
       "detail": "沪深300 PE TTM 14.36 / PB 1.46；创业板指 PE TTM 44.40 / PB 6.04",
       "group": "B3",
+      "tone": "blue"
+    },
+    {
+      "date": "08-14",
+      "title": "B5交易活跃度代理快照生成",
+      "detail": "沪深300换手率 0.53%（自由流通 1.77%）；创业板指换手率 3.08%（自由流通 4.41%）；自由流通换手比 2.50x",
+      "group": "B5",
       "tone": "blue"
     }
   ],
@@ -378,15 +385,15 @@
         "id": "B5",
         "name": "投机热度",
         "score": null,
-        "raw": null,
+        "raw": "沪深300换手率 0.53%（自由流通 1.77%）；创业板指换手率 3.08%（自由流通 4.41%）；自由流通换手比 2.50x",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-14",
+        "coverage": "2/2代理指数",
+        "quality": "A",
+        "note": "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。",
+        "dataStatus": "generated"
       }
     ]
   }

@@ -5,7 +5,7 @@ import { isMarketResearchCurrent } from "../app/market-research-types.ts";
 
 export const TUSHARE_ENDPOINT = "https://api.tushare.pro";
 export const PBOC_INDEX_URL = "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html";
-export const B3_INSTRUMENTS = [
+export const MARKET_INDEX_INSTRUMENTS = [
   { code: "000300.SH", name: "沪深300", role: "broad" },
   { code: "399006.SZ", name: "创业板指", role: "technology" },
 ];
@@ -138,17 +138,22 @@ export async function callTushare(apiName, params, fields, token, fetchImpl = fe
 
 export function selectLatestCommonSnapshot(rowsByCode, requestedAsOf) {
   const requested = compactDate(requestedAsOf);
-  const dateSets = B3_INSTRUMENTS.map(({ code }) => new Set((rowsByCode[code] ?? []).map(row => row.trade_date)));
+  const dateSets = MARKET_INDEX_INSTRUMENTS.map(({ code }) => new Set((rowsByCode[code] ?? []).map(row => row.trade_date)));
   const commonDates = [...dateSets[0]].filter(date => date <= requested && dateSets[1].has(date)).sort().reverse();
   const tradeDate = commonDates[0];
   if (!tradeDate) throw new Error(`No common index_dailybasic trade date found on or before ${requestedAsOf}`);
-  const values = Object.fromEntries(B3_INSTRUMENTS.map(({ code }) => {
+  const values = Object.fromEntries(MARKET_INDEX_INSTRUMENTS.map(({ code }) => {
     const row = rowsByCode[code].find(item => item.trade_date === tradeDate);
     const peTtm = Number(row?.pe_ttm);
     const pb = Number(row?.pb);
     if (!Number.isFinite(peTtm) || !Number.isFinite(pb)) throw new Error(`Incomplete PE/PB data for ${code} on ${tradeDate}`);
-    return [code, { peTtm, pb }];
+    const turnoverRate = row?.turnover_rate === null || row?.turnover_rate === undefined || row?.turnover_rate === "" ? Number.NaN : Number(row.turnover_rate);
+    const turnoverRateF = row?.turnover_rate_f === null || row?.turnover_rate_f === undefined || row?.turnover_rate_f === "" ? Number.NaN : Number(row.turnover_rate_f);
+    if (!Number.isFinite(turnoverRate) || turnoverRate < 0) throw new Error(`Invalid turnover_rate for ${code} on ${tradeDate}`);
+    if (!Number.isFinite(turnoverRateF) || turnoverRateF < 0) throw new Error(`Invalid turnover_rate_f for ${code} on ${tradeDate}`);
+    return [code, { peTtm, pb, turnoverRate, turnoverRateF }];
   }));
+  if (values["000300.SH"].turnoverRateF <= 0) throw new Error(`沪深300 turnover_rate_f must be greater than zero on ${tradeDate}`);
   return { tradeDate, values };
 }
 
@@ -168,6 +173,9 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
   const b3Raw = `沪深300 PE TTM ${broad.peTtm.toFixed(2)} / PB ${broad.pb.toFixed(2)}；创业板指 PE TTM ${technology.peTtm.toFixed(2)} / PB ${technology.pb.toFixed(2)}`;
+  const relativeFreeTurnover = technology.turnoverRateF / broad.turnoverRateF;
+  if (!Number.isFinite(relativeFreeTurnover)) throw new Error("Relative free-turnover ratio is not finite");
+  const b5Raw = `沪深300换手率 ${broad.turnoverRate.toFixed(2)}%（自由流通 ${broad.turnoverRateF.toFixed(2)}%）；创业板指换手率 ${technology.turnoverRate.toFixed(2)}%（自由流通 ${technology.turnoverRateF.toFixed(2)}%）；自由流通换手比 ${relativeFreeTurnover.toFixed(2)}x`;
   const gapText = `${l2.gap >= 0 ? "+" : ""}${l2.gap.toFixed(2)}pct`;
   const l2Raw = `M1同比 ${l2.m1Yoy.toFixed(2)}% / M2同比 ${l2.m2Yoy.toFixed(2)}% / 剪刀差 ${gapText}`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
@@ -176,10 +184,17 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
     ...indicator, raw: l2Raw, period: l2.period, release: l2.release, coverage: "100%", quality: "A",
     note: `${l2.period >= "2025-01" ? "真实货币供应量月度快照；发布日期由中国人民银行金融统计数据报告确认，M1/M2与Tushare cn_m交叉校验一致；M1按2025年1月起修订口径理解。" : "该月份属于历史M1统计口径，不得与2025年后的新口径序列直接拼接。"}历史分位、趋势和L2评分尚未实现。`, dataStatus: "generated",
   } : indicator);
-  components.B = components.B.map(indicator => indicator.id === "B3" ? { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" } : indicator);
+  components.B = components.B.map(indicator => {
+    if (indicator.id === "B3") return { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" };
+    if (indicator.id === "B5") return { ...indicator, raw: b5Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。", dataStatus: "generated" };
+    return indicator;
+  });
   const allIndicators = Object.values(components).flat();
-  const generatedCount = allIndicators.filter(indicator => indicator.dataStatus === "generated").length;
+  const generatedIndicators = allIndicators.filter(indicator => indicator.dataStatus === "generated");
+  const generatedIds = generatedIndicators.map(indicator => indicator.id);
+  const generatedCount = generatedIndicators.length;
   const pendingCount = allIndicators.length - generatedCount;
+  const generatedLabel = generatedIds.join("、");
   const totalCoverage = `${((generatedCount / allIndicators.length) * 100).toFixed(1)}%`;
   const cards = template.cards.map(card => {
     const indicators = components[card.code];
@@ -189,17 +204,18 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
   });
   return {
     ...template, schemaVersion: 3, generatedAt,
-    source: { mode: "generated", label: "Tushare + PBOC verified current snapshot", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m"], instruments: B3_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
     asOf: requestedAsOf,
-    diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: "真实市场数据接入中：L2、B3已生成", diagnosis: `当前仅L2和B3已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
+    diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
     jointState: { nearestState: null, transitioningTo: null, trendLabel: null, description: "数据不足，暂不判断" },
     stateMap: template.stateMap.map(row => [row[0], row[1], row[2], row[3], ""]), drivers: [], risks: [],
-    dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: `仅L2、B3已由真实数据生成，其余${pendingCount}项待接入` },
+    dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: `仅${generatedLabel}已由真实数据生成，其余${pendingCount}项待接入` },
     recentHistory: [],
     recentEvents: [
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
+      { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
     ].sort((a, b) => b.date.localeCompare(a.date)), components,
   };
 }
@@ -215,7 +231,7 @@ export async function main(argv = process.argv.slice(2)) {
   if (!token) throw new Error("TUSHARE_TOKEN is required");
   const requestedAsOf = parseAsOf(argv);
   const startDate = subtractDays(requestedAsOf, 45);
-  const rows = await Promise.all(B3_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb", token)]));
+  const rows = await Promise.all(MARKET_INDEX_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f", token)]));
   const snapshot = selectLatestCommonSnapshot(Object.fromEntries(rows), requestedAsOf);
   const report = selectLatestPublishedReport(parsePbcReportIndex(await fetchText(PBOC_INDEX_URL)), requestedAsOf);
   const official = parsePbcFinancialReport(await fetchText(report.href), report);
@@ -229,6 +245,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
+  console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

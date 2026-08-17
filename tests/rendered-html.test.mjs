@@ -38,6 +38,10 @@ async function appSource() {
   return readFile(fileURLToPath(new URL("../app/page.tsx", import.meta.url)), "utf8");
 }
 
+async function generatorSource() {
+  return readFile(fileURLToPath(new URL("../scripts/generate-market-research-current.mjs", import.meta.url)), "utf8");
+}
+
 async function currentMarketData() {
   const raw = await readFile(fileURLToPath(new URL("../public/data/market-research/current.json", import.meta.url)), "utf8");
   return JSON.parse(raw);
@@ -132,11 +136,12 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real L2 and B3 snapshots with 12 explicitly pending indicators", async () => {
+test("contains real L2, B3 and B5 snapshots with 11 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
   const l2 = current.components.L.find((item) => item.id === "L2");
+  const b5 = current.components.B.find((item) => item.id === "B5");
 
   assert.equal(b3.dataStatus, "generated");
   assert.match(b3.raw, /沪深300 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}；创业板指 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}/);
@@ -152,17 +157,26 @@ test("contains real L2 and B3 snapshots with 12 explicitly pending indicators", 
   assert.equal(l2.score, null);
   assert.equal(l2.position, null);
   assert.equal(l2.trend, null);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 2);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 12);
+  assert.equal(b5.dataStatus, "generated");
+  assert.match(b5.raw, /沪深300换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；创业板指换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；自由流通换手比 \d+\.\d{2}x/);
+  assert.equal(b5.period, b3.period);
+  assert.equal(b5.release, b3.release);
+  assert.equal(b5.score, null);
+  assert.equal(b5.position, null);
+  assert.equal(b5.trend, null);
+  assert.match(b5.note, /第一阶段交易活跃度代理/);
+  assert.match(b5.note, /不计算B5评分/);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 3);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 11);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "14.3%");
+  assert.equal(current.dataQuality.coverage, "21.4%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "1/5", "1/5"]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "1/5", "2/5"]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only B3 is generated", async () => {
+test("disables unsupported aggregate diagnoses while only three indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -177,10 +191,10 @@ test("selects the latest common trading date and builds mixed-frequency current 
   const template = await currentMarketData();
   const rows = {
     "000300.SH": [
-      { trade_date: "20260815", pe_ttm: 15, pb: 1.5 },
-      { trade_date: "20260814", pe_ttm: 14.3637, pb: 1.4639 },
+      { trade_date: "20260815", pe_ttm: 15, pb: 1.5, turnover_rate: 0.4, turnover_rate_f: 0.8 },
+      { trade_date: "20260814", pe_ttm: 14.3637, pb: 1.4639, turnover_rate: 0.5, turnover_rate_f: 1 },
     ],
-    "399006.SZ": [{ trade_date: "20260814", pe_ttm: 44.4014, pb: 6.0352 }],
+    "399006.SZ": [{ trade_date: "20260814", pe_ttm: 44.4014, pb: 6.0352, turnover_rate: 2, turnover_rate_f: 4 }],
   };
   const snapshot = selectLatestCommonSnapshot(rows, "2026-08-17");
   const l2 = { m1Yoy: 4, m2Yoy: 7.7, gap: -3.7, period: "2026-07", release: "2026-08-14" };
@@ -191,8 +205,34 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.equal(generated.asOf, "2026-08-17");
   assert.equal(generated.components.B[2].period, "2026-08-14");
   assert.equal(generated.components.L[1].period, "2026-07");
-  assert.equal(generated.dataQuality.coverage, "14.3%");
+  assert.deepEqual(snapshot.values["000300.SH"], { peTtm: 14.3637, pb: 1.4639, turnoverRate: 0.5, turnoverRateF: 1 });
+  assert.equal(generated.dataQuality.coverage, "21.4%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
+  assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
+  assert.equal(generated.components.B[4].period, generated.components.B[2].period);
+  assert.equal(generated.components.B[4].release, generated.components.B[2].release);
+  assert.match(generated.diagnosis.headline, /L2、B3、B5/);
+  assert.match(generated.dataQuality.warning, /其余11项/);
+  assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
+});
+
+test("requests both index turnover fields without adding a third API", async () => {
+  const source = await generatorSource();
+  assert.match(source, /"ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f"/);
+  const current = await currentMarketData();
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m"]);
+});
+
+test("fails closed when the shared B3/B5 snapshot has invalid turnover data", async () => {
+  const { selectLatestCommonSnapshot } = await marketGenerator();
+  const validBroad = { trade_date: "20260814", pe_ttm: 14, pb: 1.4, turnover_rate: 0.5, turnover_rate_f: 1 };
+  const validGrowth = { trade_date: "20260814", pe_ttm: 44, pb: 6, turnover_rate: 2, turnover_rate_f: 4 };
+  const rows = (broad, growth) => ({ "000300.SH": [broad], "399006.SZ": [growth] });
+
+  assert.throws(() => selectLatestCommonSnapshot(rows({ ...validBroad, turnover_rate: undefined }, validGrowth), "2026-08-17"), /Invalid turnover_rate/);
+  assert.throws(() => selectLatestCommonSnapshot(rows(validBroad, { ...validGrowth, turnover_rate_f: undefined }), "2026-08-17"), /Invalid turnover_rate_f/);
+  assert.throws(() => selectLatestCommonSnapshot(rows(validBroad, { ...validGrowth, turnover_rate: "not-a-number" }), "2026-08-17"), /Invalid turnover_rate/);
+  assert.throws(() => selectLatestCommonSnapshot(rows({ ...validBroad, turnover_rate_f: 0 }, validGrowth), "2026-08-17"), /greater than zero/);
 });
 
 test("generator refuses to run without exposing or fabricating a Tushare token", () => {
@@ -319,4 +359,6 @@ test("keeps unsupported certainty language out of the user interface", async () 
   const source = await appSource();
   assert.doesNotMatch(source, /最新可用数据/);
   assert.match(source, /<span>信息截止<\/span><b>\{display\(data\.asOf\)\}<\/b>/);
+  assert.match(source, /当前为真实数据快照（L2经PBOC交叉验证）/);
+  assert.doesNotMatch(source, /当前为双源校验真实快照/);
 });
