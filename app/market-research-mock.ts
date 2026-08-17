@@ -87,7 +87,7 @@ export const marketResearchMock = {
   dataQuality: {
     grade: "A-",
     coverage: "95%",
-    pitStatus: "通过",
+    pitStatus: "待接入",
     warning: "盈利指标仅覆盖已披露半年报公司",
   },
   recentHistory: [

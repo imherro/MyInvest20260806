@@ -57,6 +57,8 @@ test("ships the complete F/L/B market research contract", async () => {
     "POLICY OVERLAY",
     "政策制度环境",
     "联合市场状态",
+    "Point-in-Time",
+    "待接入",
     "当前页面使用示例数据",
     "分数越高代表泡沫风险越高",
   ]) {
