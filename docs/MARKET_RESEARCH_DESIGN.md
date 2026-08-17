@@ -1,7 +1,7 @@
 # 市场研究三表体系：设计共识
 
 > 状态：已与原方案 ChatGPT 会话完成澄清，可直接实施  
-> 范围：任务03I已接入L1、L2、L3、L4、L5、B1、B3、B4、B5九项真实指标；其余5项指标、F/L/B评分、历史PIT和回测仍待后续实现
+> 范围：任务03J已接入L1、L2、L3、L4、L5、B1、B2、B3、B4、B5十项真实指标；其余4项指标、F/L/B评分、历史PIT和回测仍待后续实现
 
 ## 1. 产品定位
 
@@ -100,7 +100,7 @@
 
 ## 6. current.json 文件契约
 
-任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。任务03I在B1/B3/B5共同交易日接入B4第一阶段A股当日总市值代理。当前真实指标为9/14（L1、L2、L3、L4、L5、B1、B3、B4、B5），其余5项pending。详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
+任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。任务03J复用B4同一次日截面请求，在B1/B3/B4/B5共同交易日接入B2第一阶段市值加权TTM股息率代理。当前真实指标为10/14（L1、L2、L3、L4、L5、B1、B2、B3、B4、B5），其余4项pending。详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
 
 ## 7. 实施共识
 
@@ -111,7 +111,7 @@
 - F/L/B 合计预留14项量化指标；字段遵循数据字典。
 - 实现总览、历史诊断、关键时期审计、方法与数据四个二级页面。
 - 总览显示数据质量摘要；严重缺失或 PIT 问题显式警告。
-- L1、L2、L3、L4、L5、B1、B3、B4、B5标注“真实快照 / 真实数据”；尚未接入的5项标注 `pending`，历史静态曲线和其他示例内容继续标注“示例”。
+- L1、L2、L3、L4、L5、B1、B2、B3、B4、B5标注“真实快照 / 真实数据”；尚未接入的4项标注 `pending`，历史静态曲线和其他示例内容继续标注“示例”。
 - 当前市场状态只允许来自 `current.json`；读取失败时显式报错，不回退 TypeScript Mock。
 - 仓位只表达倾向，明确市场研究是仓位系统上游而非交易指令。
 
@@ -125,7 +125,7 @@
 
 ### LATER
 
-- 继续用 Tushare、BaoStock与官方宏观数据接入其余5项指标，并接入月度 PIT 历史。
+- 继续用 Tushare、BaoStock与官方宏观数据接入其余4项指标，并接入月度 PIT 历史。
 - 实现真实评分、滚动分位、Z-score、财报公告日、历史股票池和回测。
 - 实现关键时期真实审计、Forward Return、Maximum Drawdown、Walk-forward和严格样本外验证。
 - 验证统计有效性后再调整权重并接入总体仓位控制。

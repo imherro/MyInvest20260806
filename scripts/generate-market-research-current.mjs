@@ -303,6 +303,31 @@ export function buildB4Snapshot(rows, snapshot) {
   return { tradeDate: snapshot.tradeDate, stockCount: rows.length, totalMarketCapWan, totalMarketCapTrillion };
 }
 
+export function buildB2Snapshot(rows, snapshot, b4) {
+  if (b4.tradeDate !== snapshot.tradeDate || b4.stockCount !== rows.length) throw new Error("B2 requires the validated B4 shared-date row batch");
+  let observedCount = 0;
+  let observedMarketCapWan = 0;
+  let weightedDividendValue = 0;
+  for (const row of rows) {
+    const value = row.dv_ttm;
+    if (value === null || value === undefined || value === "") continue;
+    const dividendYield = Number(value);
+    if (!Number.isFinite(dividendYield) || dividendYield < 0) throw new Error(`Tushare daily_basic contains invalid dv_ttm for ${row.ts_code}`);
+    const totalMv = Number(row.total_mv);
+    observedCount += 1;
+    observedMarketCapWan += totalMv;
+    weightedDividendValue += totalMv * dividendYield;
+  }
+  if (observedCount <= 0 || !Number.isFinite(observedMarketCapWan) || observedMarketCapWan <= 0) throw new Error("Tushare daily_basic contains no valid dv_ttm sample");
+  const marketCapCoverage = observedMarketCapWan / b4.totalMarketCapWan * 100;
+  const weightedDividendYield = weightedDividendValue / observedMarketCapWan;
+  if (!Number.isFinite(marketCapCoverage) || marketCapCoverage <= 0 || marketCapCoverage > 100
+    || !Number.isFinite(weightedDividendYield) || weightedDividendYield < 0) {
+    throw new Error("B2 weighted dividend-yield result is invalid");
+  }
+  return { tradeDate: snapshot.tradeDate, observedCount, missingCount: rows.length - observedCount, observedMarketCapWan, marketCapCoverage, weightedDividendYield };
+}
+
 export function buildL2Snapshot(rows, report, official) {
   const matches = rows.filter(row => String(row.month) === report.dataMonth);
   if (matches.length !== 1) throw new Error(`Tushare cn_m must contain exactly one row for ${report.dataMonth}`);
@@ -401,13 +426,14 @@ export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), y10 };
 }
 
-export function buildGeneratedCurrent(template, snapshot, b1, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
   const b3Raw = `沪深300 PE TTM ${broad.peTtm.toFixed(2)} / PB ${broad.pb.toFixed(2)}；创业板指 PE TTM ${technology.peTtm.toFixed(2)} / PB ${technology.pb.toFixed(2)}`;
   const b1Raw = `沪深300盈利收益率 ${b1.broadEarningsYield.toFixed(2)}%；创业板指盈利收益率 ${b1.growthEarningsYield.toFixed(2)}%`;
   const b4Raw = `A股当日记录总市值 ${b4.totalMarketCapTrillion.toFixed(2)}万亿元 / 覆盖 ${b4.stockCount}只股票`;
+  const b2Raw = `A股有值样本市值加权TTM股息率 ${b2.weightedDividendYield.toFixed(2)}% / 有值 ${b2.observedCount}只 / 市值覆盖 ${b2.marketCapCoverage.toFixed(1)}%`;
   const relativeFreeTurnover = technology.turnoverRateF / broad.turnoverRateF;
   if (!Number.isFinite(relativeFreeTurnover)) throw new Error("Relative free-turnover ratio is not finite");
   const b5Raw = `沪深300换手率 ${broad.turnoverRate.toFixed(2)}%（自由流通 ${broad.turnoverRateF.toFixed(2)}%）；创业板指换手率 ${technology.turnoverRate.toFixed(2)}%（自由流通 ${technology.turnoverRateF.toFixed(2)}%）；自由流通换手比 ${relativeFreeTurnover.toFixed(2)}x`;
@@ -443,6 +469,7 @@ export function buildGeneratedCurrent(template, snapshot, b1, b4, l1, l2, l3, l4
   });
   components.B = components.B.map(indicator => {
     if (indicator.id === "B1") return { ...indicator, raw: b1Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅根据沪深300与创业板指PE TTM反算指数盈利收益率，作为B1第一阶段股权端收益率代理；尚未接入中国长期无风险利率，因此当前不是ERP，也不计算历史分位、趋势或B1评分。", dataStatus: "generated" };
+    if (indicator.id === "B2") return { ...indicator, raw: b2Raw, period: b3Date, release: b3Date, coverage: `${b2.observedCount}只有值 / 市值覆盖${b2.marketCapCoverage.toFixed(1)}%`, quality: "A", note: "当前仅使用与B1/B3/B4/B5相同交易日的daily_basic，对dv_ttm有合法数值的股票按total_mv进行市值加权，作为B2第一阶段股息率端代理；空dv_ttm不视为0，也不纳入加权样本。尚未接入中国长期无风险利率，因此当前不是“股息率－无风险利率”指标，也不计算历史分位、趋势或B2评分。", dataStatus: "generated" };
     if (indicator.id === "B3") return { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" };
     if (indicator.id === "B4") return { ...indicator, raw: b4Raw, period: b3Date, release: b3Date, coverage: `${b4.stockCount}只当日记录股票`, quality: "A", note: "当前仅汇总与B3/B5相同交易日中Tushare daily_basic实际返回股票的total_mv，作为B4第一阶段A股当日总市值代理；尚未接入GDP分母，也未证明停牌或缺失记录股票全部覆盖，因此当前不是总市值/GDP，也不是巴菲特指标，不计算历史分位、趋势或B4评分。", dataStatus: "generated" };
     if (indicator.id === "B5") return { ...indicator, raw: b5Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。", dataStatus: "generated" };
@@ -478,6 +505,7 @@ export function buildGeneratedCurrent(template, snapshot, b1, b4, l1, l2, l3, l4
       { date: l4.listingDate.slice(5), title: "L4财政收支规模代理快照生成", detail: l4Raw, group: "L4", tone: "blue" },
       { date: l5.date.slice(5), title: "L5外部金融条件代理快照生成", detail: l5Raw, group: "L5", tone: "blue" },
       { date: b3Date.slice(5), title: "B1指数盈利收益率代理快照生成", detail: b1Raw, group: "B1", tone: "blue" },
+      { date: b3Date.slice(5), title: "B2 TTM股息率代理快照生成", detail: b2Raw, group: "B2", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B4 A股总市值代理快照生成", detail: b4Raw, group: "B4", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
@@ -499,7 +527,9 @@ export async function main(argv = process.argv.slice(2)) {
   const rows = await Promise.all(MARKET_INDEX_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f", token)]));
   const snapshot = selectLatestCommonSnapshot(Object.fromEntries(rows), requestedAsOf);
   const b1 = buildB1Snapshot(snapshot);
-  const b4 = buildB4Snapshot(await callTushare("daily_basic", { trade_date: snapshot.tradeDate }, "ts_code,trade_date,total_mv", token), snapshot);
+  const dailyRows = await callTushare("daily_basic", { trade_date: snapshot.tradeDate }, "ts_code,trade_date,total_mv,dv_ttm", token);
+  const b4 = buildB4Snapshot(dailyRows, snapshot);
+  const b2 = buildB2Snapshot(dailyRows, snapshot, b4);
   const report = selectLatestPublishedReport(parsePbcReportIndex(await fetchText(PBOC_INDEX_URL)), requestedAsOf);
   const official = parsePbcFinancialReport(await fetchText(report.href), report);
   const l2 = buildL2Snapshot(await callTushare("cn_m", { m: report.dataMonth }, "month,m1_yoy,m2_yoy", token), report, official);
@@ -512,7 +542,7 @@ export async function main(argv = process.argv.slice(2)) {
   const l4 = { ...mofOfficial, dataMonth: mofReport.dataMonth, listingDate: mofReport.listingDate };
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, b1, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
@@ -524,6 +554,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`L4: ${current.components.L.find(indicator => indicator.id === "L4").raw}`);
   console.log(`L5: ${current.components.L.find(indicator => indicator.id === "L5").raw}`);
   console.log(`B1: ${current.components.B.find(indicator => indicator.id === "B1").raw}`);
+  console.log(`B2: ${current.components.B.find(indicator => indicator.id === "B2").raw} (${b2.missingCount} missing dv_ttm)`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B4: ${current.components.B.find(indicator => indicator.id === "B4").raw} (${b4.totalMarketCapWan}万元)`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
