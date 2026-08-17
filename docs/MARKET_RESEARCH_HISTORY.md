@@ -40,3 +40,11 @@ node scripts/generate-market-research-history-b5.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-b2.mjs --as-of 2026-08-17
 ```
+
+## B4 总市值派生历史
+
+阶段04E从B2历史零网络派生B4月度总市值代理历史，逐点继承B2的日期、股票数和 `totalMarketCapWan`，只按 `totalMarketCapWan / 100000000` 换算万亿元并保留完整浮点精度。底层仍只是 `daily_basic` 当日实际返回记录的总市值之和；GDP尚未接入，所以它不是总市值/GDP或巴菲特指标，也不判断市场贵贱或计算评分。
+
+```powershell
+node scripts/generate-market-research-history-b4.mjs --as-of 2026-08-17
+```

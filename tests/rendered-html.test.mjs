@@ -92,6 +92,14 @@ async function b2HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b2.json", import.meta.url)), "utf8"));
 }
 
+async function b4HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-b4.mjs", import.meta.url).href);
+}
+
+async function b4HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b4.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -821,6 +829,72 @@ test("missing-token B2 failure preserves B2, B5, B3, B1 and current files", asyn
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b2.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /TUSHARE_TOKEN is required/);
+  assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("derives B4 total market cap from the minimal B2 contract at full precision", async () => {
+  const { buildB4MonthlyHistory } = await b4HistoryGenerator();
+  const fixture = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B2", frequency: "monthly" },
+    range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" },
+    source: { provider: "Tushare Pro", api: "daily_basic", fields: ["ts_code", "trade_date", "total_mv", "dv_ttm"] },
+    points: [{ asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", stockCount: 100, totalMarketCapWan: 100000000 }],
+  };
+  const result = buildB4MonthlyHistory(fixture, "2026-08-17", "2026-08-17T00:00:00.000Z");
+  assert.equal(result.points[0].totalMarketCapTrillion, 1);
+  const precise = structuredClone(fixture); precise.points[0].totalMarketCapWan = 123456789.123456;
+  assert.equal(buildB4MonthlyHistory(precise, "2026-08-17").points[0].totalMarketCapTrillion, precise.points[0].totalMarketCapWan / 100000000);
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", 0, -1]) {
+    const broken = structuredClone(fixture); broken.points[0].totalMarketCapWan = invalid;
+    assert.throws(() => buildB4MonthlyHistory(broken, "2026-08-17"), /totalMarketCapWan/);
+  }
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", 0, -1, 1.5]) {
+    const broken = structuredClone(fixture); broken.points[0].stockCount = invalid;
+    assert.throws(() => buildB4MonthlyHistory(broken, "2026-08-17"), /stockCount/);
+  }
+});
+
+test("B4 derivation fails closed on damaged B2 identity and PIT schedule", async () => {
+  const { buildB4MonthlyHistory } = await b4HistoryGenerator();
+  const point = (asOf, periodDate) => ({ asOf, periodDate, releaseDate: periodDate, revisionStatus: "not_tracked", stockCount: 1, totalMarketCapWan: 1 });
+  const fixture = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B2", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-02-28" }, source: { provider: "Tushare Pro", api: "daily_basic", fields: ["total_mv"] }, points: [point("2026-01-31", "2026-01-30"), point("2026-02-28", "2026-02-27")] };
+  for (const broken of [{ ...fixture, schemaVersion: 2 }, { ...fixture, indicator: { ...fixture.indicator, id: "B3" } }, { ...fixture, indicator: { ...fixture.indicator, frequency: "daily" } }]) assert.throws(() => buildB4MonthlyHistory(broken, "2026-08-17"), /identity/);
+  assert.throws(() => buildB4MonthlyHistory(fixture, "2026-08-16"), /requestedAsOf/);
+  assert.throws(() => buildB4MonthlyHistory({ ...fixture, points: [] }, "2026-08-17"), /range or points/);
+  assert.throws(() => buildB4MonthlyHistory({ ...fixture, source: { ...fixture.source, fields: [] } }, "2026-08-17"), /source/);
+  assert.throws(() => buildB4MonthlyHistory({ ...fixture, points: [fixture.points[0], fixture.points[0]], range: { ...fixture.range, endAsOf: fixture.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  assert.throws(() => buildB4MonthlyHistory({ ...fixture, points: [...fixture.points].reverse(), range: { startAsOf: fixture.range.endAsOf, endAsOf: fixture.range.startAsOf } }, "2026-08-17"), /unique and strictly ascending/);
+  for (const [key, value] of [["releaseDate", "2026-01-29"], ["releaseDate", "2026-02-01"], ["periodDate", "2025-12-31"]]) {
+    const broken = structuredClone(fixture); broken.points[0][key] = value;
+    assert.throws(() => buildB4MonthlyHistory(broken, "2026-08-17"), /PIT dates/);
+  }
+  const revision = structuredClone(fixture); revision.points[0].revisionStatus = "final";
+  assert.throws(() => buildB4MonthlyHistory(revision, "2026-08-17"), /revisionStatus/);
+  assert.throws(() => buildB4MonthlyHistory({ ...fixture, range: { ...fixture.range, startAsOf: "2025-12-31" } }, "2026-08-17"), /range does not match/);
+});
+
+test("checked-in B4 history exactly derives from B2 with zero network", async () => {
+  const [b4, b2] = await Promise.all([b4HistoryData(), b2HistoryData()]);
+  assert.equal(b4.points.length, 139);
+  assert.equal(b4.points.length, b2.points.length);
+  assert.equal(b4.requestedAsOf, b2.requestedAsOf);
+  assert.deepEqual(b4.range, b2.range);
+  for (let index = 0; index < b4.points.length; index += 1) {
+    const actual = b4.points[index]; const input = b2.points[index];
+    for (const key of ["asOf", "periodDate", "releaseDate", "revisionStatus", "stockCount", "totalMarketCapWan"]) assert.equal(actual[key], input[key]);
+    assert.ok(Math.abs(actual.totalMarketCapTrillion - input.totalMarketCapWan / 100000000) < 1e-12);
+  }
+  assert.doesNotMatch(JSON.stringify(b4), /"(?:gdp|marketCapToGdp|score|position|trend|percentile|zScore|normalized|signal|state|valuationState|riskLevel)"/i);
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-b4.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /callTushare\(|fetch\(|TUSHARE_TOKEN/);
+});
+
+test("B4 requestedAsOf failure preserves B4, B2, B5, B3, B1 and current files", async () => {
+  const paths = ["../public/data/market-research/history/b4.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b4.mjs", import.meta.url)), "--as-of", "2026-08-16"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /requestedAsOf/);
   assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 

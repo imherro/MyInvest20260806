@@ -1,0 +1,1277 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T09:42:16.830Z",
+  "requestedAsOf": "2026-08-17",
+  "indicator": {
+    "id": "B4",
+    "name": "总市值/GDP",
+    "frequency": "monthly",
+    "asOfRule": "derived_from_b2_monthly_eod"
+  },
+  "range": {
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31"
+  },
+  "source": {
+    "type": "derived",
+    "input": "public/data/market-research/history/b2.json",
+    "inputIndicator": "B2",
+    "formula": "totalMarketCapWan / 100000000",
+    "underlyingProvider": "Tushare Pro",
+    "underlyingApi": "daily_basic",
+    "underlyingField": "total_mv"
+  },
+  "points": [
+    {
+      "asOf": "2015-01-31",
+      "periodDate": "2015-01-30",
+      "releaseDate": "2015-01-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2355,
+      "totalMarketCapWan": 4160775703.567298,
+      "totalMarketCapTrillion": 41.60775703567298
+    },
+    {
+      "asOf": "2015-02-28",
+      "periodDate": "2015-02-27",
+      "releaseDate": "2015-02-27",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2387,
+      "totalMarketCapWan": 4402732437.3220005,
+      "totalMarketCapTrillion": 44.027324373220004
+    },
+    {
+      "asOf": "2015-03-31",
+      "periodDate": "2015-03-31",
+      "releaseDate": "2015-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2341,
+      "totalMarketCapWan": 4980965553.097199,
+      "totalMarketCapTrillion": 49.809655530971995
+    },
+    {
+      "asOf": "2015-04-30",
+      "periodDate": "2015-04-30",
+      "releaseDate": "2015-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2367,
+      "totalMarketCapWan": 5960349526.494099,
+      "totalMarketCapTrillion": 59.60349526494099
+    },
+    {
+      "asOf": "2015-05-31",
+      "periodDate": "2015-05-29",
+      "releaseDate": "2015-05-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2336,
+      "totalMarketCapWan": 6329193976.283897,
+      "totalMarketCapTrillion": 63.29193976283897
+    },
+    {
+      "asOf": "2015-06-30",
+      "periodDate": "2015-06-30",
+      "releaseDate": "2015-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2337,
+      "totalMarketCapWan": 5780067556.694891,
+      "totalMarketCapTrillion": 57.80067556694891
+    },
+    {
+      "asOf": "2015-07-31",
+      "periodDate": "2015-07-31",
+      "releaseDate": "2015-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2278,
+      "totalMarketCapWan": 4914011105.486298,
+      "totalMarketCapTrillion": 49.14011105486298
+    },
+    {
+      "asOf": "2015-08-31",
+      "periodDate": "2015-08-31",
+      "releaseDate": "2015-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2283,
+      "totalMarketCapWan": 4177478392.408897,
+      "totalMarketCapTrillion": 41.77478392408897
+    },
+    {
+      "asOf": "2015-09-30",
+      "periodDate": "2015-09-30",
+      "releaseDate": "2015-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2351,
+      "totalMarketCapWan": 4087283336.8958025,
+      "totalMarketCapTrillion": 40.87283336895803
+    },
+    {
+      "asOf": "2015-10-31",
+      "periodDate": "2015-10-30",
+      "releaseDate": "2015-10-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2387,
+      "totalMarketCapWan": 4727128130.110697,
+      "totalMarketCapTrillion": 47.27128130110697
+    },
+    {
+      "asOf": "2015-11-30",
+      "periodDate": "2015-11-30",
+      "releaseDate": "2015-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2474,
+      "totalMarketCapWan": 5128592758.208898,
+      "totalMarketCapTrillion": 51.28592758208897
+    },
+    {
+      "asOf": "2015-12-31",
+      "periodDate": "2015-12-31",
+      "releaseDate": "2015-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2545,
+      "totalMarketCapWan": 5482939036.866005,
+      "totalMarketCapTrillion": 54.82939036866005
+    },
+    {
+      "asOf": "2016-01-31",
+      "periodDate": "2016-01-29",
+      "releaseDate": "2016-01-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2558,
+      "totalMarketCapWan": 4116351170.5096016,
+      "totalMarketCapTrillion": 41.16351170509601
+    },
+    {
+      "asOf": "2016-02-29",
+      "periodDate": "2016-02-29",
+      "releaseDate": "2016-02-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2538,
+      "totalMarketCapWan": 3985741805.022104,
+      "totalMarketCapTrillion": 39.857418050221035
+    },
+    {
+      "asOf": "2016-03-31",
+      "periodDate": "2016-03-31",
+      "releaseDate": "2016-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2536,
+      "totalMarketCapWan": 4633810565.330605,
+      "totalMarketCapTrillion": 46.338105653306044
+    },
+    {
+      "asOf": "2016-04-30",
+      "periodDate": "2016-04-29",
+      "releaseDate": "2016-04-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2529,
+      "totalMarketCapWan": 4551887591.192503,
+      "totalMarketCapTrillion": 45.51887591192503
+    },
+    {
+      "asOf": "2016-05-31",
+      "periodDate": "2016-05-31",
+      "releaseDate": "2016-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2556,
+      "totalMarketCapWan": 4619067496.415899,
+      "totalMarketCapTrillion": 46.190674964158994
+    },
+    {
+      "asOf": "2016-06-30",
+      "periodDate": "2016-06-30",
+      "releaseDate": "2016-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2585,
+      "totalMarketCapWan": 4782392794.430108,
+      "totalMarketCapTrillion": 47.82392794430108
+    },
+    {
+      "asOf": "2016-07-31",
+      "periodDate": "2016-07-29",
+      "releaseDate": "2016-07-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2645,
+      "totalMarketCapWan": 4843051101.962308,
+      "totalMarketCapTrillion": 48.43051101962308
+    },
+    {
+      "asOf": "2016-08-31",
+      "periodDate": "2016-08-31",
+      "releaseDate": "2016-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2686,
+      "totalMarketCapWan": 5145772813.591578,
+      "totalMarketCapTrillion": 51.45772813591577
+    },
+    {
+      "asOf": "2016-09-30",
+      "periodDate": "2016-09-30",
+      "releaseDate": "2016-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2704,
+      "totalMarketCapWan": 5030204258.506804,
+      "totalMarketCapTrillion": 50.302042585068044
+    },
+    {
+      "asOf": "2016-10-31",
+      "periodDate": "2016-10-31",
+      "releaseDate": "2016-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2752,
+      "totalMarketCapWan": 5262795922.033878,
+      "totalMarketCapTrillion": 52.62795922033878
+    },
+    {
+      "asOf": "2016-11-30",
+      "periodDate": "2016-11-30",
+      "releaseDate": "2016-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2774,
+      "totalMarketCapWan": 5528904012.607906,
+      "totalMarketCapTrillion": 55.289040126079065
+    },
+    {
+      "asOf": "2016-12-31",
+      "periodDate": "2016-12-30",
+      "releaseDate": "2016-12-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2834,
+      "totalMarketCapWan": 5307869649.699392,
+      "totalMarketCapTrillion": 53.07869649699392
+    },
+    {
+      "asOf": "2017-01-31",
+      "periodDate": "2017-01-26",
+      "releaseDate": "2017-01-26",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2893,
+      "totalMarketCapWan": 5439839736.004885,
+      "totalMarketCapTrillion": 54.39839736004885
+    },
+    {
+      "asOf": "2017-02-28",
+      "periodDate": "2017-02-28",
+      "releaseDate": "2017-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2897,
+      "totalMarketCapWan": 5636713751.493412,
+      "totalMarketCapTrillion": 56.36713751493412
+    },
+    {
+      "asOf": "2017-03-31",
+      "periodDate": "2017-03-31",
+      "releaseDate": "2017-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2946,
+      "totalMarketCapWan": 5670082325.466094,
+      "totalMarketCapTrillion": 56.70082325466094
+    },
+    {
+      "asOf": "2017-04-30",
+      "periodDate": "2017-04-28",
+      "releaseDate": "2017-04-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2963,
+      "totalMarketCapWan": 5494269256.707794,
+      "totalMarketCapTrillion": 54.94269256707794
+    },
+    {
+      "asOf": "2017-05-31",
+      "periodDate": "2017-05-31",
+      "releaseDate": "2017-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 2986,
+      "totalMarketCapWan": 5382053813.027096,
+      "totalMarketCapTrillion": 53.82053813027096
+    },
+    {
+      "asOf": "2017-06-30",
+      "periodDate": "2017-06-30",
+      "releaseDate": "2017-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3022,
+      "totalMarketCapWan": 5529314061.438294,
+      "totalMarketCapTrillion": 55.29314061438294
+    },
+    {
+      "asOf": "2017-07-31",
+      "periodDate": "2017-07-31",
+      "releaseDate": "2017-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3050,
+      "totalMarketCapWan": 5653422045.2784,
+      "totalMarketCapTrillion": 56.534220452784005
+    },
+    {
+      "asOf": "2017-08-31",
+      "periodDate": "2017-08-31",
+      "releaseDate": "2017-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3116,
+      "totalMarketCapWan": 5899417650.050712,
+      "totalMarketCapTrillion": 58.994176500507116
+    },
+    {
+      "asOf": "2017-09-30",
+      "periodDate": "2017-09-29",
+      "releaseDate": "2017-09-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3182,
+      "totalMarketCapWan": 6041608985.341804,
+      "totalMarketCapTrillion": 60.416089853418036
+    },
+    {
+      "asOf": "2017-10-31",
+      "periodDate": "2017-10-31",
+      "releaseDate": "2017-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3215,
+      "totalMarketCapWan": 6164230081.964197,
+      "totalMarketCapTrillion": 61.642300819641974
+    },
+    {
+      "asOf": "2017-11-30",
+      "periodDate": "2017-11-30",
+      "releaseDate": "2017-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3234,
+      "totalMarketCapWan": 6012073064.424701,
+      "totalMarketCapTrillion": 60.120730644247004
+    },
+    {
+      "asOf": "2017-12-31",
+      "periodDate": "2017-12-29",
+      "releaseDate": "2017-12-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3251,
+      "totalMarketCapWan": 6058307706.223709,
+      "totalMarketCapTrillion": 60.58307706223709
+    },
+    {
+      "asOf": "2018-01-31",
+      "periodDate": "2018-01-31",
+      "releaseDate": "2018-01-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3263,
+      "totalMarketCapWan": 6302389158.577021,
+      "totalMarketCapTrillion": 63.02389158577021
+    },
+    {
+      "asOf": "2018-02-28",
+      "periodDate": "2018-02-28",
+      "releaseDate": "2018-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3227,
+      "totalMarketCapWan": 5957050386.980098,
+      "totalMarketCapTrillion": 59.57050386980098
+    },
+    {
+      "asOf": "2018-03-31",
+      "periodDate": "2018-03-30",
+      "releaseDate": "2018-03-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3249,
+      "totalMarketCapWan": 5919255541.696704,
+      "totalMarketCapTrillion": 59.19255541696704
+    },
+    {
+      "asOf": "2018-04-30",
+      "periodDate": "2018-04-27",
+      "releaseDate": "2018-04-27",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3272,
+      "totalMarketCapWan": 5752825649.464685,
+      "totalMarketCapTrillion": 57.528256494646854
+    },
+    {
+      "asOf": "2018-05-31",
+      "periodDate": "2018-05-31",
+      "releaseDate": "2018-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3302,
+      "totalMarketCapWan": 5752855769.590809,
+      "totalMarketCapTrillion": 57.52855769590809
+    },
+    {
+      "asOf": "2018-06-30",
+      "periodDate": "2018-06-29",
+      "releaseDate": "2018-06-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3325,
+      "totalMarketCapWan": 5332675023.350589,
+      "totalMarketCapTrillion": 53.32675023350589
+    },
+    {
+      "asOf": "2018-07-31",
+      "periodDate": "2018-07-31",
+      "releaseDate": "2018-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3396,
+      "totalMarketCapWan": 5433781202.266102,
+      "totalMarketCapTrillion": 54.33781202266102
+    },
+    {
+      "asOf": "2018-08-31",
+      "periodDate": "2018-08-31",
+      "releaseDate": "2018-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3440,
+      "totalMarketCapWan": 5179752740.325298,
+      "totalMarketCapTrillion": 51.797527403252985
+    },
+    {
+      "asOf": "2018-09-30",
+      "periodDate": "2018-09-28",
+      "releaseDate": "2018-09-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3470,
+      "totalMarketCapWan": 5302671167.053307,
+      "totalMarketCapTrillion": 53.02671167053307
+    },
+    {
+      "asOf": "2018-10-31",
+      "periodDate": "2018-10-31",
+      "releaseDate": "2018-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3481,
+      "totalMarketCapWan": 4918814770.314895,
+      "totalMarketCapTrillion": 49.18814770314895
+    },
+    {
+      "asOf": "2018-11-30",
+      "periodDate": "2018-11-30",
+      "releaseDate": "2018-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3538,
+      "totalMarketCapWan": 5050191230.157906,
+      "totalMarketCapTrillion": 50.501912301579054
+    },
+    {
+      "asOf": "2018-12-31",
+      "periodDate": "2018-12-28",
+      "releaseDate": "2018-12-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3551,
+      "totalMarketCapWan": 4834813461.168294,
+      "totalMarketCapTrillion": 48.34813461168294
+    },
+    {
+      "asOf": "2019-01-31",
+      "periodDate": "2019-01-31",
+      "releaseDate": "2019-01-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3569,
+      "totalMarketCapWan": 5042404858.090197,
+      "totalMarketCapTrillion": 50.42404858090197
+    },
+    {
+      "asOf": "2019-02-28",
+      "periodDate": "2019-02-28",
+      "releaseDate": "2019-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3571,
+      "totalMarketCapWan": 5836727373.5974,
+      "totalMarketCapTrillion": 58.367273735973995
+    },
+    {
+      "asOf": "2019-03-31",
+      "periodDate": "2019-03-29",
+      "releaseDate": "2019-03-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3567,
+      "totalMarketCapWan": 6212817667.114703,
+      "totalMarketCapTrillion": 62.12817667114703
+    },
+    {
+      "asOf": "2019-04-30",
+      "periodDate": "2019-04-30",
+      "releaseDate": "2019-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3554,
+      "totalMarketCapWan": 6159728724.014206,
+      "totalMarketCapTrillion": 61.59728724014206
+    },
+    {
+      "asOf": "2019-05-31",
+      "periodDate": "2019-05-31",
+      "releaseDate": "2019-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3601,
+      "totalMarketCapWan": 5811575461.978492,
+      "totalMarketCapTrillion": 58.115754619784916
+    },
+    {
+      "asOf": "2019-06-30",
+      "periodDate": "2019-06-28",
+      "releaseDate": "2019-06-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3614,
+      "totalMarketCapWan": 5985811523.291599,
+      "totalMarketCapTrillion": 59.85811523291599
+    },
+    {
+      "asOf": "2019-07-31",
+      "periodDate": "2019-07-31",
+      "releaseDate": "2019-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3648,
+      "totalMarketCapWan": 6020001567.688812,
+      "totalMarketCapTrillion": 60.20001567688812
+    },
+    {
+      "asOf": "2019-08-31",
+      "periodDate": "2019-08-30",
+      "releaseDate": "2019-08-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3662,
+      "totalMarketCapWan": 5994126408.465303,
+      "totalMarketCapTrillion": 59.941264084653035
+    },
+    {
+      "asOf": "2019-09-30",
+      "periodDate": "2019-09-30",
+      "releaseDate": "2019-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3672,
+      "totalMarketCapWan": 6053789216.911595,
+      "totalMarketCapTrillion": 60.537892169115956
+    },
+    {
+      "asOf": "2019-10-31",
+      "periodDate": "2019-10-31",
+      "releaseDate": "2019-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3684,
+      "totalMarketCapWan": 6138360428.938307,
+      "totalMarketCapTrillion": 61.383604289383065
+    },
+    {
+      "asOf": "2019-11-30",
+      "periodDate": "2019-11-29",
+      "releaseDate": "2019-11-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3715,
+      "totalMarketCapWan": 6070138350.667993,
+      "totalMarketCapTrillion": 60.701383506679925
+    },
+    {
+      "asOf": "2019-12-31",
+      "periodDate": "2019-12-31",
+      "releaseDate": "2019-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3742,
+      "totalMarketCapWan": 6568738428.0257015,
+      "totalMarketCapTrillion": 65.68738428025702
+    },
+    {
+      "asOf": "2020-01-31",
+      "periodDate": "2020-01-23",
+      "releaseDate": "2020-01-23",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3761,
+      "totalMarketCapWan": 6590703109.918985,
+      "totalMarketCapTrillion": 65.90703109918985
+    },
+    {
+      "asOf": "2020-02-29",
+      "periodDate": "2020-02-28",
+      "releaseDate": "2020-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3784,
+      "totalMarketCapWan": 6552300203.986288,
+      "totalMarketCapTrillion": 65.52300203986287
+    },
+    {
+      "asOf": "2020-03-31",
+      "periodDate": "2020-03-31",
+      "releaseDate": "2020-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3790,
+      "totalMarketCapWan": 6183241720.268816,
+      "totalMarketCapTrillion": 61.83241720268816
+    },
+    {
+      "asOf": "2020-04-30",
+      "periodDate": "2020-04-30",
+      "releaseDate": "2020-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3772,
+      "totalMarketCapWan": 6494688241.934298,
+      "totalMarketCapTrillion": 64.94688241934297
+    },
+    {
+      "asOf": "2020-05-31",
+      "periodDate": "2020-05-29",
+      "releaseDate": "2020-05-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3814,
+      "totalMarketCapWan": 6548070296.296504,
+      "totalMarketCapTrillion": 65.48070296296504
+    },
+    {
+      "asOf": "2020-06-30",
+      "periodDate": "2020-06-30",
+      "releaseDate": "2020-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3836,
+      "totalMarketCapWan": 7040195760.880901,
+      "totalMarketCapTrillion": 70.40195760880901
+    },
+    {
+      "asOf": "2020-07-31",
+      "periodDate": "2020-07-31",
+      "releaseDate": "2020-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3896,
+      "totalMarketCapWan": 8008719098.017412,
+      "totalMarketCapTrillion": 80.08719098017413
+    },
+    {
+      "asOf": "2020-08-31",
+      "periodDate": "2020-08-31",
+      "releaseDate": "2020-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 3952,
+      "totalMarketCapWan": 8245506044.896808,
+      "totalMarketCapTrillion": 82.45506044896808
+    },
+    {
+      "asOf": "2020-09-30",
+      "periodDate": "2020-09-30",
+      "releaseDate": "2020-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4017,
+      "totalMarketCapWan": 7829003789.878601,
+      "totalMarketCapTrillion": 78.29003789878601
+    },
+    {
+      "asOf": "2020-10-31",
+      "periodDate": "2020-10-30",
+      "releaseDate": "2020-10-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4046,
+      "totalMarketCapWan": 8013003330.808401,
+      "totalMarketCapTrillion": 80.13003330808401
+    },
+    {
+      "asOf": "2020-11-30",
+      "periodDate": "2020-11-30",
+      "releaseDate": "2020-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4069,
+      "totalMarketCapWan": 8420581391.653379,
+      "totalMarketCapTrillion": 84.2058139165338
+    },
+    {
+      "asOf": "2020-12-31",
+      "periodDate": "2020-12-31",
+      "releaseDate": "2020-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4119,
+      "totalMarketCapWan": 8674310362.649698,
+      "totalMarketCapTrillion": 86.74310362649699
+    },
+    {
+      "asOf": "2021-01-31",
+      "periodDate": "2021-01-29",
+      "releaseDate": "2021-01-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4152,
+      "totalMarketCapWan": 8719106108.82451,
+      "totalMarketCapTrillion": 87.1910610882451
+    },
+    {
+      "asOf": "2021-02-28",
+      "periodDate": "2021-02-26",
+      "releaseDate": "2021-02-26",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4179,
+      "totalMarketCapWan": 8737341088.94318,
+      "totalMarketCapTrillion": 87.3734108894318
+    },
+    {
+      "asOf": "2021-03-31",
+      "periodDate": "2021-03-31",
+      "releaseDate": "2021-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4217,
+      "totalMarketCapWan": 8543634101.330994,
+      "totalMarketCapTrillion": 85.43634101330994
+    },
+    {
+      "asOf": "2021-04-30",
+      "periodDate": "2021-04-30",
+      "releaseDate": "2021-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4241,
+      "totalMarketCapWan": 8722677323.946102,
+      "totalMarketCapTrillion": 87.22677323946102
+    },
+    {
+      "asOf": "2021-05-31",
+      "periodDate": "2021-05-31",
+      "releaseDate": "2021-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4313,
+      "totalMarketCapWan": 9244266266.986914,
+      "totalMarketCapTrillion": 92.44266266986914
+    },
+    {
+      "asOf": "2021-06-30",
+      "periodDate": "2021-06-30",
+      "releaseDate": "2021-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4360,
+      "totalMarketCapWan": 9350850322.288792,
+      "totalMarketCapTrillion": 93.50850322288791
+    },
+    {
+      "asOf": "2021-07-31",
+      "periodDate": "2021-07-30",
+      "releaseDate": "2021-07-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4408,
+      "totalMarketCapWan": 8968369048.201223,
+      "totalMarketCapTrillion": 89.68369048201224
+    },
+    {
+      "asOf": "2021-08-31",
+      "periodDate": "2021-08-31",
+      "releaseDate": "2021-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4451,
+      "totalMarketCapWan": 9370683411.915995,
+      "totalMarketCapTrillion": 93.70683411915995
+    },
+    {
+      "asOf": "2021-09-30",
+      "periodDate": "2021-09-30",
+      "releaseDate": "2021-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4482,
+      "totalMarketCapWan": 9365472235.651417,
+      "totalMarketCapTrillion": 93.65472235651417
+    },
+    {
+      "asOf": "2021-10-31",
+      "periodDate": "2021-10-29",
+      "releaseDate": "2021-10-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4522,
+      "totalMarketCapWan": 9383564508.574198,
+      "totalMarketCapTrillion": 93.83564508574197
+    },
+    {
+      "asOf": "2021-11-30",
+      "periodDate": "2021-11-30",
+      "releaseDate": "2021-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4630,
+      "totalMarketCapWan": 9627344305.529701,
+      "totalMarketCapTrillion": 96.27344305529701
+    },
+    {
+      "asOf": "2021-12-31",
+      "periodDate": "2021-12-31",
+      "releaseDate": "2021-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4669,
+      "totalMarketCapWan": 9898956357.842916,
+      "totalMarketCapTrillion": 98.98956357842917
+    },
+    {
+      "asOf": "2022-01-31",
+      "periodDate": "2022-01-28",
+      "releaseDate": "2022-01-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4705,
+      "totalMarketCapWan": 9225194518.406713,
+      "totalMarketCapTrillion": 92.25194518406714
+    },
+    {
+      "asOf": "2022-02-28",
+      "periodDate": "2022-02-28",
+      "releaseDate": "2022-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4724,
+      "totalMarketCapWan": 9500465065.469995,
+      "totalMarketCapTrillion": 95.00465065469996
+    },
+    {
+      "asOf": "2022-03-31",
+      "periodDate": "2022-03-31",
+      "releaseDate": "2022-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4756,
+      "totalMarketCapWan": 8902056670.8017,
+      "totalMarketCapTrillion": 89.020566708017
+    },
+    {
+      "asOf": "2022-04-30",
+      "periodDate": "2022-04-29",
+      "releaseDate": "2022-04-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4767,
+      "totalMarketCapWan": 8267579227.667499,
+      "totalMarketCapTrillion": 82.67579227667498
+    },
+    {
+      "asOf": "2022-05-31",
+      "periodDate": "2022-05-31",
+      "releaseDate": "2022-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4779,
+      "totalMarketCapWan": 8715005815.487513,
+      "totalMarketCapTrillion": 87.15005815487513
+    },
+    {
+      "asOf": "2022-06-30",
+      "periodDate": "2022-06-30",
+      "releaseDate": "2022-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4806,
+      "totalMarketCapWan": 9407474824.641726,
+      "totalMarketCapTrillion": 94.07474824641726
+    },
+    {
+      "asOf": "2022-07-31",
+      "periodDate": "2022-07-29",
+      "releaseDate": "2022-07-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4837,
+      "totalMarketCapWan": 9121521762.95541,
+      "totalMarketCapTrillion": 91.2152176295541
+    },
+    {
+      "asOf": "2022-08-31",
+      "periodDate": "2022-08-31",
+      "releaseDate": "2022-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4899,
+      "totalMarketCapWan": 9003779356.245405,
+      "totalMarketCapTrillion": 90.03779356245406
+    },
+    {
+      "asOf": "2022-09-30",
+      "periodDate": "2022-09-30",
+      "releaseDate": "2022-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4937,
+      "totalMarketCapWan": 8461679369.003382,
+      "totalMarketCapTrillion": 84.61679369003382
+    },
+    {
+      "asOf": "2022-10-31",
+      "periodDate": "2022-10-31",
+      "releaseDate": "2022-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 4966,
+      "totalMarketCapWan": 8235833615.47879,
+      "totalMarketCapTrillion": 82.3583361547879
+    },
+    {
+      "asOf": "2022-11-30",
+      "periodDate": "2022-11-30",
+      "releaseDate": "2022-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5007,
+      "totalMarketCapWan": 8927306256.143904,
+      "totalMarketCapTrillion": 89.27306256143903
+    },
+    {
+      "asOf": "2022-12-31",
+      "periodDate": "2022-12-30",
+      "releaseDate": "2022-12-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5061,
+      "totalMarketCapWan": 8768877598.353764,
+      "totalMarketCapTrillion": 87.68877598353764
+    },
+    {
+      "asOf": "2023-01-31",
+      "periodDate": "2023-01-31",
+      "releaseDate": "2023-01-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5065,
+      "totalMarketCapWan": 9366037806.13449,
+      "totalMarketCapTrillion": 93.66037806134489
+    },
+    {
+      "asOf": "2023-02-28",
+      "periodDate": "2023-02-28",
+      "releaseDate": "2023-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5093,
+      "totalMarketCapWan": 9442104113.272802,
+      "totalMarketCapTrillion": 94.42104113272802
+    },
+    {
+      "asOf": "2023-03-31",
+      "periodDate": "2023-03-31",
+      "releaseDate": "2023-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5127,
+      "totalMarketCapWan": 9472353313.97292,
+      "totalMarketCapTrillion": 94.7235331397292
+    },
+    {
+      "asOf": "2023-04-30",
+      "periodDate": "2023-04-28",
+      "releaseDate": "2023-04-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5131,
+      "totalMarketCapWan": 9562099372.940413,
+      "totalMarketCapTrillion": 95.62099372940412
+    },
+    {
+      "asOf": "2023-05-31",
+      "periodDate": "2023-05-31",
+      "releaseDate": "2023-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5164,
+      "totalMarketCapWan": 9279495047.153423,
+      "totalMarketCapTrillion": 92.79495047153424
+    },
+    {
+      "asOf": "2023-06-30",
+      "periodDate": "2023-06-30",
+      "releaseDate": "2023-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5205,
+      "totalMarketCapWan": 9335943782.472296,
+      "totalMarketCapTrillion": 93.35943782472296
+    },
+    {
+      "asOf": "2023-07-31",
+      "periodDate": "2023-07-31",
+      "releaseDate": "2023-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5233,
+      "totalMarketCapWan": 9551219054.571196,
+      "totalMarketCapTrillion": 95.51219054571196
+    },
+    {
+      "asOf": "2023-08-31",
+      "periodDate": "2023-08-31",
+      "releaseDate": "2023-08-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5265,
+      "totalMarketCapWan": 9120996819.655912,
+      "totalMarketCapTrillion": 91.20996819655912
+    },
+    {
+      "asOf": "2023-09-30",
+      "periodDate": "2023-09-28",
+      "releaseDate": "2023-09-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5282,
+      "totalMarketCapWan": 9057700556.275276,
+      "totalMarketCapTrillion": 90.57700556275276
+    },
+    {
+      "asOf": "2023-10-31",
+      "periodDate": "2023-10-31",
+      "releaseDate": "2023-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5297,
+      "totalMarketCapWan": 8842144651.476383,
+      "totalMarketCapTrillion": 88.42144651476383
+    },
+    {
+      "asOf": "2023-11-30",
+      "periodDate": "2023-11-30",
+      "releaseDate": "2023-11-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5312,
+      "totalMarketCapWan": 8881680578.573483,
+      "totalMarketCapTrillion": 88.81680578573483
+    },
+    {
+      "asOf": "2023-12-31",
+      "periodDate": "2023-12-29",
+      "releaseDate": "2023-12-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5329,
+      "totalMarketCapWan": 8765380470.180408,
+      "totalMarketCapTrillion": 87.65380470180409
+    },
+    {
+      "asOf": "2024-01-31",
+      "periodDate": "2024-01-31",
+      "releaseDate": "2024-01-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5344,
+      "totalMarketCapWan": 7990148626.823484,
+      "totalMarketCapTrillion": 79.90148626823485
+    },
+    {
+      "asOf": "2024-02-29",
+      "periodDate": "2024-02-29",
+      "releaseDate": "2024-02-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5347,
+      "totalMarketCapWan": 8671036560.559322,
+      "totalMarketCapTrillion": 86.71036560559322
+    },
+    {
+      "asOf": "2024-03-31",
+      "periodDate": "2024-03-29",
+      "releaseDate": "2024-03-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5356,
+      "totalMarketCapWan": 8807654121.782488,
+      "totalMarketCapTrillion": 88.07654121782488
+    },
+    {
+      "asOf": "2024-04-30",
+      "periodDate": "2024-04-30",
+      "releaseDate": "2024-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5301,
+      "totalMarketCapWan": 8920843418.177006,
+      "totalMarketCapTrillion": 89.20843418177006
+    },
+    {
+      "asOf": "2024-05-31",
+      "periodDate": "2024-05-31",
+      "releaseDate": "2024-05-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5341,
+      "totalMarketCapWan": 8845609955.045294,
+      "totalMarketCapTrillion": 88.45609955045293
+    },
+    {
+      "asOf": "2024-06-30",
+      "periodDate": "2024-06-28",
+      "releaseDate": "2024-06-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5338,
+      "totalMarketCapWan": 8497224715.785383,
+      "totalMarketCapTrillion": 84.97224715785383
+    },
+    {
+      "asOf": "2024-07-31",
+      "periodDate": "2024-07-31",
+      "releaseDate": "2024-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5334,
+      "totalMarketCapWan": 8402845002.728014,
+      "totalMarketCapTrillion": 84.02845002728014
+    },
+    {
+      "asOf": "2024-08-31",
+      "periodDate": "2024-08-30",
+      "releaseDate": "2024-08-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5339,
+      "totalMarketCapWan": 8136277803.212688,
+      "totalMarketCapTrillion": 81.36277803212688
+    },
+    {
+      "asOf": "2024-09-30",
+      "periodDate": "2024-09-30",
+      "releaseDate": "2024-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5345,
+      "totalMarketCapWan": 9674315249.8514,
+      "totalMarketCapTrillion": 96.74315249851401
+    },
+    {
+      "asOf": "2024-10-31",
+      "periodDate": "2024-10-31",
+      "releaseDate": "2024-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5349,
+      "totalMarketCapWan": 9695063639.407995,
+      "totalMarketCapTrillion": 96.95063639407995
+    },
+    {
+      "asOf": "2024-11-30",
+      "periodDate": "2024-11-29",
+      "releaseDate": "2024-11-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5364,
+      "totalMarketCapWan": 9851608275.470621,
+      "totalMarketCapTrillion": 98.5160827547062
+    },
+    {
+      "asOf": "2024-12-31",
+      "periodDate": "2024-12-31",
+      "releaseDate": "2024-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5370,
+      "totalMarketCapWan": 9875844250.489613,
+      "totalMarketCapTrillion": 98.75844250489612
+    },
+    {
+      "asOf": "2025-01-31",
+      "periodDate": "2025-01-27",
+      "releaseDate": "2025-01-27",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5382,
+      "totalMarketCapWan": 9641763071.132767,
+      "totalMarketCapTrillion": 96.41763071132766
+    },
+    {
+      "asOf": "2025-02-28",
+      "periodDate": "2025-02-28",
+      "releaseDate": "2025-02-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5383,
+      "totalMarketCapWan": 9925818327.390293,
+      "totalMarketCapTrillion": 99.25818327390293
+    },
+    {
+      "asOf": "2025-03-31",
+      "periodDate": "2025-03-31",
+      "releaseDate": "2025-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5393,
+      "totalMarketCapWan": 9969683332.742998,
+      "totalMarketCapTrillion": 99.69683332742999
+    },
+    {
+      "asOf": "2025-04-30",
+      "periodDate": "2025-04-30",
+      "releaseDate": "2025-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5360,
+      "totalMarketCapWan": 9730301602.442703,
+      "totalMarketCapTrillion": 97.30301602442704
+    },
+    {
+      "asOf": "2025-05-31",
+      "periodDate": "2025-05-30",
+      "releaseDate": "2025-05-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5384,
+      "totalMarketCapWan": 9926494166.357191,
+      "totalMarketCapTrillion": 99.26494166357192
+    },
+    {
+      "asOf": "2025-06-30",
+      "periodDate": "2025-06-30",
+      "releaseDate": "2025-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5405,
+      "totalMarketCapWan": 10467244579.728308,
+      "totalMarketCapTrillion": 104.67244579728307
+    },
+    {
+      "asOf": "2025-07-31",
+      "periodDate": "2025-07-31",
+      "releaseDate": "2025-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5409,
+      "totalMarketCapWan": 10797320442.121069,
+      "totalMarketCapTrillion": 107.9732044212107
+    },
+    {
+      "asOf": "2025-08-31",
+      "periodDate": "2025-08-29",
+      "releaseDate": "2025-08-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5414,
+      "totalMarketCapWan": 11730193686.834482,
+      "totalMarketCapTrillion": 117.30193686834482
+    },
+    {
+      "asOf": "2025-09-30",
+      "periodDate": "2025-09-30",
+      "releaseDate": "2025-09-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5423,
+      "totalMarketCapWan": 11934713247.9782,
+      "totalMarketCapTrillion": 119.347132479782
+    },
+    {
+      "asOf": "2025-10-31",
+      "periodDate": "2025-10-31",
+      "releaseDate": "2025-10-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5432,
+      "totalMarketCapWan": 12114232038.050812,
+      "totalMarketCapTrillion": 121.14232038050812
+    },
+    {
+      "asOf": "2025-11-30",
+      "periodDate": "2025-11-28",
+      "releaseDate": "2025-11-28",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5433,
+      "totalMarketCapWan": 11905713811.870434,
+      "totalMarketCapTrillion": 119.05713811870434
+    },
+    {
+      "asOf": "2025-12-31",
+      "periodDate": "2025-12-31",
+      "releaseDate": "2025-12-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5458,
+      "totalMarketCapWan": 12267098018.233746,
+      "totalMarketCapTrillion": 122.67098018233746
+    },
+    {
+      "asOf": "2026-01-31",
+      "periodDate": "2026-01-30",
+      "releaseDate": "2026-01-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5462,
+      "totalMarketCapWan": 12857133688.61251,
+      "totalMarketCapTrillion": 128.5713368861251
+    },
+    {
+      "asOf": "2026-02-28",
+      "periodDate": "2026-02-27",
+      "releaseDate": "2026-02-27",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5471,
+      "totalMarketCapWan": 13065738805.381243,
+      "totalMarketCapTrillion": 130.65738805381244
+    },
+    {
+      "asOf": "2026-03-31",
+      "periodDate": "2026-03-31",
+      "releaseDate": "2026-03-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5482,
+      "totalMarketCapWan": 12268610996.60167,
+      "totalMarketCapTrillion": 122.68610996601669
+    },
+    {
+      "asOf": "2026-04-30",
+      "periodDate": "2026-04-30",
+      "releaseDate": "2026-04-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5460,
+      "totalMarketCapWan": 13157733755.715704,
+      "totalMarketCapTrillion": 131.57733755715705
+    },
+    {
+      "asOf": "2026-05-31",
+      "periodDate": "2026-05-29",
+      "releaseDate": "2026-05-29",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5506,
+      "totalMarketCapWan": 13190111888.41619,
+      "totalMarketCapTrillion": 131.9011188841619
+    },
+    {
+      "asOf": "2026-06-30",
+      "periodDate": "2026-06-30",
+      "releaseDate": "2026-06-30",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5508,
+      "totalMarketCapWan": 13250217411.042574,
+      "totalMarketCapTrillion": 132.50217411042573
+    },
+    {
+      "asOf": "2026-07-31",
+      "periodDate": "2026-07-31",
+      "releaseDate": "2026-07-31",
+      "revisionStatus": "not_tracked",
+      "stockCount": 5528,
+      "totalMarketCapWan": 12518545038.415691,
+      "totalMarketCapTrillion": 125.18545038415691
+    }
+  ]
+}
