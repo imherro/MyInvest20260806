@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-17T05:54:34.047Z",
+  "generatedAt": "2026-08-17T06:36:16.705Z",
   "source": {
     "mode": "generated",
     "label": "Tushare generated current snapshot",
@@ -150,7 +150,7 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "1/14",
+    "coverage": "7.1%",
     "pitStatus": "待接入",
     "warning": "仅B3已由真实数据生成，其余13项待接入"
   },

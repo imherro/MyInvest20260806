@@ -141,6 +141,8 @@ test("contains one real B3 snapshot and 13 explicitly pending indicators", async
   assert.match(b3.note, /历史分位和最终B3评分尚未实现/);
   assert.equal(components.filter((item) => item.dataStatus === "generated").length, 1);
   assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 13);
+  assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
+  assert.equal(current.dataQuality.coverage, "7.1%");
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
@@ -170,6 +172,7 @@ test("selects the latest common trading date and builds B3 without network acces
 
   assert.equal(snapshot.tradeDate, "20260814");
   assert.equal(generated.asOf, "2026-08-14");
+  assert.equal(generated.dataQuality.coverage, "7.1%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
 });
 

@@ -94,6 +94,9 @@ export function buildGeneratedCurrent(template, snapshot, generatedAt = new Date
     note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。",
     dataStatus: "generated",
   } : indicator);
+  const allIndicators = Object.values(components).flat();
+  const generatedIndicatorCount = allIndicators.filter(indicator => indicator.dataStatus === "generated").length;
+  const totalCoverage = `${((generatedIndicatorCount / allIndicators.length) * 100).toFixed(1)}%`;
 
   return {
     ...template,
@@ -131,7 +134,7 @@ export function buildGeneratedCurrent(template, snapshot, generatedAt = new Date
     stateMap: template.stateMap.map(row => [row[0], row[1], row[2], row[3], ""]),
     drivers: [],
     risks: [],
-    dataQuality: { grade: "Partial", coverage: "1/14", pitStatus: "待接入", warning: "仅B3已由真实数据生成，其余13项待接入" },
+    dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: "仅B3已由真实数据生成，其余13项待接入" },
     recentHistory: [],
     recentEvents: [{ date: asOf.slice(5), title: "B3真实估值截面生成", detail: raw, group: "B3", tone: "blue" }],
     components,
