@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:52:43.591Z",
+  "generatedAt": "2026-08-17T09:01:31.643Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -16,7 +16,9 @@
       "sf_month",
       "us_trycr",
       "daily_basic",
-      "fina_indicator_vip"
+      "fina_indicator_vip",
+      "etf_basic",
+      "etf_share_size"
     ],
     "instruments": [
       {
@@ -54,8 +56,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
-    "diagnosis": "当前仅F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余1项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：F1、F2、F3、F4、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
+    "diagnosis": "14项当前快照均已生成，但F/L/B评分、历史PIT和校准尚未完成，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -68,7 +70,7 @@
       "title": "长牛底座",
       "score": null,
       "status": "数据接入中",
-      "coverage": "3/4",
+      "coverage": "4/4",
       "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
@@ -178,9 +180,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "92.9%",
+    "coverage": "100.0%",
     "pitStatus": "待接入",
-    "warning": "仅F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余1项待接入"
+    "warning": "14/14当前快照已生成；F/L/B评分、历史PIT和校准仍待完成"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -203,6 +205,13 @@
       "title": "L1名义资金利率代理快照生成",
       "detail": "SHIBOR隔夜 1.3620% / 1周 1.3854% / 3月 1.4300% / 1年 1.4800% / 1Y-ON期限差 +0.1180pct",
       "group": "L1",
+      "tone": "blue"
+    },
+    {
+      "date": "08-15",
+      "title": "F4沪深300ETF资金池规模代理快照生成",
+      "detail": "沪深300ETF有值样本总规模 0.27万亿元 / 有值 30只 / 目标 30只",
+      "group": "F4",
       "tone": "blue"
     },
     {
@@ -324,15 +333,15 @@
         "id": "F4",
         "name": "长期资金",
         "score": null,
-        "raw": null,
+        "raw": "沪深300ETF有值样本总规模 0.27万亿元 / 有值 30只 / 目标 30只",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-15",
+        "coverage": "30/30只沪深300ETF",
+        "quality": "A",
+        "note": "当前仅汇总严格早于信息截止日的最新共同交易日中，跟踪沪深300指数且当时已上市的ETF，在etf_share_size中有合法规模记录的total_size，作为F4第一阶段沪深300ETF资金池规模代理。ETF规模数据按交易所口径次日约8:30更新，因此不使用信息截止日当天的ETF规模。当前仅覆盖沪深300ETF这一被动权益资金池，不代表全部长期资金，也不代表养老金、险资、社保基金或全部公募权益资金，绝对规模也不代表资金净流入。当前ETF基础列表不是完整历史PIT股票池，不计算历史趋势、分位或F4评分。",
+        "dataStatus": "generated"
       }
     ],
     "L": [

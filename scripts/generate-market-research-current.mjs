@@ -36,6 +36,12 @@ function subtractDays(value, days) {
   return date.toISOString().slice(0, 10);
 }
 
+function addDays(value, days) {
+  const date = new Date(`${value}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
 export function quarterEndOnOrBefore(asOf) {
   const compact = compactDate(asOf);
   const year = Number(compact.slice(0, 4));
@@ -257,7 +263,9 @@ export function selectLatestCommonSnapshot(rowsByCode, requestedAsOf) {
   const dateSets = MARKET_INDEX_INSTRUMENTS.map(({ code }) => new Set((rowsByCode[code] ?? []).map(row => row.trade_date)));
   const commonDates = [...dateSets[0]].filter(date => date <= requested && dateSets[1].has(date)).sort().reverse();
   const tradeDate = commonDates[0];
+  const priorTradeDate = commonDates.find(date => date < requested);
   if (!tradeDate) throw new Error(`No common index_dailybasic trade date found on or before ${requestedAsOf}`);
+  if (!priorTradeDate) throw new Error(`No common index_dailybasic trade date found before ${requestedAsOf}`);
   const values = Object.fromEntries(MARKET_INDEX_INSTRUMENTS.map(({ code }) => {
     const row = rowsByCode[code].find(item => item.trade_date === tradeDate);
     const peTtm = Number(row?.pe_ttm);
@@ -270,7 +278,48 @@ export function selectLatestCommonSnapshot(rowsByCode, requestedAsOf) {
     return [code, { peTtm, pb, turnoverRate, turnoverRateF }];
   }));
   if (values["000300.SH"].turnoverRateF <= 0) throw new Error(`沪深300 turnover_rate_f must be greater than zero on ${tradeDate}`);
-  return { tradeDate, values };
+  return { tradeDate, priorTradeDate, values };
+}
+
+export function buildF4Snapshot(etfBasics, shareRows, snapshot) {
+  if (!Array.isArray(etfBasics) || !etfBasics.length) throw new Error("Tushare etf_basic returned no CSI300 ETFs");
+  if (!Array.isArray(shareRows) || shareRows.length >= 5000) throw new Error("Tushare etf_share_size reached the 5000-row limit or returned invalid rows");
+  const validDate = value => {
+    if (!/^\d{8}$/.test(String(value ?? ""))) return false;
+    const shown = displayDate(String(value));
+    const date = new Date(`${shown}T00:00:00Z`);
+    return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === shown;
+  };
+  const codes = new Set();
+  const eligible = new Set();
+  for (const row of etfBasics) {
+    if (row?.index_code !== "000300.SH" || row?.list_status !== "L") throw new Error("Tushare etf_basic contains a non-listed or non-CSI300 ETF");
+    const code = typeof row.ts_code === "string" ? row.ts_code.trim() : "";
+    if (!code) throw new Error("Tushare etf_basic contains an empty ts_code");
+    if (codes.has(code)) throw new Error(`Tushare etf_basic contains duplicate ts_code ${code}`);
+    codes.add(code);
+    if (row.list_date === null || row.list_date === undefined || row.list_date === "") continue;
+    if (!validDate(row.list_date)) throw new Error(`Tushare etf_basic contains invalid list_date for ${code}`);
+    if (row.list_date <= snapshot.priorTradeDate) eligible.add(code);
+  }
+  if (!eligible.size) throw new Error("Tushare etf_basic contains no eligible CSI300 ETF");
+  const seenShareCodes = new Set();
+  const observed = new Set();
+  let totalSizeWan = 0;
+  for (const row of shareRows) {
+    if (!eligible.has(row?.ts_code)) continue;
+    if (String(row.trade_date ?? "") !== snapshot.priorTradeDate) throw new Error(`Tushare etf_share_size contains a row outside ${snapshot.priorTradeDate}`);
+    if (seenShareCodes.has(row.ts_code)) throw new Error(`Tushare etf_share_size contains duplicate ts_code ${row.ts_code}`);
+    seenShareCodes.add(row.ts_code);
+    const value = row.total_size;
+    if (value === null || value === undefined || value === "") continue;
+    const size = Number(value);
+    if (!Number.isFinite(size) || size < 0) throw new Error(`Tushare etf_share_size contains invalid total_size for ${row.ts_code}`);
+    observed.add(row.ts_code);
+    totalSizeWan += size;
+  }
+  if (!observed.size || !Number.isFinite(totalSizeWan) || totalSizeWan <= 0) throw new Error("Tushare etf_share_size contains no positive observed CSI300 ETF pool");
+  return { tradeDate: snapshot.priorTradeDate, release: addDays(displayDate(snapshot.priorTradeDate), 1), eligibleCount: eligible.size, observedCount: observed.size, missingCount: eligible.size - observed.size, totalSizeWan, totalSizeTrillion: totalSizeWan / 100000000 };
 }
 
 export function buildB1Snapshot(snapshot) {
@@ -493,7 +542,7 @@ export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), y10 };
 }
 
-export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, f1, f4, b1, b2, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -516,6 +565,8 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
   const f1GrowthText = `${f1.medianNetProfitYoy > 0 ? "+" : ""}${f1.medianNetProfitYoy.toFixed(1)}%`;
   const f1Raw = `已披露样本归母净利润同比中位数 ${f1GrowthText} / 有值 ${f1.validCount}家 / 缺失 ${f1.missingCount}家`;
   const f2Raw = `已披露样本归母净利润同比正增长占比 ${f1.positiveShare.toFixed(1)}% / 正增长 ${f1.positiveCount}家 / 有值 ${f1.validCount}家`;
+  const f4Raw = `沪深300ETF有值样本总规模 ${f4.totalSizeTrillion.toFixed(2)}万亿元 / 有值 ${f4.observedCount}只 / 目标 ${f4.eligibleCount}只`;
+  if (f4.release > requestedAsOf) throw new Error("F4 release is after requested as-of");
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
   components.F = components.F.map(indicator => {
@@ -523,6 +574,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
     if (indicator.id === "F1") return { ...indicator, ...shared, raw: f1Raw, note: "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。" };
     if (indicator.id === "F2") return { ...indicator, ...shared, raw: f2Raw, note: "当前仅复用F1同一批截至信息截止日可验证公告日的公司最新记录，以netprofit_yoy>0的公司占有值样本比例作为F2第一阶段盈利扩散代理；netprofit_yoy为0或负数均不计为正增长，空值不进入分母。当前仅覆盖盈利扩散，尚未覆盖盈利质量，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F2评分。" };
     if (indicator.id === "F3") return { ...indicator, raw: b2Raw, period: b3Date, release: b3Date, coverage: b2Coverage, quality: "A", note: "当前仅复用B2同一daily_basic有值样本的市值加权TTM股息率，作为F3第一阶段现金分红股东回报代理；当前只覆盖现金分红，尚未接入股票回购，也未扣除IPO、增发等股权融资，因此当前不是完整的“股东回报 / 股权融资”指标，也不计算历史分位、趋势或F3评分。", dataStatus: "generated" };
+    if (indicator.id === "F4") return { ...indicator, raw: f4Raw, period: displayDate(f4.tradeDate), release: f4.release, coverage: `${f4.observedCount}/${f4.eligibleCount}只沪深300ETF`, quality: "A", note: "当前仅汇总严格早于信息截止日的最新共同交易日中，跟踪沪深300指数且当时已上市的ETF，在etf_share_size中有合法规模记录的total_size，作为F4第一阶段沪深300ETF资金池规模代理。ETF规模数据按交易所口径次日约8:30更新，因此不使用信息截止日当天的ETF规模。当前仅覆盖沪深300ETF这一被动权益资金池，不代表全部长期资金，也不代表养老金、险资、社保基金或全部公募权益资金，绝对规模也不代表资金净流入。当前ETF基础列表不是完整历史PIT股票池，不计算历史趋势、分位或F4评分。", dataStatus: "generated" };
     return indicator;
   });
   components.L = components.L.map(indicator => {
@@ -568,18 +620,19 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
   });
   return {
     ...template, schemaVersion: 4, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official", providers: ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic", "fina_indicator_vip"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.pbc.title, reportUrl: evidence.pbc.href, publishedAt: evidence.pbc.publishedAt }, L4: { provider: "中华人民共和国财政部", indexUrl: MOF_INDEX_URL, reportTitle: evidence.mof.title, reportUrl: evidence.mof.href, publishedAt: evidence.mof.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official", providers: ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic", "fina_indicator_vip", "etf_basic", "etf_share_size"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.pbc.title, reportUrl: evidence.pbc.href, publishedAt: evidence.pbc.publishedAt }, L4: { provider: "中华人民共和国财政部", indexUrl: MOF_INDEX_URL, reportTitle: evidence.mof.title, reportUrl: evidence.mof.href, publishedAt: evidence.mof.publishedAt } } },
     asOf: requestedAsOf,
-    diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
+    diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: pendingCount ? `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。` : "14项当前快照均已生成，但F/L/B评分、历史PIT和校准尚未完成，因此暂不形成F/L/B综合市场判断。", investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
     jointState: { nearestState: null, transitioningTo: null, trendLabel: null, description: "数据不足，暂不判断" },
     stateMap: template.stateMap.map(row => [row[0], row[1], row[2], row[3], ""]), drivers: [], risks: [],
-    dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: `仅${generatedLabel}已由真实数据生成，其余${pendingCount}项待接入` },
+    dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: pendingCount ? `仅${generatedLabel}已由真实数据生成，其余${pendingCount}项待接入` : "14/14当前快照已生成；F/L/B评分、历史PIT和校准仍待完成" },
     recentHistory: [],
     recentEvents: [
       { date: displayDate(f1.latestAnnDate).slice(5), title: "F1已披露样本盈利同比代理快照生成", detail: f1Raw, group: "F1", tone: "blue" },
       { date: displayDate(f1.latestAnnDate).slice(5), title: "F2已披露样本盈利扩散代理快照生成", detail: f2Raw, group: "F2", tone: "blue" },
       { date: b3Date.slice(5), title: "F3现金分红股东回报代理快照生成", detail: b2Raw, group: "F3", tone: "blue" },
+      { date: f4.release.slice(5), title: "F4沪深300ETF资金池规模代理快照生成", detail: f4Raw, group: "F4", tone: "blue" },
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
@@ -610,6 +663,9 @@ export async function main(argv = process.argv.slice(2)) {
   const startDate = subtractDays(requestedAsOf, 45);
   const rows = await Promise.all(MARKET_INDEX_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f", token)]));
   const snapshot = selectLatestCommonSnapshot(Object.fromEntries(rows), requestedAsOf);
+  const etfBasics = await callTushare("etf_basic", { index_code: "000300.SH", list_status: "L" }, "ts_code,index_code,list_date,list_status", token);
+  const etfShareRows = await callTushare("etf_share_size", { trade_date: snapshot.priorTradeDate }, "trade_date,ts_code,total_size", token);
+  const f4 = buildF4Snapshot(etfBasics, etfShareRows, snapshot);
   const b1 = buildB1Snapshot(snapshot);
   const dailyRows = await callTushare("daily_basic", { trade_date: snapshot.tradeDate }, "ts_code,trade_date,total_mv,dv_ttm", token);
   const b4 = buildB4Snapshot(dailyRows, snapshot);
@@ -626,7 +682,7 @@ export async function main(argv = process.argv.slice(2)) {
   const l4 = { ...mofOfficial, dataMonth: mofReport.dataMonth, listingDate: mofReport.listingDate };
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, f1, f4, b1, b2, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
@@ -634,6 +690,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`F1: ${current.components.F.find(indicator => indicator.id === "F1").raw} (${f1.reportedCount} reported, ${f1.excludedMissingAnnDateCount} missing ann_date excluded, target ${targetPeriod}, latest ${f1.latestAnnDate})`);
   console.log(`F2: ${current.components.F.find(indicator => indicator.id === "F2").raw}`);
   console.log(`F3: ${current.components.F.find(indicator => indicator.id === "F3").raw}`);
+  console.log(`F4: ${current.components.F.find(indicator => indicator.id === "F4").raw} (${f4.totalSizeWan}万元, ${f4.missingCount} missing, released ${f4.release})`);
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
