@@ -68,6 +68,14 @@ async function b3HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b3.json", import.meta.url)), "utf8"));
 }
 
+async function b1HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-b1.mjs", import.meta.url).href);
+}
+
+async function b1HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b1.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -572,6 +580,57 @@ test("missing-token history failure preserves both history and current files byt
   assert.match(result.stderr, /TUSHARE_TOKEN is required/);
   assert.deepEqual(await readFile(historyPath), beforeHistory);
   assert.deepEqual(await readFile(currentPath), beforeCurrent);
+});
+
+test("derives B1 monthly earnings yields from B3 with identical PIT dates", async () => {
+  const { buildB1MonthlyHistory } = await b1HistoryGenerator();
+  const fixture = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" },
+    range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" },
+    points: [{ asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", values: { "000300.SH": { peTtm: 20 }, "399006.SZ": { peTtm: 40 } } }],
+  };
+  const result = buildB1MonthlyHistory(fixture, "2026-08-17", "2026-08-17T00:00:00.000Z");
+  assert.equal(result.points[0].values["000300.SH"].earningsYield, 5);
+  assert.equal(result.points[0].values["399006.SZ"].earningsYield, 2.5);
+  assert.deepEqual({ asOf: result.points[0].asOf, periodDate: result.points[0].periodDate, releaseDate: result.points[0].releaseDate, revisionStatus: result.points[0].revisionStatus }, { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked" });
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad", 0, -10]) {
+    const broken = structuredClone(fixture);
+    broken.points[0].values["000300.SH"].peTtm = invalid;
+    assert.throws(() => buildB1MonthlyHistory(broken, "2026-08-17"), /Invalid B3 peTtm/);
+  }
+  assert.throws(() => buildB1MonthlyHistory({ ...fixture, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/);
+  assert.throws(() => buildB1MonthlyHistory({ ...fixture, schemaVersion: 2 }, "2026-08-17"), /identity/);
+  assert.throws(() => buildB1MonthlyHistory({ ...fixture, points: [] }, "2026-08-17"), /range or points/);
+  assert.throws(() => buildB1MonthlyHistory({ ...fixture, points: [fixture.points[0], fixture.points[0]], range: { ...fixture.range, endAsOf: fixture.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  const badDate = structuredClone(fixture); badDate.points[0].releaseDate = "2026-01-29";
+  assert.throws(() => buildB1MonthlyHistory(badDate, "2026-08-17"), /PIT dates/);
+  const missing = structuredClone(fixture); delete missing.points[0].values["399006.SZ"];
+  assert.throws(() => buildB1MonthlyHistory(missing, "2026-08-17"), /missing 399006/);
+});
+
+test("checked-in B1 history exactly derives every point from B3 without network fields", async () => {
+  const [b1, b3] = await Promise.all([b1HistoryData(), b3HistoryData()]);
+  assert.equal(b1.points.length, 139);
+  assert.equal(b1.points.length, b3.points.length);
+  assert.deepEqual(b1.range, b3.range);
+  assert.equal(b1.requestedAsOf, b3.requestedAsOf);
+  for (let index = 0; index < b1.points.length; index += 1) {
+    for (const key of ["asOf", "periodDate", "releaseDate", "revisionStatus"]) assert.equal(b1.points[index][key], b3.points[index][key]);
+    for (const code of ["000300.SH", "399006.SZ"]) assert.ok(Math.abs(b1.points[index].values[code].earningsYield - 100 / b3.points[index].values[code].peTtm) < 1e-12);
+  }
+  assert.doesNotMatch(JSON.stringify(b1), /"(?:score|position|trend|percentile|zScore|normalized|signal|state|riskLevel|valuationState)"/);
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-b1.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /callTushare\(|fetch\(|TUSHARE_TOKEN/);
+});
+
+test("B1 requestedAsOf failure preserves B1, B3 and current files", async () => {
+  const paths = ["../public/data/market-research/history/b1.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b1.mjs", import.meta.url)), "--as-of", "2026-08-16"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /requestedAsOf/);
+  const after = await Promise.all(paths.map(value => readFile(value)));
+  assert.deepEqual(after, before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {

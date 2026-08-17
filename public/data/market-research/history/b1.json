@@ -1,0 +1,1971 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T09:15:44.747Z",
+  "requestedAsOf": "2026-08-17",
+  "indicator": {
+    "id": "B1",
+    "name": "ERP股权风险溢价",
+    "frequency": "monthly",
+    "asOfRule": "derived_from_b3_monthly_eod"
+  },
+  "range": {
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31"
+  },
+  "source": {
+    "type": "derived",
+    "input": "public/data/market-research/history/b3.json",
+    "inputIndicator": "B3",
+    "formula": "100 / peTtm",
+    "underlyingProvider": "Tushare Pro",
+    "underlyingApi": "index_dailybasic"
+  },
+  "points": [
+    {
+      "asOf": "2015-01-31",
+      "periodDate": "2015-01-30",
+      "releaseDate": "2015-01-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.91765637371338
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5696123057604772
+        }
+      }
+    },
+    {
+      "asOf": "2015-02-28",
+      "periodDate": "2015-02-27",
+      "releaseDate": "2015-02-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.698229407236336
+        },
+        "399006.SZ": {
+          "earningsYield": 1.4382281029771322
+        }
+      }
+    },
+    {
+      "asOf": "2015-03-31",
+      "periodDate": "2015-03-31",
+      "releaseDate": "2015-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.802721088435375
+        },
+        "399006.SZ": {
+          "earningsYield": 1.2260912211868562
+        }
+      }
+    },
+    {
+      "asOf": "2015-04-30",
+      "periodDate": "2015-04-30",
+      "releaseDate": "2015-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 5.868544600938967
+        },
+        "399006.SZ": {
+          "earningsYield": 1.0058338362502515
+        }
+      }
+    },
+    {
+      "asOf": "2015-05-31",
+      "periodDate": "2015-05-29",
+      "releaseDate": "2015-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 5.9417706476530014
+        },
+        "399006.SZ": {
+          "earningsYield": 0.8120838070488875
+        }
+      }
+    },
+    {
+      "asOf": "2015-06-30",
+      "periodDate": "2015-06-30",
+      "releaseDate": "2015-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.042296072507552
+        },
+        "399006.SZ": {
+          "earningsYield": 1.012965964343598
+        }
+      }
+    },
+    {
+      "asOf": "2015-07-31",
+      "periodDate": "2015-07-31",
+      "releaseDate": "2015-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.067137809187279
+        },
+        "399006.SZ": {
+          "earningsYield": 1.175640724194686
+        }
+      }
+    },
+    {
+      "asOf": "2015-08-31",
+      "periodDate": "2015-08-31",
+      "releaseDate": "2015-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.264462809917356
+        },
+        "399006.SZ": {
+          "earningsYield": 1.6173378618793466
+        }
+      }
+    },
+    {
+      "asOf": "2015-09-30",
+      "periodDate": "2015-09-30",
+      "releaseDate": "2015-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.620689655172415
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5535187199005747
+        }
+      }
+    },
+    {
+      "asOf": "2015-10-31",
+      "periodDate": "2015-10-30",
+      "releaseDate": "2015-10-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.704160246533128
+        },
+        "399006.SZ": {
+          "earningsYield": 1.3588802826470987
+        }
+      }
+    },
+    {
+      "asOf": "2015-11-30",
+      "periodDate": "2015-11-30",
+      "releaseDate": "2015-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.633587786259542
+        },
+        "399006.SZ": {
+          "earningsYield": 1.4253135689851768
+        }
+      }
+    },
+    {
+      "asOf": "2015-12-31",
+      "periodDate": "2015-12-31",
+      "releaseDate": "2015-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.315288953913679
+        },
+        "399006.SZ": {
+          "earningsYield": 1.3935340022296543
+        }
+      }
+    },
+    {
+      "asOf": "2016-01-31",
+      "periodDate": "2016-01-29",
+      "releaseDate": "2016-01-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.099181073703367
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8254837531945964
+        }
+      }
+    },
+    {
+      "asOf": "2016-02-29",
+      "periodDate": "2016-02-29",
+      "releaseDate": "2016-02-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.27643784786642
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0533880903490758
+        }
+      }
+    },
+    {
+      "asOf": "2016-03-31",
+      "periodDate": "2016-03-31",
+      "releaseDate": "2016-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.410428931875526
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7292062943109114
+        }
+      }
+    },
+    {
+      "asOf": "2016-04-30",
+      "periodDate": "2016-04-29",
+      "releaseDate": "2016-04-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.375209380234507
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9179133103183736
+        }
+      }
+    },
+    {
+      "asOf": "2016-05-31",
+      "periodDate": "2016-05-31",
+      "releaseDate": "2016-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.340283569641368
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8839487565938207
+        }
+      }
+    },
+    {
+      "asOf": "2016-06-30",
+      "periodDate": "2016-06-30",
+      "releaseDate": "2016-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.347245409015025
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8385732671446957
+        }
+      }
+    },
+    {
+      "asOf": "2016-07-31",
+      "periodDate": "2016-07-29",
+      "releaseDate": "2016-07-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.097165991902834
+        },
+        "399006.SZ": {
+          "earningsYield": 1.866368047779022
+        }
+      }
+    },
+    {
+      "asOf": "2016-08-31",
+      "periodDate": "2016-08-31",
+      "releaseDate": "2016-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.570022710068129
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9956096587507484
+        }
+      }
+    },
+    {
+      "asOf": "2016-09-30",
+      "periodDate": "2016-09-30",
+      "releaseDate": "2016-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.763975155279502
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0403999183840034
+        }
+      }
+    },
+    {
+      "asOf": "2016-10-31",
+      "periodDate": "2016-10-31",
+      "releaseDate": "2016-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.751937984496124
+        },
+        "399006.SZ": {
+          "earningsYield": 2.17296827466319
+        }
+      }
+    },
+    {
+      "asOf": "2016-11-30",
+      "periodDate": "2016-11-30",
+      "releaseDate": "2016-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.336757153338224
+        },
+        "399006.SZ": {
+          "earningsYield": 2.1486892995272884
+        }
+      }
+    },
+    {
+      "asOf": "2016-12-31",
+      "periodDate": "2016-12-30",
+      "releaseDate": "2016-12-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.745933384972889
+        },
+        "399006.SZ": {
+          "earningsYield": 2.358490566037736
+        }
+      }
+    },
+    {
+      "asOf": "2017-01-31",
+      "periodDate": "2017-01-26",
+      "releaseDate": "2017-01-26",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.457121551081283
+        },
+        "399006.SZ": {
+          "earningsYield": 2.444987775061125
+        }
+      }
+    },
+    {
+      "asOf": "2017-02-28",
+      "periodDate": "2017-02-28",
+      "releaseDate": "2017-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.380073800738007
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5
+        }
+      }
+    },
+    {
+      "asOf": "2017-03-31",
+      "periodDate": "2017-03-31",
+      "releaseDate": "2017-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.407407407407407
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5188916876574305
+        }
+      }
+    },
+    {
+      "asOf": "2017-04-30",
+      "periodDate": "2017-04-28",
+      "releaseDate": "2017-04-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.668711656441718
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5119316754584275
+        }
+      }
+    },
+    {
+      "asOf": "2017-05-31",
+      "periodDate": "2017-05-31",
+      "releaseDate": "2017-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.552870090634441
+        },
+        "399006.SZ": {
+          "earningsYield": 2.638522427440633
+        }
+      }
+    },
+    {
+      "asOf": "2017-06-30",
+      "periodDate": "2017-06-30",
+      "releaseDate": "2017-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.278020378457059
+        },
+        "399006.SZ": {
+          "earningsYield": 2.554278416347382
+        }
+      }
+    },
+    {
+      "asOf": "2017-07-31",
+      "periodDate": "2017-07-31",
+      "releaseDate": "2017-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.0821529745042495
+        },
+        "399006.SZ": {
+          "earningsYield": 2.628120893561104
+        }
+      }
+    },
+    {
+      "asOf": "2017-08-31",
+      "periodDate": "2017-08-31",
+      "releaseDate": "2017-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.072135785007072
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3623907394283017
+        }
+      }
+    },
+    {
+      "asOf": "2017-09-30",
+      "periodDate": "2017-09-29",
+      "releaseDate": "2017-09-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.067137809187279
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3331777881474567
+        }
+      }
+    },
+    {
+      "asOf": "2017-10-31",
+      "periodDate": "2017-10-31",
+      "releaseDate": "2017-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.0821529745042495
+        },
+        "399006.SZ": {
+          "earningsYield": 2.2660321776569226
+        }
+      }
+    },
+    {
+      "asOf": "2017-11-30",
+      "periodDate": "2017-11-30",
+      "releaseDate": "2017-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.1022727272727275
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3957834211787254
+        }
+      }
+    },
+    {
+      "asOf": "2017-12-31",
+      "periodDate": "2017-12-29",
+      "releaseDate": "2017-12-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.9930069930069925
+        },
+        "399006.SZ": {
+          "earningsYield": 2.418964683115626
+        }
+      }
+    },
+    {
+      "asOf": "2018-01-31",
+      "periodDate": "2018-01-31",
+      "releaseDate": "2018-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.476683937823834
+        },
+        "399006.SZ": {
+          "earningsYield": 2.4968789013732837
+        }
+      }
+    },
+    {
+      "asOf": "2018-02-28",
+      "periodDate": "2018-02-28",
+      "releaseDate": "2018-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.978367062107467
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5290844714213456
+        }
+      }
+    },
+    {
+      "asOf": "2018-03-31",
+      "periodDate": "2018-03-30",
+      "releaseDate": "2018-03-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.4128984432913265
+        },
+        "399006.SZ": {
+          "earningsYield": 2.346866932644919
+        }
+      }
+    },
+    {
+      "asOf": "2018-04-30",
+      "periodDate": "2018-04-27",
+      "releaseDate": "2018-04-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.763975155279502
+        },
+        "399006.SZ": {
+          "earningsYield": 2.294630564479119
+        }
+      }
+    },
+    {
+      "asOf": "2018-05-31",
+      "periodDate": "2018-05-31",
+      "releaseDate": "2018-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.861635220125786
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3607176581680833
+        }
+      }
+    },
+    {
+      "asOf": "2018-06-30",
+      "periodDate": "2018-06-29",
+      "releaseDate": "2018-06-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.410428931875526
+        },
+        "399006.SZ": {
+          "earningsYield": 2.572678157962439
+        }
+      }
+    },
+    {
+      "asOf": "2018-07-31",
+      "periodDate": "2018-07-31",
+      "releaseDate": "2018-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.305647840531561
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5839793281653747
+        }
+      }
+    },
+    {
+      "asOf": "2018-08-31",
+      "periodDate": "2018-08-31",
+      "releaseDate": "2018-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.928571428571429
+        },
+        "399006.SZ": {
+          "earningsYield": 2.7472527472527473
+        }
+      }
+    },
+    {
+      "asOf": "2018-09-30",
+      "periodDate": "2018-09-28",
+      "releaseDate": "2018-09-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.554319931565441
+        },
+        "399006.SZ": {
+          "earningsYield": 2.797202797202797
+        }
+      }
+    },
+    {
+      "asOf": "2018-10-31",
+      "periodDate": "2018-10-31",
+      "releaseDate": "2018-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.31098696461825
+        },
+        "399006.SZ": {
+          "earningsYield": 3.5335689045936394
+        }
+      }
+    },
+    {
+      "asOf": "2018-11-30",
+      "periodDate": "2018-11-30",
+      "releaseDate": "2018-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.45179584120983
+        },
+        "399006.SZ": {
+          "earningsYield": 3.3692722371967654
+        }
+      }
+    },
+    {
+      "asOf": "2018-12-31",
+      "periodDate": "2018-12-28",
+      "releaseDate": "2018-12-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.775171065493646
+        },
+        "399006.SZ": {
+          "earningsYield": 3.5816618911174785
+        }
+      }
+    },
+    {
+      "asOf": "2019-01-31",
+      "periodDate": "2019-01-31",
+      "releaseDate": "2019-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.182736455463727
+        },
+        "399006.SZ": {
+          "earningsYield": 3.597122302158273
+        }
+      }
+    },
+    {
+      "asOf": "2019-02-28",
+      "periodDate": "2019-02-28",
+      "releaseDate": "2019-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.176614881439084
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0120724346076457
+        }
+      }
+    },
+    {
+      "asOf": "2019-03-31",
+      "periodDate": "2019-03-29",
+      "releaseDate": "2019-03-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.892659826361484
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8443378827001107
+        }
+      }
+    },
+    {
+      "asOf": "2019-04-30",
+      "periodDate": "2019-04-30",
+      "releaseDate": "2019-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.955449482895784
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7328019407381736
+        }
+      }
+    },
+    {
+      "asOf": "2019-05-31",
+      "periodDate": "2019-05-31",
+      "releaseDate": "2019-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.51063829787234
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8789928598271326
+        }
+      }
+    },
+    {
+      "asOf": "2019-06-30",
+      "periodDate": "2019-06-28",
+      "releaseDate": "2019-06-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.038585209003216
+        },
+        "399006.SZ": {
+          "earningsYield": 2.055076037813399
+        }
+      }
+    },
+    {
+      "asOf": "2019-07-31",
+      "periodDate": "2019-07-31",
+      "releaseDate": "2019-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.077544426494345
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9996000799840032
+        }
+      }
+    },
+    {
+      "asOf": "2019-08-31",
+      "periodDate": "2019-08-30",
+      "releaseDate": "2019-08-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.424599831508004
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9157088122605364
+        }
+      }
+    },
+    {
+      "asOf": "2019-09-30",
+      "periodDate": "2019-09-30",
+      "releaseDate": "2019-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.403361344537815
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9000570017100513
+        }
+      }
+    },
+    {
+      "asOf": "2019-10-31",
+      "periodDate": "2019-10-31",
+      "releaseDate": "2019-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.438818565400844
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9860973187686195
+        }
+      }
+    },
+    {
+      "asOf": "2019-11-30",
+      "periodDate": "2019-11-29",
+      "releaseDate": "2019-11-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.598452278589853
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9739439399921044
+        }
+      }
+    },
+    {
+      "asOf": "2019-12-31",
+      "periodDate": "2019-12-31",
+      "releaseDate": "2019-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.012820512820513
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0048115477145148
+        }
+      }
+    },
+    {
+      "asOf": "2020-01-31",
+      "periodDate": "2020-01-23",
+      "releaseDate": "2020-01-23",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.23045267489712
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8412815319462346
+        }
+      }
+    },
+    {
+      "asOf": "2020-02-29",
+      "periodDate": "2020-02-28",
+      "releaseDate": "2020-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.496176720475786
+        },
+        "399006.SZ": {
+          "earningsYield": 1.966568338249754
+        }
+      }
+    },
+    {
+      "asOf": "2020-03-31",
+      "periodDate": "2020-03-31",
+      "releaseDate": "2020-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.090909090909092
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9353590090961872
+        }
+      }
+    },
+    {
+      "asOf": "2020-04-30",
+      "periodDate": "2020-04-30",
+      "releaseDate": "2020-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.244023083264633
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7250301880282906
+        }
+      }
+    },
+    {
+      "asOf": "2020-05-31",
+      "periodDate": "2020-05-29",
+      "releaseDate": "2020-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.361204013377925
+        },
+        "399006.SZ": {
+          "earningsYield": 1.6917611233293859
+        }
+      }
+    },
+    {
+      "asOf": "2020-06-30",
+      "periodDate": "2020-06-30",
+      "releaseDate": "2020-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.880220646178094
+        },
+        "399006.SZ": {
+          "earningsYield": 1.485001485001485
+        }
+      }
+    },
+    {
+      "asOf": "2020-07-31",
+      "periodDate": "2020-07-31",
+      "releaseDate": "2020-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.142857142857143
+        },
+        "399006.SZ": {
+          "earningsYield": 1.3092432573972246
+        }
+      }
+    },
+    {
+      "asOf": "2020-08-31",
+      "periodDate": "2020-08-31",
+      "releaseDate": "2020-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.557377049180328
+        },
+        "399006.SZ": {
+          "earningsYield": 1.4898688915375446
+        }
+      }
+    },
+    {
+      "asOf": "2020-09-30",
+      "periodDate": "2020-09-30",
+      "releaseDate": "2020-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.830601092896175
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5535187199005747
+        }
+      }
+    },
+    {
+      "asOf": "2020-10-31",
+      "periodDate": "2020-10-30",
+      "releaseDate": "2020-10-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.968641114982579
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5815277558121146
+        }
+      }
+    },
+    {
+      "asOf": "2020-11-30",
+      "periodDate": "2020-11-30",
+      "releaseDate": "2020-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.5359477124183005
+        },
+        "399006.SZ": {
+          "earningsYield": 1.6191709844559585
+        }
+      }
+    },
+    {
+      "asOf": "2020-12-31",
+      "periodDate": "2020-12-31",
+      "releaseDate": "2020-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.211180124223602
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5530361857431279
+        }
+      }
+    },
+    {
+      "asOf": "2021-01-31",
+      "periodDate": "2021-01-29",
+      "releaseDate": "2021-01-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.1050061050061055
+        },
+        "399006.SZ": {
+          "earningsYield": 1.4604936468526362
+        }
+      }
+    },
+    {
+      "asOf": "2021-02-28",
+      "periodDate": "2021-02-26",
+      "releaseDate": "2021-02-26",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.131207847946046
+        },
+        "399006.SZ": {
+          "earningsYield": 1.4682131845543973
+        }
+      }
+    },
+    {
+      "asOf": "2021-03-31",
+      "periodDate": "2021-03-31",
+      "releaseDate": "2021-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.618133686300464
+        },
+        "399006.SZ": {
+          "earningsYield": 1.670843776106934
+        }
+      }
+    },
+    {
+      "asOf": "2021-04-30",
+      "periodDate": "2021-04-30",
+      "releaseDate": "2021-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.158196134574087
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7061934823408975
+        }
+      }
+    },
+    {
+      "asOf": "2021-05-31",
+      "periodDate": "2021-05-31",
+      "releaseDate": "2021-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.868131868131868
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5895724050230489
+        }
+      }
+    },
+    {
+      "asOf": "2021-06-30",
+      "periodDate": "2021-06-30",
+      "releaseDate": "2021-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.7704807041299935
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5845349389954049
+        }
+      }
+    },
+    {
+      "asOf": "2021-07-31",
+      "periodDate": "2021-07-30",
+      "releaseDate": "2021-07-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.396449704142012
+        },
+        "399006.SZ": {
+          "earningsYield": 1.656726308813784
+        }
+      }
+    },
+    {
+      "asOf": "2021-08-31",
+      "periodDate": "2021-08-31",
+      "releaseDate": "2021-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.763975155279502
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7898693395382137
+        }
+      }
+    },
+    {
+      "asOf": "2021-09-30",
+      "periodDate": "2021-09-30",
+      "releaseDate": "2021-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.633587786259542
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7627357659086904
+        }
+      }
+    },
+    {
+      "asOf": "2021-10-31",
+      "periodDate": "2021-10-29",
+      "releaseDate": "2021-10-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.518796992481203
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5810276679841897
+        }
+      }
+    },
+    {
+      "asOf": "2021-11-30",
+      "periodDate": "2021-11-30",
+      "releaseDate": "2021-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.722007722007723
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5183723048891589
+        }
+      }
+    },
+    {
+      "asOf": "2021-12-31",
+      "periodDate": "2021-12-31",
+      "releaseDate": "2021-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.132667617689016
+        },
+        "399006.SZ": {
+          "earningsYield": 1.5807777426493836
+        }
+      }
+    },
+    {
+      "asOf": "2022-01-31",
+      "periodDate": "2022-01-28",
+      "releaseDate": "2022-01-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.656967840735069
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8066847335140017
+        }
+      }
+    },
+    {
+      "asOf": "2022-02-28",
+      "periodDate": "2022-02-28",
+      "releaseDate": "2022-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.570022710068129
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7313019390581719
+        }
+      }
+    },
+    {
+      "asOf": "2022-03-31",
+      "periodDate": "2022-03-31",
+      "releaseDate": "2022-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.097165991902834
+        },
+        "399006.SZ": {
+          "earningsYield": 1.9230769230769231
+        }
+      }
+    },
+    {
+      "asOf": "2022-04-30",
+      "periodDate": "2022-04-29",
+      "releaseDate": "2022-04-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.438818565400844
+        },
+        "399006.SZ": {
+          "earningsYield": 2.178649237472767
+        }
+      }
+    },
+    {
+      "asOf": "2022-05-31",
+      "periodDate": "2022-05-31",
+      "releaseDate": "2022-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.196721311475411
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0725388601036268
+        }
+      }
+    },
+    {
+      "asOf": "2022-06-30",
+      "periodDate": "2022-06-30",
+      "releaseDate": "2022-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.698229407236336
+        },
+        "399006.SZ": {
+          "earningsYield": 1.7825311942959001
+        }
+      }
+    },
+    {
+      "asOf": "2022-07-31",
+      "periodDate": "2022-07-29",
+      "releaseDate": "2022-07-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.271298593879239
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8758206715438004
+        }
+      }
+    },
+    {
+      "asOf": "2022-08-31",
+      "periodDate": "2022-08-31",
+      "releaseDate": "2022-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.488964346349746
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0567667626491155
+        }
+      }
+    },
+    {
+      "asOf": "2022-09-30",
+      "periodDate": "2022-09-30",
+      "releaseDate": "2022-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.936550491510278
+        },
+        "399006.SZ": {
+          "earningsYield": 2.2914757103574703
+        }
+      }
+    },
+    {
+      "asOf": "2022-10-31",
+      "periodDate": "2022-10-31",
+      "releaseDate": "2022-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.718172983479107
+        },
+        "399006.SZ": {
+          "earningsYield": 2.6730820636193533
+        }
+      }
+    },
+    {
+      "asOf": "2022-11-30",
+      "periodDate": "2022-11-30",
+      "releaseDate": "2022-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.849557522123893
+        },
+        "399006.SZ": {
+          "earningsYield": 2.577984016499098
+        }
+      }
+    },
+    {
+      "asOf": "2022-12-31",
+      "periodDate": "2022-12-30",
+      "releaseDate": "2022-12-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.8339222614841
+        },
+        "399006.SZ": {
+          "earningsYield": 2.570033410434336
+        }
+      }
+    },
+    {
+      "asOf": "2023-01-31",
+      "periodDate": "2023-01-31",
+      "releaseDate": "2023-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.31255195344971
+        },
+        "399006.SZ": {
+          "earningsYield": 2.34192037470726
+        }
+      }
+    },
+    {
+      "asOf": "2023-02-28",
+      "periodDate": "2023-02-28",
+      "releaseDate": "2023-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.403361344537815
+        },
+        "399006.SZ": {
+          "earningsYield": 2.654632333421821
+        }
+      }
+    },
+    {
+      "asOf": "2023-03-31",
+      "periodDate": "2023-03-31",
+      "releaseDate": "2023-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.291873963515755
+        },
+        "399006.SZ": {
+          "earningsYield": 2.7878449958182325
+        }
+      }
+    },
+    {
+      "asOf": "2023-04-30",
+      "periodDate": "2023-04-28",
+      "releaseDate": "2023-04-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.19000819000819
+        },
+        "399006.SZ": {
+          "earningsYield": 2.9797377830750893
+        }
+      }
+    },
+    {
+      "asOf": "2023-05-31",
+      "periodDate": "2023-05-31",
+      "releaseDate": "2023-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.554319931565441
+        },
+        "399006.SZ": {
+          "earningsYield": 3.1766200762388817
+        }
+      }
+    },
+    {
+      "asOf": "2023-06-30",
+      "periodDate": "2023-06-30",
+      "releaseDate": "2023-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.561643835616438
+        },
+        "399006.SZ": {
+          "earningsYield": 3.0721966205837177
+        }
+      }
+    },
+    {
+      "asOf": "2023-07-31",
+      "periodDate": "2023-07-31",
+      "releaseDate": "2023-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.264462809917356
+        },
+        "399006.SZ": {
+          "earningsYield": 3.1133250311332508
+        }
+      }
+    },
+    {
+      "asOf": "2023-08-31",
+      "periodDate": "2023-08-31",
+      "releaseDate": "2023-08-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.583690987124463
+        },
+        "399006.SZ": {
+          "earningsYield": 3.2552083333333335
+        }
+      }
+    },
+    {
+      "asOf": "2023-09-30",
+      "periodDate": "2023-09-28",
+      "releaseDate": "2023-09-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.680555555555555
+        },
+        "399006.SZ": {
+          "earningsYield": 3.404834865509023
+        }
+      }
+    },
+    {
+      "asOf": "2023-10-31",
+      "periodDate": "2023-10-31",
+      "releaseDate": "2023-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.976660682226212
+        },
+        "399006.SZ": {
+          "earningsYield": 3.456619426201175
+        }
+      }
+    },
+    {
+      "asOf": "2023-11-30",
+      "periodDate": "2023-11-30",
+      "releaseDate": "2023-11-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.115770282588878
+        },
+        "399006.SZ": {
+          "earningsYield": 3.5435861091424523
+        }
+      }
+    },
+    {
+      "asOf": "2023-12-31",
+      "periodDate": "2023-12-29",
+      "releaseDate": "2023-12-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.216589861751153
+        },
+        "399006.SZ": {
+          "earningsYield": 3.5906642728904847
+        }
+      }
+    },
+    {
+      "asOf": "2024-01-31",
+      "periodDate": "2024-01-31",
+      "releaseDate": "2024-01-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 9.42507068803016
+        },
+        "399006.SZ": {
+          "earningsYield": 4.308487720809995
+        }
+      }
+    },
+    {
+      "asOf": "2024-02-29",
+      "periodDate": "2024-02-29",
+      "releaseDate": "2024-02-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.741258741258742
+        },
+        "399006.SZ": {
+          "earningsYield": 3.6778227289444647
+        }
+      }
+    },
+    {
+      "asOf": "2024-03-31",
+      "periodDate": "2024-03-29",
+      "releaseDate": "2024-03-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.576329331046312
+        },
+        "399006.SZ": {
+          "earningsYield": 3.663003663003663
+        }
+      }
+    },
+    {
+      "asOf": "2024-04-30",
+      "periodDate": "2024-04-30",
+      "releaseDate": "2024-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.285004142502071
+        },
+        "399006.SZ": {
+          "earningsYield": 3.5026269702276704
+        }
+      }
+    },
+    {
+      "asOf": "2024-05-31",
+      "periodDate": "2024-05-31",
+      "releaseDate": "2024-05-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.319467554076539
+        },
+        "399006.SZ": {
+          "earningsYield": 3.6049026676279743
+        }
+      }
+    },
+    {
+      "asOf": "2024-06-30",
+      "periodDate": "2024-06-28",
+      "releaseDate": "2024-06-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.445945945945946
+        },
+        "399006.SZ": {
+          "earningsYield": 3.8639876352395675
+        }
+      }
+    },
+    {
+      "asOf": "2024-07-31",
+      "periodDate": "2024-07-31",
+      "releaseDate": "2024-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.547008547008547
+        },
+        "399006.SZ": {
+          "earningsYield": 3.904724716907458
+        }
+      }
+    },
+    {
+      "asOf": "2024-08-31",
+      "periodDate": "2024-08-30",
+      "releaseDate": "2024-08-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.880994671403197
+        },
+        "399006.SZ": {
+          "earningsYield": 4.1067761806981515
+        }
+      }
+    },
+    {
+      "asOf": "2024-09-30",
+      "periodDate": "2024-09-30",
+      "releaseDate": "2024-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.541478129713424
+        },
+        "399006.SZ": {
+          "earningsYield": 3.0102347983142685
+        }
+      }
+    },
+    {
+      "asOf": "2024-10-31",
+      "periodDate": "2024-10-31",
+      "releaseDate": "2024-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.071025020177562
+        },
+        "399006.SZ": {
+          "earningsYield": 3.020235578375113
+        }
+      }
+    },
+    {
+      "asOf": "2024-11-30",
+      "periodDate": "2024-11-29",
+      "releaseDate": "2024-11-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8
+        },
+        "399006.SZ": {
+          "earningsYield": 2.914602156805596
+        }
+      }
+    },
+    {
+      "asOf": "2024-12-31",
+      "periodDate": "2024-12-31",
+      "releaseDate": "2024-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.733952049497293
+        },
+        "399006.SZ": {
+          "earningsYield": 3.006614552014432
+        }
+      }
+    },
+    {
+      "asOf": "2025-01-31",
+      "periodDate": "2025-01-27",
+      "releaseDate": "2025-01-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.038585209003216
+        },
+        "399006.SZ": {
+          "earningsYield": 3.0395136778115504
+        }
+      }
+    },
+    {
+      "asOf": "2025-02-28",
+      "periodDate": "2025-02-28",
+      "releaseDate": "2025-02-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.96812749003984
+        },
+        "399006.SZ": {
+          "earningsYield": 2.9815146094215863
+        }
+      }
+    },
+    {
+      "asOf": "2025-03-31",
+      "periodDate": "2025-03-31",
+      "releaseDate": "2025-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.077544426494345
+        },
+        "399006.SZ": {
+          "earningsYield": 3.138731952291274
+        }
+      }
+    },
+    {
+      "asOf": "2025-04-30",
+      "periodDate": "2025-04-30",
+      "releaseDate": "2025-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.19000819000819
+        },
+        "399006.SZ": {
+          "earningsYield": 3.427004797806717
+        }
+      }
+    },
+    {
+      "asOf": "2025-05-31",
+      "periodDate": "2025-05-30",
+      "releaseDate": "2025-05-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 8.025682182985554
+        },
+        "399006.SZ": {
+          "earningsYield": 3.3112582781456954
+        }
+      }
+    },
+    {
+      "asOf": "2025-06-30",
+      "periodDate": "2025-06-30",
+      "releaseDate": "2025-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.651109410864575
+        },
+        "399006.SZ": {
+          "earningsYield": 3.0902348578491967
+        }
+      }
+    },
+    {
+      "asOf": "2025-07-31",
+      "periodDate": "2025-07-31",
+      "releaseDate": "2025-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.581501137225171
+        },
+        "399006.SZ": {
+          "earningsYield": 2.965599051008304
+        }
+      }
+    },
+    {
+      "asOf": "2025-08-31",
+      "periodDate": "2025-08-29",
+      "releaseDate": "2025-08-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.067137809187279
+        },
+        "399006.SZ": {
+          "earningsYield": 2.43842965130456
+        }
+      }
+    },
+    {
+      "asOf": "2025-09-30",
+      "periodDate": "2025-09-30",
+      "releaseDate": "2025-09-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.032348804500703
+        },
+        "399006.SZ": {
+          "earningsYield": 2.200704225352113
+        }
+      }
+    },
+    {
+      "asOf": "2025-10-31",
+      "periodDate": "2025-10-31",
+      "releaseDate": "2025-10-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.087172218284905
+        },
+        "399006.SZ": {
+          "earningsYield": 2.4324981756263684
+        }
+      }
+    },
+    {
+      "asOf": "2025-11-30",
+      "periodDate": "2025-11-28",
+      "releaseDate": "2025-11-28",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.173601147776184
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5510204081632653
+        }
+      }
+    },
+    {
+      "asOf": "2025-12-31",
+      "periodDate": "2025-12-31",
+      "releaseDate": "2025-12-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.057163020465773
+        },
+        "399006.SZ": {
+          "earningsYield": 2.452783909737552
+        }
+      }
+    },
+    {
+      "asOf": "2026-01-31",
+      "periodDate": "2026-01-30",
+      "releaseDate": "2026-01-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.052186177715092
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3446658851113718
+        }
+      }
+    },
+    {
+      "asOf": "2026-02-28",
+      "periodDate": "2026-02-27",
+      "releaseDate": "2026-02-27",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.077140835102618
+        },
+        "399006.SZ": {
+          "earningsYield": 2.308402585410896
+        }
+      }
+    },
+    {
+      "asOf": "2026-03-31",
+      "periodDate": "2026-03-31",
+      "releaseDate": "2026-03-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 7.199424046076314
+        },
+        "399006.SZ": {
+          "earningsYield": 2.5693730729701953
+        }
+      }
+    },
+    {
+      "asOf": "2026-04-30",
+      "periodDate": "2026-04-30",
+      "releaseDate": "2026-04-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.830601092896175
+        },
+        "399006.SZ": {
+          "earningsYield": 2.2517451024544024
+        }
+      }
+    },
+    {
+      "asOf": "2026-05-31",
+      "periodDate": "2026-05-29",
+      "releaseDate": "2026-05-29",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.868131868131868
+        },
+        "399006.SZ": {
+          "earningsYield": 2.0725388601036268
+        }
+      }
+    },
+    {
+      "asOf": "2026-06-30",
+      "periodDate": "2026-06-30",
+      "releaseDate": "2026-06-30",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.891798759476224
+        },
+        "399006.SZ": {
+          "earningsYield": 1.8304960644334614
+        }
+      }
+    },
+    {
+      "asOf": "2026-07-31",
+      "periodDate": "2026-07-31",
+      "releaseDate": "2026-07-31",
+      "revisionStatus": "not_tracked",
+      "values": {
+        "000300.SH": {
+          "earningsYield": 6.93000693000693
+        },
+        "399006.SZ": {
+          "earningsYield": 2.3716689909022777
+        }
+      }
+    }
+  ]
+}

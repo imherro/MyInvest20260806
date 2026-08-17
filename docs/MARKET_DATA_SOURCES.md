@@ -58,6 +58,8 @@ SHIBOR属于名义银行间资金利率，官方在每个交易日11:00发布。
 
 当前尚未接入中国长期无风险利率，所以B1展示的只是股权端指数盈利收益率代理，不是ERP；不计算历史分位、趋势或评分。
 
+阶段04B的B1月度历史没有新增数据源或网络请求，完全从B3历史的Tushare `index_dailybasic` PE TTM按 `100 / peTtm` 派生，并原样继承日期与 `revisionStatus=not_tracked`。
+
 ## B2 股息率－无风险利率——第一阶段股息率端代理
 
 - 来源：复用B4的同一次 Tushare Pro `daily_basic` 请求，不增加API调用；字段合并为 `ts_code,trade_date,total_mv,dv_ttm`。

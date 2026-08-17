@@ -1,6 +1,6 @@
 # 市场研究历史数据
 
-阶段04A目前只实现B3“PE/PB与估值分化”的月度历史PIT试点，产物为 `public/data/market-research/history/b3.json`，与当前状态文件 `current.json` 完全分离。
+阶段04A实现B3“PE/PB与估值分化”的月度历史PIT试点；阶段04B从B3确定性派生B1指数盈利收益率历史。产物分别为 `history/b3.json` 与 `history/b1.json`，均与当前状态文件 `current.json` 完全分离。
 
 - 范围从2015-01开始，结束于信息截止日当日或之前最后一个完整自然月。
 - 每个 `asOf` 为自然月末；在该月内选择沪深300与创业板指均有数据的最新共同交易日作为 `periodDate`。
@@ -16,3 +16,11 @@ node scripts/generate-market-research-history-b3.mjs --as-of 2026-08-17
 ```
 
 Token仍只从 `TUSHARE_TOKEN` 环境变量读取。
+
+## B1 派生历史
+
+B1历史生成器只读取B3历史文件，不访问网络、不需要Token，逐点计算 `earningsYield = 100 / peTtm`。B1的 `asOf`、`periodDate`、`releaseDate`、`revisionStatus` 和范围均逐字段继承B3；输入PE必须为有限正数。它仍只是指数盈利收益率代理，没有减去中国长期无风险利率，因此不是ERP，也不包含评分、分位或市场判断。
+
+```powershell
+node scripts/generate-market-research-history-b1.mjs --as-of 2026-08-17
+```
