@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { marketEpisodes, marketResearchMock, type MarketCardCode, type RegimeIndicator } from "./market-research-mock";
+import { useEffect, useState } from "react";
+import { marketEpisodes } from "./market-research-static";
+import { isMarketResearchCurrent, type DisplayValue, type MarketCardCode, type MarketResearchCurrent, type RegimeIndicator } from "./market-research-types";
 
 type View = "overview" | "market" | "themes" | "etf" | "stocks" | "portfolio" | "library";
 
@@ -16,6 +17,7 @@ const nav: { id: View; label: string; icon: string }[] = [
 ];
 
 const pctClass = (n: number) => (n >= 0 ? "up" : "down");
+const display = (value: DisplayValue | undefined) => value ?? "—";
 
 function Sparkline({ values, negative = false }: { values: number[]; negative?: boolean }) {
   const max = Math.max(...values);
@@ -66,32 +68,52 @@ function Overview({ go }: { go: (v: View) => void }) {
 function Market() {
   const [marketTab,setMarketTab]=useState<"overview"|"history"|"episodes"|"method">("overview");
   const [expandedCard,setExpandedCard]=useState<MarketCardCode|null>(null);
+  const [data,setData]=useState<MarketResearchCurrent|null>(null);
+  const [dataError,setDataError]=useState<string|null>(null);
   const selectMarketTab=(tab:"overview"|"history"|"episodes"|"method")=>{setMarketTab(tab);if(typeof window!=="undefined")window.history.replaceState(null,"",`#market/${tab}`)};
-  const data=marketResearchMock;
+  useEffect(()=>{
+    const controller=new AbortController();
+    fetch("/data/market-research/current.json",{cache:"no-store",signal:controller.signal})
+      .then(async response=>{
+        if(!response.ok)throw new Error(`HTTP ${response.status}`);
+        const payload:unknown=await response.json();
+        if(!isMarketResearchCurrent(payload))throw new Error("数据结构不符合 schemaVersion 1");
+        setData(payload);
+      })
+      .catch(error=>{
+        if(error instanceof DOMException&&error.name==="AbortError")return;
+        setDataError(error instanceof Error?error.message:"未知错误");
+      });
+    return()=>controller.abort();
+  },[]);
+
+  const header=<PageHeader eyebrow="MARKET REGIME HEALTH" title="市场研究" desc="先看发动机，再看汽油，最后看转速表。三张表分别描述长期基础、流动性与估值风险，不合并为单一方向判断。"><button className="btn ghost" onClick={()=>selectMarketTab("method")}>方法说明</button><button className="btn primary">导出诊断</button></PageHeader>;
+  if(dataError)return <>{header}<section className="market-data-state error" role="alert"><span>DATA INPUT ERROR</span><h2>当前市场数据加载失败</h2><p>无法读取 <code>/data/market-research/current.json</code>：{dataError}</p><small>页面不会回退到旧数据。请修复文件后刷新页面。</small></section></>;
+  if(!data)return <>{header}<section className="market-data-state" aria-live="polite"><span>LOCAL JSON INPUT</span><h2>正在读取当前市场数据…</h2><p>/data/market-research/current.json</p></section></>;
   const indicators=data.components;
   return <>
-    <PageHeader eyebrow="MARKET REGIME HEALTH" title="市场研究" desc="先看发动机，再看汽油，最后看转速表。三张表分别描述长期基础、流动性与估值风险，不合并为单一方向判断。"><button className="btn ghost" onClick={()=>selectMarketTab("method")}>方法说明</button><button className="btn primary">导出诊断</button></PageHeader>
-    <div className="prototype-banner"><span>STATIC PROTOTYPE</span><b>当前页面使用示例数据</b><em>未来接入 Point-in-Time 数据引擎</em><small>数据截至 {data.asOf} · 质量 {data.dataQuality.grade} · 覆盖率 {data.dataQuality.coverage}</small></div>
+    {header}
+    <div className="prototype-banner"><span>LOCAL JSON INPUT</span><b>当前为人工样例文件</b><em>{data.source.label} · 未来接入 Point-in-Time 数据引擎</em><small>数据截至 {display(data.asOf)} · 质量 {display(data.dataQuality.grade)} · 覆盖率 {display(data.dataQuality.coverage)}</small></div>
     <div className="tabs regime-tabs">{[["overview","总览"],["history","历史诊断"],["episodes","关键时期审计"],["method","方法与数据"]].map(([id,label])=><button key={id} className={marketTab===id?"active":""} onClick={()=>selectMarketTab(id as "overview"|"history"|"episodes"|"method")}>{label}</button>)}</div>
     {marketTab==="overview"&&<>
     <section className="regime-diagnosis">
-      <div><span className="eyebrow">CURRENT DIAGNOSIS · {data.diagnosis.states.join(" · ")}</span><h2>{data.diagnosis.headline}</h2><p>{data.diagnosis.diagnosis}</p><p><b>投资含义：</b>{data.diagnosis.investmentImplication}</p><p><b>主要风险：</b>{data.diagnosis.riskNote}</p></div>
-      <div className="diagnosis-action"><small>仓位倾向</small><b>{data.diagnosis.positionBias}</b><span>该结论是总体仓位判断的上游输入，不直接构成交易指令</span></div>
+      <div><span className="eyebrow">CURRENT DIAGNOSIS · {data.diagnosis.states.join(" · ")}</span><h2>{display(data.diagnosis.headline)}</h2><p>{display(data.diagnosis.diagnosis)}</p><p><b>投资含义：</b>{display(data.diagnosis.investmentImplication)}</p><p><b>主要风险：</b>{display(data.diagnosis.riskNote)}</p></div>
+      <div className="diagnosis-action"><small>仓位倾向</small><b>{display(data.diagnosis.positionBias)}</b><span>该结论是总体仓位判断的上游输入，不直接构成交易指令</span></div>
     </section>
     <div className="regime-card-grid">{data.cards.map(card=><article className={`regime-score-card ${card.tone}`} key={card.code}>
       <div className="regime-card-head"><span className="regime-code">{card.code}</span><div><small>{card.metaphor} · {card.kind.toUpperCase()}</small><h2>{card.title}</h2></div><span className={`regime-state ${card.tone}`}>{card.status}</span></div>
-      <div className="regime-score-row"><strong>{card.score}</strong><span>/ 10</span><div className="regime-trend" aria-label="最近12个月趋势">{card.trend.map((v,i)=><i key={i} style={{height:`${Math.max(18,v)}%`}} />)}</div></div>
-      <div className="regime-meta"><span>数据覆盖 <b>{card.coverage}</b></span><span>更新/数据期 <b>{card.updatedAt}</b></span></div>
+      <div className="regime-score-row"><strong>{display(card.score)}</strong><span>/ 10</span><div className="regime-trend" aria-label="最近12个月趋势">{card.trend.map((v,i)=><i key={i} style={{height:`${Math.max(18,v)}%`}} />)}</div></div>
+      <div className="regime-meta"><span>数据覆盖 <b>{display(card.coverage)}</b></span><span>更新/数据期 <b>{display(card.updatedAt)}</b></span></div>
       <div className="regime-evidence"><small>主要驱动</small>{card.drivers.map(x=><p key={x}><i>↑</i>{x}</p>)}<p className="risk"><i>!</i>{card.risks[0]}</p>{card.directionNote&&<small className="bubble-direction">{card.directionNote}</small>}</div>
       <button className="regime-detail-btn" onClick={()=>setExpandedCard(expandedCard===card.code?null:card.code)}>{expandedCard===card.code?"收起指标":`展开 ${card.code === "F" ? "4" : "5"} 项指标`} <span>{expandedCard===card.code?"−":"＋"}</span></button>
     </article>)}</div>
-    {expandedCard&&<section className="panel indicator-detail"><div className="section-title"><div><span>COMPONENT DETAIL</span><h2>{expandedCard==="F"?"长牛底座":expandedCard==="L"?"货币信用":"估值泡沫"} · 指标明细</h2></div><span className="tag gray">示例数据</span></div><div className="indicator-table"><div className="indicator-row header"><span>指标</span><span>得分 / 状态</span><span>原始值 / 历史位置</span><span>数据期 / 发布</span><span>覆盖 / 质量</span><span>解释</span></div>{indicators[expandedCard].map(item=><div className="indicator-row" key={item.id}><span><b>{item.id}</b><strong>{item.name}</strong></span><span><b>{item.score}</b><small>{item.trend}</small></span><span><strong>{item.raw}</strong><small>{item.position}</small></span><span><strong>{item.period}</strong><small>{item.release}</small></span><span><strong>{item.coverage}</strong><small>质量 {item.quality}</small></span><span>{item.note}</span></div>)}</div></section>}
+    {expandedCard&&<section className="panel indicator-detail"><div className="section-title"><div><span>COMPONENT DETAIL</span><h2>{expandedCard==="F"?"长牛底座":expandedCard==="L"?"货币信用":"估值泡沫"} · 指标明细</h2></div><span className="tag gray">文件输入 · 人工样例</span></div><div className="indicator-table"><div className="indicator-row header"><span>指标</span><span>得分 / 状态</span><span>原始值 / 历史位置</span><span>数据期 / 发布</span><span>覆盖 / 质量</span><span>解释</span></div>{indicators[expandedCard].map(item=><div className="indicator-row" key={item.id}><span><b>{item.id}</b><strong>{item.name}</strong></span><span><b>{display(item.score)}</b><small>{display(item.trend)}</small></span><span><strong>{display(item.raw)}</strong><small>{display(item.position)}</small></span><span><strong>{display(item.period)}</strong><small>{display(item.release)}</small></span><span><strong>{display(item.coverage)}</strong><small>质量 {display(item.quality)}</small></span><span>{display(item.note)}</span></div>)}</div></section>}
     <div className="regime-summary-grid">
       <section className="panel policy-card"><div className="section-title"><div><span>POLICY OVERLAY</span><h2>政策制度环境</h2></div><span className={`regime-state ${data.policyOverlay.tone}`}>{data.policyOverlay.status}</span></div><p>定性叠加，不计入三表总分</p><div>{data.policyOverlay.reasons.map(reason=><span key={reason}>{reason}</span>)}</div></section>
-      <section className="panel joint-state"><div className="section-title"><div><span>COMBINED REGIME</span><h2>联合市场状态</h2></div><span className="tag warm">{data.jointState.trendLabel}</span></div><div className="joint-formula"><b>F 偏强</b><i>×</i><b>L 偏正</b><i>×</i><b>B 温热</b></div><h3>{data.jointState.nearestState} → {data.jointState.transitioningTo}过渡</h3><p>{data.jointState.description}</p></section>
+      <section className="panel joint-state"><div className="section-title"><div><span>COMBINED REGIME</span><h2>联合市场状态</h2></div><span className="tag warm">{display(data.jointState.trendLabel)}</span></div><div className="joint-formula">{data.diagnosis.states.map((state,index)=><span key={state}><b>{state}</b>{index<data.diagnosis.states.length-1&&<i>×</i>}</span>)}</div><h3>{display(data.jointState.nearestState)} → {display(data.jointState.transitioningTo)}过渡</h3><p>{display(data.jointState.description)}</p></section>
     </div>
     <section className="panel state-map"><div className="section-title"><div><span>8-STATE REGIME MAP</span><h2>联合状态图例</h2></div><button onClick={()=>selectMarketTab("history")}>查看状态演变 →</button></div><div className="state-map-grid">{data.stateMap.map((s,i)=><article key={i} className={s[4]}><div><span>F {s[0]}</span><span>B {s[1]}</span><span>L {s[2]}</span></div><b>{s[3]}</b>{s[4]==="current"&&<em>当前</em>}{s[4]==="next"&&<em>正在靠近</em>}</article>)}</div></section>
-    <div className="market-evidence-grid"><section className="panel driver-risk"><div className="section-title"><div><span>DRIVERS & RISKS</span><h2>主要驱动与主要风险</h2></div></div><div className="driver-columns"><div><h3>支持市场</h3>{data.drivers.map((item,i)=><p key={item.title}><b>{String(i+1).padStart(2,"0")}</b><span>{item.title}</span><em>{item.detail}</em></p>)}</div><div className="risks"><h3>需要警惕</h3>{data.risks.map((item,i)=><p key={item.title}><b>{String(i+1).padStart(2,"0")}</b><span>{item.title}</span><em>{item.detail}</em></p>)}</div></div></section><section className="panel quality-card"><div className="section-title"><div><span>DATA TRUST</span><h2>数据质量</h2></div><span className="quality-grade">{data.dataQuality.grade}</span></div><div className="quality-meter"><i style={{width:data.dataQuality.coverage}}/></div><p><span>总覆盖率</span><b>{data.dataQuality.coverage}</b></p><p><span>Point-in-Time</span><b>{data.dataQuality.pitStatus}</b></p><p><span>最新可用数据</span><b>{data.asOf}</b></p><div className="quality-warning">⚠ {data.dataQuality.warning}</div><button onClick={()=>selectMarketTab("method")}>查看数据口径 →</button></section></div>
+    <div className="market-evidence-grid"><section className="panel driver-risk"><div className="section-title"><div><span>DRIVERS & RISKS</span><h2>主要驱动与主要风险</h2></div></div><div className="driver-columns"><div><h3>支持市场</h3>{data.drivers.map((item,i)=><p key={item.title}><b>{String(i+1).padStart(2,"0")}</b><span>{item.title}</span><em>{display(item.detail)}</em></p>)}</div><div className="risks"><h3>需要警惕</h3>{data.risks.map((item,i)=><p key={item.title}><b>{String(i+1).padStart(2,"0")}</b><span>{item.title}</span><em>{display(item.detail)}</em></p>)}</div></div></section><section className="panel quality-card"><div className="section-title"><div><span>DATA TRUST</span><h2>数据质量</h2></div><span className="quality-grade">{display(data.dataQuality.grade)}</span></div><div className="quality-meter"><i style={{width:data.dataQuality.coverage??"0%"}}/></div><p><span>总覆盖率</span><b>{display(data.dataQuality.coverage)}</b></p><p><span>Point-in-Time</span><b>{display(data.dataQuality.pitStatus)}</b></p><p><span>最新可用数据</span><b>{display(data.asOf)}</b></p><div className="quality-warning">⚠ {display(data.dataQuality.warning)}</div><button onClick={()=>selectMarketTab("method")}>查看数据口径 →</button></section></div>
     <div className="market-lower-grid"><section className="panel recent-history"><div className="section-title"><div><span>12-MONTH CHANGE</span><h2>近期状态变化</h2></div><button onClick={()=>selectMarketTab("history")}>完整历史 →</button></div>{data.recentHistory.map(x=><div className="history-strip" key={x[0]}><b>{x[0]}</b><span>{x[1]}</span><div><i className={x[3]} style={{width:`${Number(x[2])*10}%`}}/></div><strong>{x[2]}</strong><em>12个月</em></div>)}</section><section className="panel regime-events"><div className="section-title"><div><span>KEY EVENTS</span><h2>近期关键事件</h2></div><button onClick={()=>selectMarketTab("history")}>完整时间轴 →</button></div>{data.recentEvents.map(event=><article key={event.date}><time>{event.date}</time><div><b>{event.title}</b><p>{event.detail}</p></div><span className={`tag ${event.tone}`}>{event.group}</span></article>)}</section></div>
     </>}
     {marketTab==="history"&&<MarketHistory onEpisode={()=>selectMarketTab("episodes")}/>}
@@ -123,7 +145,7 @@ function MarketEpisodes() {
 function MarketMethod({indicators}:{indicators:Record<MarketCardCode,RegimeIndicator[]>}) {
   return <div className="market-subpage"><div className="subpage-head"><div><span>METHODOLOGY & DATA</span><h2>方法与数据</h2><p>公开说明系统如何得出结论、何时知道数据，以及哪些部分仍然存在限制。</p></div><span className="tag blue">可解释优先</span></div>
     <div className="metaphor-grid"><article className="panel"><span>F · FOUNDATION</span><div className="metaphor-icon">发动机</div><h3>长牛底座</h3><p>盈利、资本回报和长期资金决定市场能不能跑得远。</p><b>0–10 · 越高越好</b></article><article className="panel"><span>L · LIQUIDITY</span><div className="metaphor-icon blue">汽油</div><h3>货币信用</h3><p>实际利率、货币活化和信用脉冲决定近期有没有动力。</p><b>0–10 · 越高越支持</b></article><article className="panel"><span>B · BUBBLE</span><div className="metaphor-icon gold">转速表</div><h3>估值泡沫</h3><p>估值、杠杆和投机热度决定是否已经接近红线。</p><b>0–10 · 越高越危险</b></article></div>
-    <section className="panel dictionary"><div className="section-title"><div><span>INDICATOR DICTIONARY</span><h2>14项量化指标</h2></div><span className="tag gray">固定等权 · 第一版</span></div>{(["F","L","B"] as MarketCardCode[]).map(group=><div className="dictionary-group" key={group}><h3>{group==="F"?"长牛底座 Foundation":group==="L"?"货币信用 Liquidity":"估值泡沫 Bubble"}</h3>{indicators[group].map(x=><article key={x.id}><span>{x.id}</span><div><b>{x.name}</b><p>{x.note}</p></div><div><small>示例原始值</small><strong>{x.raw}</strong></div><div><small>数据期 / 发布</small><strong>{x.period} · {x.release}</strong></div><div><small>覆盖 / 质量</small><strong>{x.coverage} · {x.quality}</strong></div></article>)}</div>)}</section>
+    <section className="panel dictionary"><div className="section-title"><div><span>INDICATOR DICTIONARY</span><h2>14项量化指标</h2></div><span className="tag gray">固定等权 · 第一版</span></div>{(["F","L","B"] as MarketCardCode[]).map(group=><div className="dictionary-group" key={group}><h3>{group==="F"?"长牛底座 Foundation":group==="L"?"货币信用 Liquidity":"估值泡沫 Bubble"}</h3>{indicators[group].map(x=><article key={x.id}><span>{x.id}</span><div><b>{x.name}</b><p>{display(x.note)}</p></div><div><small>样例原始值</small><strong>{display(x.raw)}</strong></div><div><small>数据期 / 发布</small><strong>{display(x.period)} · {display(x.release)}</strong></div><div><small>覆盖 / 质量</small><strong>{display(x.coverage)} · {display(x.quality)}</strong></div></article>)}</div>)}</section>
     <div className="method-bottom"><section className="panel pit-card"><div className="section-title"><div><span>POINT-IN-TIME</span><h2>当时知道什么，就只能用什么</h2></div><span className="regime-state healthy">核心纪律</span></div><div className="pit-flow"><div><b>PERIOD DATE</b><span>数据所属期间</span><strong>2026-06-30</strong></div><i>→</i><div><b>RELEASE DATE</b><span>市场实际获知</span><strong>2026-07-15</strong></div><i>→</i><div><b>AS OF QUERY</b><span>回测可使用</span><strong>release ≤ as_of</strong></div></div><ul><li>财报按公告日期生效，不按报告期提前使用。</li><li>宏观数据按发布日期生效，并保留历史修订状态。</li><li>M1新旧口径分版本标准化，不强行拼接。</li><li>历史股票池包含当时已上市及后来退市公司。</li></ul></section><section className="panel limitations"><div className="section-title"><div><span>KNOWN LIMITATIONS</span><h2>已知限制</h2></div></div><p><b>长期资金</b><span>早期历史覆盖不足，允许partial并重分配权重。</span></p><p><b>市值/GDP</b><span>受证券化率变化影响，只使用滚动历史分位。</span></p><p><b>Policy Overlay</b><span>保持定性，不参加第一阶段历史拟合。</span></p><p><b>样本数量</b><span>约260个月，不在第一版使用机器学习。</span></p></section></div>
   </div>;
 }

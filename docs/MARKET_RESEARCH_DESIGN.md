@@ -98,22 +98,9 @@
 - 为 Loading、Empty、Partial Coverage、Warning 预留统一状态组件。
 - 专业指标提供解释入口；总览不直接铺满14项指标。
 
-## 6. Mock 数据契约
+## 6. current.json 文件契约
 
-静态原型按未来 `current.json` 设计：
-
-```json
-{
-  "as_of": "2026-08-17",
-  "prototype": true,
-  "foundation": { "score": 7.6, "band": "strong", "data_coverage": 0.91, "components": [] },
-  "bubble": { "score": 4.3, "band": "warm", "data_coverage": 0.98, "components": [] },
-  "liquidity": { "score": 6.8, "band": "positive", "data_coverage": 0.95, "components": [] },
-  "policy_overlay": { "score": 1, "band": "supportive", "reasons": [] },
-  "regime": "strong_foundation__warm_valuation__positive_liquidity",
-  "data_quality": { "grade": "A-", "warnings": [] }
-}
-```
+任务02已建立 `/data/market-research/current.json` → `fetch` → 市场研究页面的文件输入闭环。当前文件仍是人工样例，详细字段、失败行为与缺失值规则见 [MARKET_RESEARCH_CURRENT_JSON.md](./MARKET_RESEARCH_CURRENT_JSON.md)。
 
 ## 7. 实施共识
 
@@ -125,7 +112,7 @@
 - 实现总览、历史诊断、关键时期审计、方法与数据四个二级页面。
 - 总览显示数据质量摘要；严重缺失或 PIT 问题显式警告。
 - 所有静态分数和曲线标注“示例数据 / 静态原型”。
-- Mock 数据结构与未来 `current.json`、月度历史和回测诊断保持一致。
+- 当前市场状态只允许来自 `current.json`；读取失败时显式报错，不回退 TypeScript Mock。
 - 仓位只表达倾向，明确市场研究是仓位系统上游而非交易指令。
 
 ### SHOULD
@@ -138,7 +125,7 @@
 
 ### LATER
 
-- 接入真实 `current.json`、月度 PIT 历史、Tushare、BaoStock与宏观数据。
+- 用 Tushare、BaoStock与宏观数据生成真实 `current.json`，并接入月度 PIT 历史。
 - 实现真实评分、滚动分位、Z-score、财报公告日、历史股票池和回测。
 - 实现关键时期真实审计、Forward Return、Maximum Drawdown、Walk-forward和严格样本外验证。
 - 验证统计有效性后再调整权重并接入总体仓位控制。

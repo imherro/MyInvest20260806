@@ -32,6 +32,15 @@ async function builtClientText() {
   return contents.join("\n");
 }
 
+async function appSource() {
+  return readFile(fileURLToPath(new URL("../app/page.tsx", import.meta.url)), "utf8");
+}
+
+async function currentMarketData() {
+  const raw = await readFile(fileURLToPath(new URL("../public/data/market-research/current.json", import.meta.url)), "utf8");
+  return JSON.parse(raw);
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -43,32 +52,39 @@ test("renders the MY INVEST application shell", async () => {
   assert.match(html, /今日总览/);
 });
 
-test("ships the complete F/L/B market research contract", async () => {
-  const client = await builtClientText();
+test("loads current market research from the only current.json source", async () => {
+  const source = await appSource();
+
+  assert.match(source, /fetch\("\/data\/market-research\/current\.json",\{cache:"no-store"/);
+  assert.match(source, /当前市场数据加载失败/);
+  assert.match(source, /页面不会回退到旧数据/);
+  assert.doesNotMatch(source, /marketResearchMock|market-research-mock/);
+});
+
+test("current.json contains the complete F/L/B market research contract", async () => {
+  const current = await currentMarketData();
+
+  assert.equal(current.schemaVersion, 1);
+  assert.equal(current.source.mode, "manual_sample");
+  assert.deepEqual(current.cards.map((card) => card.code), ["F", "L", "B"]);
 
   for (const text of [
-    "市场研究",
     "长牛底座",
     "发动机",
     "货币信用",
     "汽油",
     "估值泡沫",
     "转速表",
-    "POLICY OVERLAY",
-    "政策制度环境",
-    "联合市场状态",
-    "Point-in-Time",
     "待接入",
-    "当前页面使用示例数据",
     "分数越高代表泡沫风险越高",
   ]) {
-    assert.match(client, new RegExp(text), `missing rendered product text: ${text}`);
+    assert.match(JSON.stringify(current), new RegExp(text), `missing current.json product text: ${text}`);
   }
-  assert.match(client, /静态原型|示例数据/);
 });
 
-test("ships all 14 market indicators with their names", async () => {
-  const client = await builtClientText();
+test("current.json ships all 14 market indicators with their names", async () => {
+  const current = await currentMarketData();
+  const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const indicators = [
     ["F1", "盈利趋势"],
     ["F2", "盈利扩散与质量"],
@@ -87,12 +103,19 @@ test("ships all 14 market indicators with their names", async () => {
   ];
 
   for (const [code, name] of indicators) {
-    assert.match(client, new RegExp(code), `missing indicator code: ${code}`);
-    assert.match(client, new RegExp(name.replaceAll("/", "\\/")), `missing indicator name: ${name}`);
+    assert.ok(components.some((item) => item.id === code && item.name === name), `missing indicator: ${code} ${name}`);
   }
+  assert.equal(components.length, 14);
+});
+
+test("defines explicit missing-value behavior", async () => {
+  const source = await appSource();
+  assert.match(source, /value \?\? "—"/);
+  assert.match(source, /isMarketResearchCurrent/);
 });
 
 test("keeps unsupported certainty language out of the user interface", async () => {
   const client = await builtClientText();
-  assert.doesNotMatch(client, /牛市概率|熊市概率|置信度/);
+  const current = await currentMarketData();
+  assert.doesNotMatch(`${client}\n${JSON.stringify(current)}`, /牛市概率|熊市概率|置信度/);
 });
