@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:47:32.654Z",
+  "generatedAt": "2026-08-17T08:52:43.591Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -54,8 +54,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
-    "diagnosis": "当前仅F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余2项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
+    "diagnosis": "当前仅F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余1项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -68,7 +68,7 @@
       "title": "长牛底座",
       "score": null,
       "status": "数据接入中",
-      "coverage": "2/4",
+      "coverage": "3/4",
       "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
@@ -178,9 +178,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "85.7%",
+    "coverage": "92.9%",
     "pitStatus": "待接入",
-    "warning": "仅F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余2项待接入"
+    "warning": "仅F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余1项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -203,6 +203,13 @@
       "title": "L1名义资金利率代理快照生成",
       "detail": "SHIBOR隔夜 1.3620% / 1周 1.3854% / 3月 1.4300% / 1年 1.4800% / 1Y-ON期限差 +0.1180pct",
       "group": "L1",
+      "tone": "blue"
+    },
+    {
+      "date": "08-14",
+      "title": "F3现金分红股东回报代理快照生成",
+      "detail": "A股有值样本市值加权TTM股息率 2.21% / 有值 3701只 / 市值覆盖 81.8%",
+      "group": "F3",
       "tone": "blue"
     },
     {
@@ -303,15 +310,15 @@
         "id": "F3",
         "name": "股东回报 / 股权融资",
         "score": null,
-        "raw": null,
+        "raw": "A股有值样本市值加权TTM股息率 2.21% / 有值 3701只 / 市值覆盖 81.8%",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-14",
+        "coverage": "3701只有值 / 市值覆盖81.8%",
+        "quality": "A",
+        "note": "当前仅复用B2同一daily_basic有值样本的市值加权TTM股息率，作为F3第一阶段现金分红股东回报代理；当前只覆盖现金分红，尚未接入股票回购，也未扣除IPO、增发等股权融资，因此当前不是完整的“股东回报 / 股权融资”指标，也不计算历史分位、趋势或F3评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "F4",

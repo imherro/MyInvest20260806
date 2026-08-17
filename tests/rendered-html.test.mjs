@@ -138,7 +138,7 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real F1-F2, L1-L5 and B1-B5 snapshots with 2 explicitly pending indicators", async () => {
+test("contains real F1-F3, L1-L5 and B1-B5 snapshots with 1 explicitly pending indicator", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
@@ -153,6 +153,7 @@ test("contains real F1-F2, L1-L5 and B1-B5 snapshots with 2 explicitly pending i
   const l5 = current.components.L.find((item) => item.id === "L5");
   const f1 = current.components.F.find((item) => item.id === "F1");
   const f2 = current.components.F.find((item) => item.id === "F2");
+  const f3 = current.components.F.find((item) => item.id === "F3");
 
   assert.equal(f1.dataStatus, "generated");
   assert.match(f1.raw, /已披露样本归母净利润同比中位数 [+-]?\d+\.\d% \/ 有值 \d+家 \/ 缺失 \d+家/);
@@ -178,6 +179,20 @@ test("contains real F1-F2, L1-L5 and B1-B5 snapshots with 2 explicitly pending i
   assert.match(f2.note, /尚未覆盖盈利质量/);
   assert.match(f2.note, /空值不进入分母/);
   assert.match(f2.note, /不计算F2评分/);
+  assert.equal(f3.dataStatus, "generated");
+  assert.equal(f3.raw, b2.raw);
+  assert.equal(f3.period, b2.period);
+  assert.equal(f3.release, b2.release);
+  assert.equal(f3.coverage, b2.coverage);
+  assert.equal(f3.score, null);
+  assert.equal(f3.position, null);
+  assert.equal(f3.trend, null);
+  assert.match(f3.note, /第一阶段现金分红股东回报代理/);
+  assert.match(f3.note, /只覆盖现金分红/);
+  assert.match(f3.note, /尚未接入股票回购/);
+  assert.match(f3.note, /未扣除IPO、增发等股权融资/);
+  assert.match(f3.note, /不是完整的“股东回报 \/ 股权融资”/);
+  assert.match(f3.note, /不计算.*F3评分/);
 
   assert.equal(b1.dataStatus, "generated");
   assert.match(b1.raw, /沪深300盈利收益率 \d+\.\d{2}%；创业板指盈利收益率 \d+\.\d{2}%/);
@@ -280,19 +295,19 @@ test("contains real F1-F2, L1-L5 and B1-B5 snapshots with 2 explicitly pending i
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 12);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 2);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 13);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 1);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "85.7%");
+  assert.equal(current.dataQuality.coverage, "92.9%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["2/4", "5/5", "5/5"]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["3/4", "5/5", "5/5"]);
   assert.equal(current.cards.find((card) => card.code === "F").updatedAt, f1.release);
   assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l4.release, l5.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only twelve indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only thirteen indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -351,13 +366,17 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.equal(b2.observedCount, 2);
   assert.equal(b2.observedMarketCapWan, 100000000);
   assert.equal(b2.marketCapCoverage, 100);
-  assert.equal(generated.dataQuality.coverage, "85.7%");
+  assert.equal(generated.dataQuality.coverage, "92.9%");
   assert.match(generated.components.F[0].raw, /已披露样本归母净利润同比中位数 \+6\.3% \/ 有值 2家 \/ 缺失 1家/);
   assert.equal(generated.components.F[0].period, "2026-06");
   assert.equal(generated.components.F[0].release, "2026-08-15");
   assert.match(generated.components.F[1].raw, /正增长占比 50\.0% \/ 正增长 1家 \/ 有值 2家/);
   assert.equal(generated.components.F[1].period, generated.components.F[0].period);
   assert.equal(generated.components.F[1].release, generated.components.F[0].release);
+  assert.equal(generated.components.F[2].raw, generated.components.B[1].raw);
+  assert.equal(generated.components.F[2].period, generated.components.B[1].period);
+  assert.equal(generated.components.F[2].release, generated.components.B[1].release);
+  assert.equal(generated.components.F[2].coverage, generated.components.B[1].coverage);
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.match(generated.components.B[0].raw, /沪深300盈利收益率 6\.96%；创业板指盈利收益率 2\.25%/);
@@ -376,10 +395,11 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
   assert.match(generated.components.L[3].raw, /12\.1047万亿元（同比 \+4\.7%）.*14\.3329万亿元（同比 \+1\.5%）/);
   assert.match(generated.components.L[4].raw, /美国10年实际国债收益率 2\.41%/);
-  assert.match(generated.diagnosis.headline, /F1、F2、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
-  assert.match(generated.dataQuality.warning, /其余2项/);
+  assert.match(generated.diagnosis.headline, /F1、F2、F3、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
+  assert.match(generated.dataQuality.warning, /其余1项/);
   assert.equal(generated.recentEvents.some((event) => event.group === "F1" && event.detail === generated.components.F[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "F2" && event.detail === generated.components.F[1].raw), true);
+  assert.equal(generated.recentEvents.some((event) => event.group === "F3" && event.detail === generated.components.F[2].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);

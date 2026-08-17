@@ -501,6 +501,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
   const b1Raw = `沪深300盈利收益率 ${b1.broadEarningsYield.toFixed(2)}%；创业板指盈利收益率 ${b1.growthEarningsYield.toFixed(2)}%`;
   const b4Raw = `A股当日记录总市值 ${b4.totalMarketCapTrillion.toFixed(2)}万亿元 / 覆盖 ${b4.stockCount}只股票`;
   const b2Raw = `A股有值样本市值加权TTM股息率 ${b2.weightedDividendYield.toFixed(2)}% / 有值 ${b2.observedCount}只 / 市值覆盖 ${b2.marketCapCoverage.toFixed(1)}%`;
+  const b2Coverage = `${b2.observedCount}只有值 / 市值覆盖${b2.marketCapCoverage.toFixed(1)}%`;
   const relativeFreeTurnover = technology.turnoverRateF / broad.turnoverRateF;
   if (!Number.isFinite(relativeFreeTurnover)) throw new Error("Relative free-turnover ratio is not finite");
   const b5Raw = `沪深300换手率 ${broad.turnoverRate.toFixed(2)}%（自由流通 ${broad.turnoverRateF.toFixed(2)}%）；创业板指换手率 ${technology.turnoverRate.toFixed(2)}%（自由流通 ${technology.turnoverRateF.toFixed(2)}%）；自由流通换手比 ${relativeFreeTurnover.toFixed(2)}x`;
@@ -521,6 +522,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
     const shared = { period: displayMonth(f1.targetPeriod), release: displayDate(f1.latestAnnDate), coverage: `${f1.validCount}/${f1.reportedCount}家已披露样本`, quality: "A", dataStatus: "generated" };
     if (indicator.id === "F1") return { ...indicator, ...shared, raw: f1Raw, note: "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。" };
     if (indicator.id === "F2") return { ...indicator, ...shared, raw: f2Raw, note: "当前仅复用F1同一批截至信息截止日可验证公告日的公司最新记录，以netprofit_yoy>0的公司占有值样本比例作为F2第一阶段盈利扩散代理；netprofit_yoy为0或负数均不计为正增长，空值不进入分母。当前仅覆盖盈利扩散，尚未覆盖盈利质量，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F2评分。" };
+    if (indicator.id === "F3") return { ...indicator, raw: b2Raw, period: b3Date, release: b3Date, coverage: b2Coverage, quality: "A", note: "当前仅复用B2同一daily_basic有值样本的市值加权TTM股息率，作为F3第一阶段现金分红股东回报代理；当前只覆盖现金分红，尚未接入股票回购，也未扣除IPO、增发等股权融资，因此当前不是完整的“股东回报 / 股权融资”指标，也不计算历史分位、趋势或F3评分。", dataStatus: "generated" };
     return indicator;
   });
   components.L = components.L.map(indicator => {
@@ -545,7 +547,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
   });
   components.B = components.B.map(indicator => {
     if (indicator.id === "B1") return { ...indicator, raw: b1Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅根据沪深300与创业板指PE TTM反算指数盈利收益率，作为B1第一阶段股权端收益率代理；尚未接入中国长期无风险利率，因此当前不是ERP，也不计算历史分位、趋势或B1评分。", dataStatus: "generated" };
-    if (indicator.id === "B2") return { ...indicator, raw: b2Raw, period: b3Date, release: b3Date, coverage: `${b2.observedCount}只有值 / 市值覆盖${b2.marketCapCoverage.toFixed(1)}%`, quality: "A", note: "当前仅使用与B1/B3/B4/B5相同交易日的daily_basic，对dv_ttm有合法数值的股票按total_mv进行市值加权，作为B2第一阶段股息率端代理；空dv_ttm不视为0，也不纳入加权样本。尚未接入中国长期无风险利率，因此当前不是“股息率－无风险利率”指标，也不计算历史分位、趋势或B2评分。", dataStatus: "generated" };
+    if (indicator.id === "B2") return { ...indicator, raw: b2Raw, period: b3Date, release: b3Date, coverage: b2Coverage, quality: "A", note: "当前仅使用与B1/B3/B4/B5相同交易日的daily_basic，对dv_ttm有合法数值的股票按total_mv进行市值加权，作为B2第一阶段股息率端代理；空dv_ttm不视为0，也不纳入加权样本。尚未接入中国长期无风险利率，因此当前不是“股息率－无风险利率”指标，也不计算历史分位、趋势或B2评分。", dataStatus: "generated" };
     if (indicator.id === "B3") return { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" };
     if (indicator.id === "B4") return { ...indicator, raw: b4Raw, period: b3Date, release: b3Date, coverage: `${b4.stockCount}只当日记录股票`, quality: "A", note: "当前仅汇总与B3/B5相同交易日中Tushare daily_basic实际返回股票的total_mv，作为B4第一阶段A股当日总市值代理；尚未接入GDP分母，也未证明停牌或缺失记录股票全部覆盖，因此当前不是总市值/GDP，也不是巴菲特指标，不计算历史分位、趋势或B4评分。", dataStatus: "generated" };
     if (indicator.id === "B5") return { ...indicator, raw: b5Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。", dataStatus: "generated" };
@@ -577,6 +579,7 @@ export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2
     recentEvents: [
       { date: displayDate(f1.latestAnnDate).slice(5), title: "F1已披露样本盈利同比代理快照生成", detail: f1Raw, group: "F1", tone: "blue" },
       { date: displayDate(f1.latestAnnDate).slice(5), title: "F2已披露样本盈利扩散代理快照生成", detail: f2Raw, group: "F2", tone: "blue" },
+      { date: b3Date.slice(5), title: "F3现金分红股东回报代理快照生成", detail: b2Raw, group: "F3", tone: "blue" },
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
@@ -630,6 +633,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
   console.log(`F1: ${current.components.F.find(indicator => indicator.id === "F1").raw} (${f1.reportedCount} reported, ${f1.excludedMissingAnnDateCount} missing ann_date excluded, target ${targetPeriod}, latest ${f1.latestAnnDate})`);
   console.log(`F2: ${current.components.F.find(indicator => indicator.id === "F2").raw}`);
+  console.log(`F3: ${current.components.F.find(indicator => indicator.id === "F3").raw}`);
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
