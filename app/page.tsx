@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 type View = "overview" | "market" | "themes" | "etf" | "stocks" | "portfolio" | "library";
+type RegimeIndicator = {id:string;name:string;score:string;raw:string;position:string;trend:string;period:string;release:string;coverage:string;quality:string;note:string};
 
 const nav: { id: View; label: string; icon: string }[] = [
   { id: "overview", label: "今日总览", icon: "⌂" },
@@ -63,16 +64,103 @@ function Overview({ go }: { go: (v: View) => void }) {
 }
 
 function Market() {
-  return <><PageHeader eyebrow="MARKET RESEARCH" title="市场研究" desc="判断水温、风向与风险预算。先回答市场环境，再决定研究和交易节奏。"><button className="btn ghost">导出日报</button><button className="btn primary">更新数据</button></PageHeader>
-    <div className="tabs"><b>市场温度</b><span>指数估值</span><span>资金流向</span><span>情绪周期</span><span>宏观日历</span></div>
-    <div className="market-layout"><section className="panel regime"><div className="section-title"><div><span>MARKET REGIME</span><h2>市场状态雷达</h2></div><span className="tag red">震荡偏强</span></div><div className="radar"><div className="radar-shape"/><span className="r1">趋势 72</span><span className="r2">流动性 78</span><span className="r3">估值 45</span><span className="r4">情绪 68</span><span className="r5">盈利 56</span></div><p className="insight">当前组合：<b>中高仓位 × 均衡偏成长</b>。趋势与流动性仍构成支持，需防范情绪过热后的快速波动。</p></section>
-      <section className="panel"><div className="section-title"><div><span>BREADTH</span><h2>市场宽度</h2></div><button>近 20 日⌄</button></div><div className="chart-area"><div className="ylabels"><span>80%</span><span>60%</span><span>40%</span><span>20%</span></div><svg viewBox="0 0 600 190" preserveAspectRatio="none"><defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#d85c50" stopOpacity=".3"/><stop offset="1" stopColor="#d85c50" stopOpacity="0"/></linearGradient></defs><path className="area" d="M0,155 C55,145 70,115 115,125 S180,145 215,105 S270,78 305,90 S360,125 400,75 S465,50 500,62 S560,45 600,34 L600,190 L0,190Z"/><path className="line" d="M0,155 C55,145 70,115 115,125 S180,145 215,105 S270,78 305,90 S360,125 400,75 S465,50 500,62 S560,45 600,34"/></svg><div className="xlabels"><span>07/10</span><span>07/17</span><span>07/24</span><span>07/31</span><span>08/06</span></div></div><div className="chart-note"><b>62.4%</b><span>个股位于 20 日均线上方</span><em className="up">+8.7pct</em></div></section>
+  const [marketTab,setMarketTab]=useState<"overview"|"history"|"episodes"|"method">("overview");
+  const [expandedCard,setExpandedCard]=useState<string|null>(null);
+  const selectMarketTab=(tab:"overview"|"history"|"episodes"|"method")=>{setMarketTab(tab);if(typeof window!=="undefined")window.history.replaceState(null,"",`#market/${tab}`)};
+  const indicators:Record<string,RegimeIndicator[]>={
+    F:[
+      {id:"F1",name:"全A盈利趋势",score:"6.8",raw:"全A +8.3% / 非金融 +11.2%",position:"近10年 62%",trend:"改善",period:"2026 Q2",release:"08.31 预计完整",coverage:"86%",quality:"B+",note:"上市公司盈利恢复，但半年报尚未完全披露。"},
+      {id:"F2",name:"盈利扩散与质量",score:"6.1",raw:"增长公司占比 56.4%",position:"近10年 55%",trend:"改善",period:"2026 Q2",release:"08.17",coverage:"84%",quality:"B",note:"ROE企稳，现金流匹配度仍需观察。"},
+      {id:"F3",name:"股东回报 / 股权融资",score:"9.2",raw:"3.08×",position:"历史高位",trend:"改善",period:"滚动12月",release:"08.12",coverage:"99%",quality:"A",note:"分红与已完成回购显著高于股权融资。"},
+      {id:"F4",name:"长期资金",score:"8.3",raw:"持仓市值两年 +85%",position:"结构性高位",trend:"改善",period:"2026 Q2",release:"07.18",coverage:"72%",quality:"B-",note:"保险、社保和年金方向积极，早期历史覆盖不足。"}
+    ],
+    L:[
+      {id:"L1",name:"利率与实际利率",score:"7.2",raw:"实际10Y 1.1%",position:"近5年 34%",trend:"宽松",period:"2026-08",release:"08.17",coverage:"100%",quality:"A",note:"实际利率边际下行，对权益估值形成支持。"},
+      {id:"L2",name:"M1 / M2 货币活化",score:"6.4",raw:"剪刀差 +1.6pct",position:"近5年 63%",trend:"改善",period:"2026-07",release:"08.13",coverage:"100%",quality:"B+",note:"按新M1口径单独标准化，不与旧序列强拼。"},
+      {id:"L3",name:"信用脉冲",score:"7.6",raw:"3M +1.8pct",position:"近5年 72%",trend:"转正",period:"2026-07",release:"08.13",coverage:"96%",quality:"A-",note:"新增社融相对GDP开始加速，是当前主要支撑。"},
+      {id:"L4",name:"财政脉冲",score:"6.9",raw:"政府债融资/GDP +0.7pct",position:"近5年 66%",trend:"扩张",period:"2026-07",release:"08.15",coverage:"92%",quality:"B+",note:"政府债券净融资保持积极。"},
+      {id:"L5",name:"外部金融条件",score:"5.9",raw:"中性偏约束",position:"近5年 48%",trend:"持平",period:"2026-08",release:"08.17",coverage:"100%",quality:"A-",note:"美元与美国实际利率仍限制外部流动性。"}
+    ],
+    B:[
+      {id:"B1",name:"股权风险溢价 ERP",score:"3.8",raw:"沪深300 4.7%",position:"近10年 54%",trend:"收窄",period:"2026-08",release:"08.17",coverage:"100%",quality:"A",note:"仍有风险补偿，但已较年初收窄。"},
+      {id:"B2",name:"股息率利差",score:"3.2",raw:"+0.9pct",position:"近10年 43%",trend:"持平",period:"2026-08",release:"08.17",coverage:"98%",quality:"A-",note:"红利资产相对国债仍具一定吸引力。"},
+      {id:"B3",name:"PE / PB与行业分化",score:"5.6",raw:"宽基 58% / 科技 88%",position:"局部偏高",trend:"升温",period:"2026-08",release:"08.17",coverage:"99%",quality:"A",note:"整体中性，科技成长局部估值显著更热。"},
+      {id:"B4",name:"总市值 / GDP",score:"4.7",raw:"92%",position:"滚动10年 76%",trend:"升温",period:"2026 Q2",release:"07.15",coverage:"100%",quality:"B+",note:"证券化率变化使绝对值仅作辅助。"},
+      {id:"B5",name:"投机热度",score:"4.4",raw:"两融/流通市值 2.66%",position:"黄色观察区",trend:"升温",period:"2026-08",release:"08.17",coverage:"100%",quality:"A",note:"市场宽度和成交活跃，但尚未达到全面狂热。"}
+    ]
+  };
+  const cards = [
+    { code:"F", kind:"foundation", metaphor:"发动机", title:"长牛底座", score:"7.6", state:"基础较强", coverage:"91%", date:"2026 Q2", tone:"healthy", trend:[42,46,51,55,58,63,66,69,72,74,75,76], good:["股东回报持续改善","长期资金稳定流入"], risk:"盈利扩散仍待半年报确认" },
+    { code:"L", kind:"liquidity", metaphor:"汽油", title:"货币信用", score:"6.8", state:"偏支持", coverage:"95%", date:"2026-07", tone:"support", trend:[48,46,43,45,50,54,58,61,65,67,69,68], good:["实际利率边际下行","信用脉冲转正"], risk:"外部金融条件仍有约束" },
+    { code:"B", kind:"bubble", metaphor:"转速表", title:"估值泡沫", score:"4.3", state:"温热", coverage:"98%", date:"2026-08-14", tone:"warm", trend:[18,20,23,25,27,30,34,36,39,41,42,43], good:["宽基估值尚未极端","ERP仍有风险补偿"], risk:"局部科技成长拥挤升温" },
+  ];
+  return <>
+    <PageHeader eyebrow="MARKET REGIME HEALTH" title="市场研究" desc="先看发动机，再看汽油，最后看转速表。三张表共同描述市场，但绝不揉成一个牛市概率。"><button className="btn ghost" onClick={()=>selectMarketTab("method")}>方法说明</button><button className="btn primary">导出诊断</button></PageHeader>
+    <div className="prototype-banner"><span>STATIC PROTOTYPE</span><b>当前页面使用示例数据</b><em>未来接入 Point-in-Time 数据引擎</em><small>数据截至 2026.08.17 · 质量 A- · 覆盖率 95%</small></div>
+    <div className="tabs regime-tabs">{[["overview","总览"],["history","历史诊断"],["episodes","关键时期审计"],["method","方法与数据"]].map(([id,label])=><button key={id} className={marketTab===id?"active":""} onClick={()=>selectMarketTab(id as "overview"|"history"|"episodes"|"method")}>{label}</button>)}</div>
+    {marketTab==="overview"&&<>
+    <section className="regime-diagnosis">
+      <div><span className="eyebrow">CURRENT DIAGNOSIS</span><h2>长牛底座较强，信用环境提供支撑，泡沫由低温进入温热</h2><p>市场仍处在适合保持较高权益暴露的阶段，但风险预算应从“全面进攻”转向“结构选择”。当前主要矛盾不是宽基泡沫，而是局部成长赛道的拥挤度。</p></div>
+      <div className="diagnosis-action"><small>风险预算倾向</small><b>积极 · 保持选择性</b><span>上游状态输入，不构成交易指令</span></div>
+    </section>
+    <div className="regime-card-grid">{cards.map(card=><article className={`regime-score-card ${card.tone}`} key={card.code}>
+      <div className="regime-card-head"><span className="regime-code">{card.code}</span><div><small>{card.metaphor} · {card.kind.toUpperCase()}</small><h2>{card.title}</h2></div><span className={`regime-state ${card.tone}`}>{card.state}</span></div>
+      <div className="regime-score-row"><strong>{card.score}</strong><span>/ 10</span><div className="regime-trend" aria-label="最近12个月趋势">{card.trend.map((v,i)=><i key={i} style={{height:`${Math.max(18,v)}%`}} />)}</div></div>
+      <div className="regime-meta"><span>数据覆盖 <b>{card.coverage}</b></span><span>数据期 <b>{card.date}</b></span></div>
+      <div className="regime-evidence"><small>主要驱动</small>{card.good.map(x=><p key={x}><i>↑</i>{x}</p>)}<p className="risk"><i>!</i>{card.risk}</p></div>
+      <button className="regime-detail-btn" onClick={()=>setExpandedCard(expandedCard===card.code?null:card.code)}>{expandedCard===card.code?"收起指标":`展开 ${card.code === "F" ? "4" : "5"} 项指标`} <span>{expandedCard===card.code?"−":"＋"}</span></button>
+    </article>)}</div>
+    {expandedCard&&<section className="panel indicator-detail"><div className="section-title"><div><span>COMPONENT DETAIL</span><h2>{expandedCard==="F"?"长牛底座":expandedCard==="L"?"货币信用":"估值泡沫"} · 指标明细</h2></div><span className="tag gray">示例数据</span></div><div className="indicator-table"><div className="indicator-row header"><span>指标</span><span>得分 / 状态</span><span>原始值 / 历史位置</span><span>数据期 / 发布</span><span>覆盖 / 质量</span><span>解释</span></div>{indicators[expandedCard].map(item=><div className="indicator-row" key={item.id}><span><b>{item.id}</b><strong>{item.name}</strong></span><span><b>{item.score}</b><small>{item.trend}</small></span><span><strong>{item.raw}</strong><small>{item.position}</small></span><span><strong>{item.period}</strong><small>{item.release}</small></span><span><strong>{item.coverage}</strong><small>质量 {item.quality}</small></span><span>{item.note}</span></div>)}</div></section>}
+    <div className="regime-summary-grid">
+      <section className="panel policy-card"><div className="section-title"><div><span>POLICY OVERLAY</span><h2>制度与政策叠加层</h2></div><span className="regime-state healthy">支持</span></div><strong>+1</strong><p>定性叠加，不计入三表总分</p><div><span>分红回购制度强化</span><span>长期资金入市机制改善</span></div></section>
+      <section className="panel joint-state"><div className="section-title"><div><span>COMBINED REGIME</span><h2>联合市场状态</h2></div><span className="tag warm">向过热区移动</span></div><div className="joint-formula"><b>F 强</b><i>×</i><b>L 强</b><i>×</i><b>B 温热</b></div><h3>黄金牛市环境 → 牛市中段</h3><p>发动机和汽油仍然健康，但转速正在抬升。保持参与，同时降低最高估、最拥挤资产的权重。</p></section>
     </div>
-    <div className="tri-grid"><section className="panel metric-list"><div className="section-title"><h2>估值水位</h2><span className="tag gray">近10年分位</span></div>{[["沪深300","46%","合理"],["中证500","62%","略高"],["创业板指","31%","偏低"],["科创50","68%","略高"]].map(x=><div key={x[0]}><b>{x[0]}</b><div className="bar"><i style={{width:x[1]}}/></div><strong>{x[1]}</strong><span>{x[2]}</span></div>)}</section>
-      <section className="panel metric-list flow-list"><div className="section-title"><h2>资金方向</h2><span>当日净流入</span></div>{[["融资余额","+126.8亿"],["股票ETF","+74.2亿"],["主力资金","-88.5亿"],["北向代理","+38.6亿"]].map(x=><div key={x[0]}><b>{x[0]}</b><strong className={x[1].startsWith("+")?"up":"down"}>{x[1]}</strong></div>)}</section>
-      <section className="panel calendar"><div className="section-title"><h2>本周关键事件</h2><button>完整日历 →</button></div><article><time>08/07<br/><b>周五</b></time><div><b>中国 7 月进出口数据</b><p>预期出口同比 +5.4%</p></div><span className="dot high"/></article><article><time>08/08<br/><b>周六</b></time><div><b>中国 7 月 CPI / PPI</b><p>关注通胀边际变化</p></div><span className="dot high"/></article><article><time>08/12<br/><b>周三</b></time><div><b>美国 7 月 CPI</b><p>影响全球降息预期</p></div><span className="dot"/></article></section>
-    </div>
+    <section className="panel state-map"><div className="section-title"><div><span>8-STATE REGIME MAP</span><h2>联合状态地图</h2></div><button onClick={()=>selectMarketTab("history")}>查看状态演变 →</button></div><div className="state-map-grid">{[["高","低","高","黄金牛市环境","current"],["高","高","高","牛市后期 / 过热","next"],["高","低","低","长牛中的调整",""],["高","高","低","高度危险","danger"],["低","低","高","流动性 / 政策牛",""],["低","高","高","投机牛","warm"],["低","低","低","熊市底部寻找",""],["低","高","低","最差状态","danger"]].map((s,i)=><article key={i} className={s[4]}><div><span>F {s[0]}</span><span>B {s[1]}</span><span>L {s[2]}</span></div><b>{s[3]}</b>{s[4]==="current"&&<em>当前</em>}{s[4]==="next"&&<em>正在靠近</em>}</article>)}</div></section>
+    <div className="market-evidence-grid"><section className="panel driver-risk"><div className="section-title"><div><span>DRIVERS & RISKS</span><h2>当前驱动与风险</h2></div></div><div className="driver-columns"><div><h3>支持市场</h3><p><b>01</b><span>股东回报机制</span><em>分红回购/融资比维持高位</em></p><p><b>02</b><span>信用脉冲</span><em>3M与6M变化均已转正</em></p><p><b>03</b><span>长期资金</span><em>保险与年金配置继续提升</em></p></div><div className="risks"><h3>需要警惕</h3><p><b>01</b><span>局部估值分化</span><em>科技成长处于88%分位</em></p><p><b>02</b><span>交易热度</span><em>成交与两融进入黄色观察区</em></p><p><b>03</b><span>数据完整度</span><em>半年报尚未全部披露</em></p></div></div></section><section className="panel quality-card"><div className="section-title"><div><span>DATA TRUST</span><h2>数据质量</h2></div><span className="quality-grade">A-</span></div><div className="quality-meter"><i style={{width:"95%"}}/></div><p><span>总覆盖率</span><b>95%</b></p><p><span>Point-in-Time</span><b className="ok">通过</b></p><p><span>最新可用数据</span><b>2026.08.17</b></p><div className="quality-warning">⚠ 盈利指标仅覆盖已披露半年报公司</div><button onClick={()=>selectMarketTab("method")}>查看数据口径 →</button></section></div>
+    <div className="market-lower-grid"><section className="panel recent-history"><div className="section-title"><div><span>12-MONTH CHANGE</span><h2>近期状态变化</h2></div><button onClick={()=>selectMarketTab("history")}>完整历史 →</button></div>{[["F 长牛底座","6.3","7.6","foundation"],["L 货币信用","4.8","6.8","liquidity"],["B 估值泡沫","1.8","4.3","bubble"]].map(x=><div className="history-strip" key={x[0]}><b>{x[0]}</b><span>{x[1]}</span><div><i className={x[3]} style={{width:`${Number(x[2])*10}%`}}/></div><strong>{x[2]}</strong><em>12个月</em></div>)}</section><section className="panel regime-events"><div className="section-title"><div><span>KEY EVENTS</span><h2>近期关键事件</h2></div><button onClick={()=>selectMarketTab("history")}>完整时间轴 →</button></div><article><time>08.15</time><div><b>7月金融数据发布</b><p>信用脉冲维持正值，L3保持支持。</p></div><span className="tag blue">L</span></article><article><time>08.12</time><div><b>分红回购统计更新</b><p>股东回报/融资比继续处于历史高位。</p></div><span className="tag green">F</span></article><article><time>08.08</time><div><b>科技成交占比升温</b><p>局部拥挤度上升，B5进入观察区。</p></div><span className="tag warm">B</span></article></section></div>
+    </>}
+    {marketTab==="history"&&<MarketHistory onEpisode={()=>selectMarketTab("episodes")}/>}
+    {marketTab==="episodes"&&<MarketEpisodes/>}
+    {marketTab==="method"&&<MarketMethod indicators={indicators}/>}
   </>;
+}
+
+function MarketHistory({onEpisode}:{onEpisode:()=>void}) {
+  const [series,setSeries]=useState<Record<string,boolean>>({index:true,F:true,L:true,B:true});
+  const toggle=(key:string)=>setSeries(prev=>({...prev,[key]:!prev[key]}));
+  return <div className="market-subpage">
+    <div className="subpage-head"><div><span>MONTHLY POINT-IN-TIME VIEW</span><h2>历史诊断</h2><p>按当时已经发布的数据重建月度状态，用来解释机制，不追求预测某一个顶部日期。</p></div><span className="tag gray">示例曲线 · 2005—2026</span></div>
+    <section className="panel historical-chart-panel"><div className="section-title"><div><span>REGIME HISTORY</span><h2>沪深300与三表状态</h2></div><div className="series-switch">{[["index","沪深300"],["F","长牛底座 F"],["L","货币信用 L"],["B","泡沫温度 B"]].map(x=><button key={x[0]} className={series[x[0]]?`on s-${x[0]}`:""} onClick={()=>toggle(x[0])}><i/>{x[1]}</button>)}</div></div>
+      <div className="historical-chart"><div className="history-y"><span>10</span><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div><svg viewBox="0 0 1000 310" preserveAspectRatio="none" aria-label="示例历史状态曲线"><g className="history-bands"><rect x="0" y="0" width="1000" height="62"/><rect x="0" y="62" width="1000" height="62"/><rect x="0" y="124" width="1000" height="62"/><rect x="0" y="186" width="1000" height="62"/><rect x="0" y="248" width="1000" height="62"/></g>{series.index&&<path className="history-line index" d="M0 238 C55 220 80 90 130 42 S190 270 240 235 S300 88 350 70 S410 250 455 230 S525 110 575 74 S635 160 680 205 S745 95 800 64 S870 210 910 150 S960 80 1000 105"/>}{series.F&&<path className="history-line f" d="M0 160 C70 120 100 75 150 80 S230 170 280 155 S360 130 420 160 S510 105 570 92 S660 118 720 84 S810 120 860 105 S930 72 1000 76"/>}{series.L&&<path className="history-line l" d="M0 190 C70 110 120 78 175 200 S250 65 310 82 S390 220 450 225 S520 105 580 125 S650 205 710 210 S790 120 850 150 S920 85 1000 98"/>}{series.B&&<path className="history-line b" d="M0 250 C60 245 100 60 155 22 S220 275 280 240 S340 80 385 26 S450 260 510 235 S580 115 640 52 S715 260 780 240 S850 180 900 125 S960 100 1000 120"/>}<g className="event-lines"><line x1="155" x2="155" y1="0" y2="310"/><line x1="385" x2="385" y1="0" y2="310"/><line x1="640" x2="640" y1="0" y2="310"/><line x1="780" x2="780" y1="0" y2="310"/></g></svg><div className="history-x"><span>2005</span><span>2007</span><span>2009</span><span>2015</span><span>2018</span><span>2021</span><span>2024</span><span>2026</span></div><div className="event-labels"><span style={{left:"13%"}}>6124</span><span style={{left:"37%"}}>杠杆顶</span><span style={{left:"62%"}}>核心资产</span><span style={{left:"76%"}}>信用收缩</span></div></div>
+      <div className="history-state-band"><span className="gold">黄金环境</span><span className="danger">泡沫顶</span><span className="policy">政策牛</span><span className="danger">投机牛</span><span className="weak">信用熊</span><span className="warm">好公司泡沫</span><span className="adjust">长牛调整</span></div>
+    </section>
+    <div className="validation-grid"><section className="panel"><span>FOUNDATION TARGET</span><h3>长周期验证</h3><b>36M / 60M</b><p>验证F高时未来3—5年权益回报和盈利增长是否更好。</p></section><section className="panel"><span>BUBBLE TARGET</span><h3>回撤预警</h3><b>Crash12 ≤ -20%</b><p>验证B≥8时未来12—24个月的大回撤概率是否抬升。</p></section><section className="panel"><span>LIQUIDITY TARGET</span><h3>短中期领先</h3><b>3M / 6M / 12M</b><p>验证信用改善能否领先股票表现和企业盈利变化。</p></section></div>
+    <section className="panel episode-shortcuts"><div className="section-title"><div><span>EPISODE SHORTCUTS</span><h2>关键时期</h2></div><button onClick={onEpisode}>进入完整审计 →</button></div><div>{["2005–07 长牛启动与泡沫","2009 强刺激反弹","2014–15 杠杆泡沫","2018 信用熊市","2019–21 好公司泡沫","2024–当前 新周期"].map((x,i)=><button key={x} onClick={onEpisode}><span>0{i+1}</span>{x}<i>→</i></button>)}</div></section>
+  </div>;
+}
+
+function MarketEpisodes() {
+  const episodes=[
+    {period:"2005.06 — 2007.10",title:"长牛启动 → 超级泡沫",state:"F高 · L转弱 · B极高",tone:"danger",finding:"发动机仍好，但转速进入红线；顶部风险来自价格而非盈利崩溃。",pass:"应在6124前看到B快速升至历史高位。"},
+    {period:"2007.10 — 2008.11",title:"泡沫破裂与外部冲击",state:"F下行 · L弱 · B回落",tone:"weak",finding:"估值回落并不等于熊市立即结束，盈利和信用同步恶化。",pass:"F与L应在熊市中持续走弱。"},
+    {period:"2008.11 — 2009.08",title:"强刺激反弹",state:"F一般 · L极强 · B升温",tone:"policy",finding:"汽油猛烈增加，但发动机没有同步升级；强行情不等于十年牛。",pass:"L应显著领先并高于F。"},
+    {period:"2014.06 — 2015.06",title:"杠杆与投机泡沫",state:"F弱 · L强 · B极高",tone:"danger",finding:"融资与估值形成正反馈，市场性质从低估值修复转为投机牛。",pass:"2015年6月B必须处于极端高位。"},
+    {period:"2017.01 — 2018.12",title:"信用收缩熊市",state:"F转弱 · L弱 · B中性",tone:"weak",finding:"熊市并非都由泡沫引发；信用和盈利恶化是这轮下跌的关键。",pass:"L和F应先后恶化，而B未必极高。"},
+    {period:"2019.01 — 2021.02",title:"核心资产结构牛",state:"F高 · L中高 · B高",tone:"warm",finding:"优质资产有真实盈利，但集中买入把好公司推成了泡沫。",pass:"2021年应同时出现F高与B高。"},
+    {period:"2021.02 — 2022.12",title:"好公司泡沫消化",state:"F回落 · L转弱 · B回落",tone:"weak",finding:"不是全市场股灾，而是高估值资产经历多年估值消化。",pass:"B应从高位回落，风格分化需被保留。"},
+    {period:"2024.01 — 当前",title:"制度底与新周期验证",state:"F增强 · L改善 · B温热",tone:"current",finding:"股东回报和长期资金形成结构改善，仍需盈利持续性完成验证。",pass:"不能因示例结论替代未来真实PIT回测。"}
+  ];
+  const [selected,setSelected]=useState(0);
+  const e=episodes[selected];
+  return <div className="market-subpage"><div className="subpage-head"><div><span>HISTORICAL EPISODE AUDIT</span><h2>关键时期审计</h2><p>逐段检查三表是否解释了正确的市场机制，而不是只看一条漂亮的收益曲线。</p></div><span className="tag gray">8个必测窗口</span></div><div className="episode-layout"><aside className="panel episode-list">{episodes.map((x,i)=><button className={selected===i?"active":""} key={x.period} onClick={()=>setSelected(i)}><span>{String(i+1).padStart(2,"0")}</span><div><b>{x.period}</b><small>{x.title}</small></div><i>›</i></button>)}</aside><section className="panel episode-detail"><div className="episode-title"><div><span>EPISODE {String(selected+1).padStart(2,"0")}</span><h2>{e.title}</h2><p>{e.period}</p></div><span className={`episode-status ${e.tone}`}>{e.state}</span></div><div className="episode-score-row"><div><small>长牛底座 F</small><b>{selected===3?"4.6":selected===5?"8.1":selected===7?"7.6":"6.2"}</b><div className="bar"><i style={{width:selected===3?"46%":selected===5?"81%":"68%"}}/></div></div><div><small>货币信用 L</small><b>{selected===2?"9.1":selected===4?"2.8":"5.7"}</b><div className="bar blue"><i style={{width:selected===2?"91%":selected===4?"28%":"57%"}}/></div></div><div><small>泡沫温度 B</small><b>{[0,3,5].includes(selected)?"9.3":"4.1"}</b><div className="bar gold"><i style={{width:[0,3,5].includes(selected)?"93%":"41%"}}/></div></div></div><div className="episode-chart"><div className="episode-mountain"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div><span>窗口开始</span><span>关键拐点</span><span>窗口结束</span></div><div className="episode-findings"><article><span>核心解释</span><p>{e.finding}</p></article><article><span>验收条件</span><p>{e.pass}</p></article></div><div className="static-warning">当前为界面示意：分数与曲线不是历史回测结果。真实结论必须由Point-in-Time数据生成。</div></section></div></div>;
+}
+
+function MarketMethod({indicators}:{indicators:Record<string,RegimeIndicator[]>}) {
+  return <div className="market-subpage"><div className="subpage-head"><div><span>METHODOLOGY & DATA</span><h2>方法与数据</h2><p>公开说明系统如何得出结论、何时知道数据，以及哪些部分仍然存在限制。</p></div><span className="tag blue">可解释优先</span></div>
+    <div className="metaphor-grid"><article className="panel"><span>F · FOUNDATION</span><div className="metaphor-icon">发动机</div><h3>长牛底座</h3><p>盈利、资本回报和长期资金决定市场能不能跑得远。</p><b>0–10 · 越高越好</b></article><article className="panel"><span>L · LIQUIDITY</span><div className="metaphor-icon blue">汽油</div><h3>货币信用</h3><p>实际利率、货币活化和信用脉冲决定近期有没有动力。</p><b>0–10 · 越高越支持</b></article><article className="panel"><span>B · BUBBLE</span><div className="metaphor-icon gold">转速表</div><h3>估值泡沫</h3><p>估值、杠杆和投机热度决定是否已经接近红线。</p><b>0–10 · 越高越危险</b></article></div>
+    <section className="panel dictionary"><div className="section-title"><div><span>INDICATOR DICTIONARY</span><h2>14项量化指标</h2></div><span className="tag gray">固定等权 · 第一版</span></div>{["F","L","B"].map(group=><div className="dictionary-group" key={group}><h3>{group==="F"?"长牛底座 Foundation":group==="L"?"货币信用 Liquidity":"估值泡沫 Bubble"}</h3>{indicators[group].map(x=><article key={x.id}><span>{x.id}</span><div><b>{x.name}</b><p>{x.note}</p></div><div><small>示例原始值</small><strong>{x.raw}</strong></div><div><small>数据期 / 发布</small><strong>{x.period} · {x.release}</strong></div><div><small>覆盖 / 质量</small><strong>{x.coverage} · {x.quality}</strong></div></article>)}</div>)}</section>
+    <div className="method-bottom"><section className="panel pit-card"><div className="section-title"><div><span>POINT-IN-TIME</span><h2>当时知道什么，就只能用什么</h2></div><span className="regime-state healthy">核心纪律</span></div><div className="pit-flow"><div><b>PERIOD DATE</b><span>数据所属期间</span><strong>2026-06-30</strong></div><i>→</i><div><b>RELEASE DATE</b><span>市场实际获知</span><strong>2026-07-15</strong></div><i>→</i><div><b>AS OF QUERY</b><span>回测可使用</span><strong>release ≤ as_of</strong></div></div><ul><li>财报按公告日期生效，不按报告期提前使用。</li><li>宏观数据按发布日期生效，并保留历史修订状态。</li><li>M1新旧口径分版本标准化，不强行拼接。</li><li>历史股票池包含当时已上市及后来退市公司。</li></ul></section><section className="panel limitations"><div className="section-title"><div><span>KNOWN LIMITATIONS</span><h2>已知限制</h2></div></div><p><b>长期资金</b><span>早期历史覆盖不足，允许partial并重分配权重。</span></p><p><b>市值/GDP</b><span>受证券化率变化影响，只使用滚动历史分位。</span></p><p><b>Policy Overlay</b><span>保持定性，不参加第一阶段历史拟合。</span></p><p><b>样本数量</b><span>约260个月，不在第一版使用机器学习。</span></p></section></div>
+  </div>;
 }
 
 function Themes() {
