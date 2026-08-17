@@ -56,6 +56,18 @@ async function marketGenerator() {
   return import(new URL("../scripts/generate-market-research-current.mjs", import.meta.url).href);
 }
 
+async function historyGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-b3.mjs", import.meta.url).href);
+}
+
+async function historyGeneratorSource() {
+  return readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-b3.mjs", import.meta.url)), "utf8");
+}
+
+async function b3HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b3.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -487,6 +499,79 @@ test("requests ETF basics and share sizes exactly once with strict contracts", a
   assert.match(source, /callTushare\("etf_basic", \{ index_code: "000300\.SH", list_status: "L" \}, "ts_code,index_code,list_date,list_status"/);
   assert.equal((source.match(/callTushare\("etf_share_size"/g) ?? []).length, 1);
   assert.match(source, /callTushare\("etf_share_size", \{ trade_date: snapshot\.priorTradeDate \}, "trade_date,ts_code,total_size"/);
+});
+
+test("derives complete history month ends and ships 139 raw B3 PIT points", async () => {
+  const { historyEndOnOrBefore, monthlyAsOfs } = await historyGenerator();
+  assert.equal(historyEndOnOrBefore("2026-08-17"), "2026-07-31");
+  assert.equal(historyEndOnOrBefore("2026-08-31"), "2026-08-31");
+  assert.equal(historyEndOnOrBefore("2026-09-01"), "2026-08-31");
+  assert.equal(monthlyAsOfs("2015-01-31", "2026-07-31").length, 139);
+  const history = await b3HistoryData();
+  assert.equal(history.schemaVersion, 1);
+  assert.equal(history.points.length, 139);
+  assert.deepEqual(history.range, { startAsOf: "2015-01-31", endAsOf: "2026-07-31" });
+  assert.deepEqual(history.points.map(point => point.asOf), [...history.points].map(point => point.asOf).sort());
+  for (const point of history.points) {
+    assert.equal(point.asOf.slice(8), String(new Date(Date.UTC(Number(point.asOf.slice(0, 4)), Number(point.asOf.slice(5, 7)), 0)).getUTCDate()).padStart(2, "0"));
+    assert.equal(point.releaseDate, point.periodDate);
+    assert.ok(point.releaseDate <= point.asOf);
+    assert.equal(point.periodDate.slice(0, 7), point.asOf.slice(0, 7));
+    assert.equal(point.revisionStatus, "not_tracked");
+    for (const code of ["000300.SH", "399006.SZ"]) {
+      assert.ok(Number.isFinite(point.values[code].peTtm));
+      assert.ok(Number.isFinite(point.values[code].pb));
+    }
+  }
+  assert.doesNotMatch(JSON.stringify(history), /"(?:score|position|trend|percentile|zScore|normalized|signal|state)"/);
+});
+
+test("builds monthly B3 history from the latest same-month common date without fallback", async () => {
+  const { buildB3MonthlyHistory } = await historyGenerator();
+  const row = (ts_code, trade_date, pe_ttm = 10, pb = 1) => ({ ts_code, trade_date, pe_ttm, pb });
+  const rows = {
+    "000300.SH": [row("000300.SH", "20150129", 9, 0.9), row("000300.SH", "20150130", 10, 1), row("000300.SH", "20150227", 11, 1.1)],
+    "399006.SZ": [row("399006.SZ", "20150129", 19, 1.9), row("399006.SZ", "20150130", 20, 2), row("399006.SZ", "20150227", 21, 2.1)],
+  };
+  const history = buildB3MonthlyHistory(rows, "2015-03-15", "2015-03-15T00:00:00.000Z");
+  assert.equal(history.points.length, 2);
+  assert.equal(history.points[0].periodDate, "2015-01-30");
+  assert.equal(history.points[1].periodDate, "2015-02-27");
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad"]) {
+    const broken = { ...rows, "000300.SH": rows["000300.SH"].map(item => item.trade_date === "20150130" ? { ...item, pe_ttm: invalid } : item) };
+    assert.throws(() => buildB3MonthlyHistory(broken, "2015-03-15"), /Invalid pe_ttm/);
+  }
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "399006.SZ": rows["399006.SZ"].filter(item => !item.trade_date.startsWith("201502")) }, "2015-03-15"), /within 2015-02/);
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "000300.SH": [...rows["000300.SH"], rows["000300.SH"][0]] }, "2015-03-15"), /duplicate trade_date/);
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "000300.SH": [{ ...rows["000300.SH"][0], ts_code: "BAD" }] }, "2015-02-15"), /unexpected ts_code/);
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "000300.SH": [{ ...rows["000300.SH"][0], trade_date: "20150230" }] }, "2015-02-15"), /invalid trade_date/);
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "000300.SH": [] }, "2015-03-15"), /no history rows/);
+  const capped = Array.from({ length: 3000 }, (_, index) => row("000300.SH", `2015${String(Math.floor(index / 31) + 1).padStart(2, "0")}${String(index % 31 + 1).padStart(2, "0")}`));
+  assert.throws(() => buildB3MonthlyHistory({ ...rows, "000300.SH": capped }, "2015-03-15"), /3000-row limit/);
+});
+
+test("history generator uses exactly two strict index requests and never targets current.json", async () => {
+  const source = await historyGeneratorSource();
+  assert.equal((source.match(/callTushare\("index_dailybasic"/g) ?? []).length, 1);
+  assert.match(source, /MARKET_INDEX_INSTRUMENTS\.map/);
+  assert.match(source, /\{ ts_code: instrument\.code, start_date: START_DATE, end_date: compactDate\(historyEnd\) \}, FIELDS/);
+  assert.match(source, /const START_DATE = "20150101"/);
+  assert.match(source, /const FIELDS = "ts_code,trade_date,pe_ttm,pb"/);
+  assert.doesNotMatch(source, /public\/data\/market-research\/current\.json/);
+});
+
+test("missing-token history failure preserves both history and current files byte-for-byte", async () => {
+  const historyPath = fileURLToPath(new URL("../public/data/market-research/history/b3.json", import.meta.url));
+  const currentPath = fileURLToPath(new URL("../public/data/market-research/current.json", import.meta.url));
+  const beforeHistory = await readFile(historyPath);
+  const beforeCurrent = await readFile(currentPath);
+  const env = { ...process.env };
+  delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b3.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /TUSHARE_TOKEN is required/);
+  assert.deepEqual(await readFile(historyPath), beforeHistory);
+  assert.deepEqual(await readFile(currentPath), beforeCurrent);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {

@@ -47,6 +47,8 @@ SHIBOR属于名义银行间资金利率，官方在每个交易日11:00发布。
 - 字段：`ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f`
 - 算法：在45个自然日窗口内，选择不晚于信息截止日且两只指数均有数据的最近共同交易日。
 
+阶段04A另以相同 `index_dailybasic` 字段生成B3月度历史文件：两只指数从2015-01-01至最近完整月末各请求一次，每个自然月末只选择当月最新共同交易日，禁止跨月沿用。历史点采用 `releaseDate=periodDate` 的收盘后EOD语义，并标记 `revisionStatus=not_tracked`；接口任一返回达到3000行上限时失败关闭。
+
 ## B1 ERP股权风险溢价——第一阶段指数盈利收益率代理
 
 - 来源：复用B3/B5同一份 Tushare Pro `index_dailybasic` 共同快照及其 `pe_ttm`，不增加API请求。
