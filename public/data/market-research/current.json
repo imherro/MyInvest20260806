@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:30:20.684Z",
+  "generatedAt": "2026-08-17T08:41:48.514Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -15,7 +15,8 @@
       "shibor",
       "sf_month",
       "us_trycr",
-      "daily_basic"
+      "daily_basic",
+      "fina_indicator_vip"
     ],
     "instruments": [
       {
@@ -53,8 +54,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
-    "diagnosis": "当前仅L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余4项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已生成",
+    "diagnosis": "当前仅F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余3项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -66,9 +67,9 @@
       "metaphor": "发动机",
       "title": "长牛底座",
       "score": null,
-      "status": "待计算",
-      "coverage": "0/4",
-      "updatedAt": null,
+      "status": "数据接入中",
+      "coverage": "1/4",
+      "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
       "drivers": [],
@@ -177,12 +178,19 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "71.4%",
+    "coverage": "78.6%",
     "pitStatus": "待接入",
-    "warning": "仅L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余4项待接入"
+    "warning": "仅F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5已由真实数据生成，其余3项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
+    {
+      "date": "08-17",
+      "title": "F1已披露样本盈利同比代理快照生成",
+      "detail": "已披露样本归母净利润同比中位数 +21.4% / 有值 512家 / 缺失 0家",
+      "group": "F1",
+      "tone": "blue"
+    },
     {
       "date": "08-17",
       "title": "L1名义资金利率代理快照生成",
@@ -260,15 +268,15 @@
         "id": "F1",
         "name": "盈利趋势",
         "score": null,
-        "raw": null,
+        "raw": "已披露样本归母净利润同比中位数 +21.4% / 有值 512家 / 缺失 0家",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-06",
+        "release": "2026-08-17",
+        "coverage": "512/512家已披露样本",
+        "quality": "A",
+        "note": "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "F2",

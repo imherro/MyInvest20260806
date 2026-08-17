@@ -84,7 +84,7 @@ test("current.json contains the complete F/L/B market research contract", async 
   assert.equal(current.schemaVersion, 4);
   assert.equal(current.source.mode, "generated");
   assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"]);
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic", "fina_indicator_vip"]);
   assert.equal("api" in current.source, false);
   assert.equal(current.source.releaseEvidence.L2.provider, "中国人民银行");
   assert.equal(current.source.releaseEvidence.L4.provider, "中华人民共和国财政部");
@@ -138,7 +138,7 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real L1-L5 and B1-B5 snapshots with 4 explicitly pending indicators", async () => {
+test("contains real F1, L1-L5 and B1-B5 snapshots with 3 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
@@ -151,6 +151,20 @@ test("contains real L1-L5 and B1-B5 snapshots with 4 explicitly pending indicato
   const l3 = current.components.L.find((item) => item.id === "L3");
   const l4 = current.components.L.find((item) => item.id === "L4");
   const l5 = current.components.L.find((item) => item.id === "L5");
+  const f1 = current.components.F.find((item) => item.id === "F1");
+
+  assert.equal(f1.dataStatus, "generated");
+  assert.match(f1.raw, /已披露样本归母净利润同比中位数 [+-]?\d+\.\d% \/ 有值 \d+家 \/ 缺失 \d+家/);
+  assert.equal(f1.period, "2026-06");
+  assert.ok(f1.release <= current.asOf);
+  assert.equal(f1.score, null);
+  assert.equal(f1.position, null);
+  assert.equal(f1.trend, null);
+  assert.match(f1.coverage, /\d+\/\d+家已披露样本/);
+  assert.match(f1.note, /第一阶段已披露样本盈利同比代理/);
+  assert.match(f1.note, /公告日期缺失记录已排除/);
+  assert.match(f1.note, /不是全A总利润增长率/);
+  assert.match(f1.note, /不计算F1评分/);
 
   assert.equal(b1.dataStatus, "generated");
   assert.match(b1.raw, /沪深300盈利收益率 \d+\.\d{2}%；创业板指盈利收益率 \d+\.\d{2}%/);
@@ -253,18 +267,19 @@ test("contains real L1-L5 and B1-B5 snapshots with 4 explicitly pending indicato
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 10);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 4);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 11);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 3);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "71.4%");
+  assert.equal(current.dataQuality.coverage, "78.6%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "5/5", "5/5"]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["1/4", "5/5", "5/5"]);
+  assert.equal(current.cards.find((card) => card.code === "F").updatedAt, f1.release);
   assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release, l4.release, l5.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only ten indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only eleven indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
@@ -307,7 +322,8 @@ test("selects the latest common trading date and builds mixed-frequency current 
     pbc: { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" },
     mof: { ...l4, href: "https://gks.mof.gov.cn/tongjishuju/202607/t20260722_3993943.htm" },
   };
-  const generated = buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3, l4, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
+  const f1 = { targetPeriod: "20260630", reportedCount: 3, validCount: 2, missingCount: 1, medianNetProfitYoy: 6.25, latestAnnDate: "20260815" };
+  const generated = buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
   assert.equal(generated.asOf, "2026-08-17");
@@ -322,7 +338,10 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.equal(b2.observedCount, 2);
   assert.equal(b2.observedMarketCapWan, 100000000);
   assert.equal(b2.marketCapCoverage, 100);
-  assert.equal(generated.dataQuality.coverage, "71.4%");
+  assert.equal(generated.dataQuality.coverage, "78.6%");
+  assert.match(generated.components.F[0].raw, /已披露样本归母净利润同比中位数 \+6\.3% \/ 有值 2家 \/ 缺失 1家/);
+  assert.equal(generated.components.F[0].period, "2026-06");
+  assert.equal(generated.components.F[0].release, "2026-08-15");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.match(generated.components.B[0].raw, /沪深300盈利收益率 6\.96%；创业板指盈利收益率 2\.25%/);
@@ -341,8 +360,9 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
   assert.match(generated.components.L[3].raw, /12\.1047万亿元（同比 \+4\.7%）.*14\.3329万亿元（同比 \+1\.5%）/);
   assert.match(generated.components.L[4].raw, /美国10年实际国债收益率 2\.41%/);
-  assert.match(generated.diagnosis.headline, /L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
-  assert.match(generated.dataQuality.warning, /其余4项/);
+  assert.match(generated.diagnosis.headline, /F1、L1、L2、L3、L4、L5、B1、B2、B3、B4、B5/);
+  assert.match(generated.dataQuality.warning, /其余3项/);
+  assert.equal(generated.recentEvents.some((event) => event.group === "F1" && event.detail === generated.components.F[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);
@@ -353,11 +373,75 @@ test("selects the latest common trading date and builds mixed-frequency current 
   assert.equal(generated.recentEvents.some((event) => event.group === "B4" && event.detail === generated.components.B[3].raw), true);
 });
 
-test("requests index turnover fields and records the exact six APIs", async () => {
+test("requests index turnover fields and records the exact seven APIs", async () => {
   const source = await generatorSource();
   assert.match(source, /"ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f"/);
   const current = await currentMarketData();
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic", "fina_indicator_vip"]);
+});
+
+test("selects the latest ended quarter at date boundaries", async () => {
+  const { quarterEndOnOrBefore } = await marketGenerator();
+  assert.equal(quarterEndOnOrBefore("2026-08-17"), "20260630");
+  assert.equal(quarterEndOnOrBefore("2026-06-30"), "20260630");
+  assert.equal(quarterEndOnOrBefore("2026-06-29"), "20260331");
+  assert.equal(quarterEndOnOrBefore("2026-03-31"), "20260331");
+  assert.equal(quarterEndOnOrBefore("2026-03-30"), "20251231");
+});
+
+test("builds F1 from latest disclosed company records and validates median inputs", async () => {
+  const { buildF1Snapshot } = await marketGenerator();
+  const target = "20260630";
+  const rows = [
+    { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: -10 },
+    { ts_code: "A", ann_date: "20260810", end_date: target, netprofit_yoy: 0 },
+    { ts_code: "B", ann_date: "20260809", end_date: target, netprofit_yoy: 20 },
+    { ts_code: "C", ann_date: "20260808", end_date: target, netprofit_yoy: null },
+    { ts_code: "D", ann_date: "20260807", end_date: target, netprofit_yoy: undefined },
+    { ts_code: "E", ann_date: "20260806", end_date: target, netprofit_yoy: "" },
+    { ts_code: "F", ann_date: "20260818", end_date: target, netprofit_yoy: 999 },
+    { ts_code: "G", ann_date: "20260805", end_date: "20260331", netprofit_yoy: 999 },
+    { ts_code: "B", ann_date: "20260809", end_date: target, netprofit_yoy: 20 },
+    { ts_code: "I", ann_date: null, end_date: target, netprofit_yoy: 99 },
+    { ts_code: "J", ann_date: undefined, end_date: target, netprofit_yoy: 99 },
+    { ts_code: "K", ann_date: "", end_date: target, netprofit_yoy: 99 },
+  ];
+  assert.deepEqual(buildF1Snapshot(rows, "2026-08-17", target), {
+    targetPeriod: target, reportedCount: 5, validCount: 2, missingCount: 3,
+    medianNetProfitYoy: 10, latestAnnDate: "20260810", excludedMissingAnnDateCount: 3,
+  });
+  const odd = rows.concat({ ts_code: "H", ann_date: "20260811", end_date: target, netprofit_yoy: 5 });
+  assert.equal(buildF1Snapshot(odd, "2026-08-17", target).medianNetProfitYoy, 5);
+  const missingAndValue = buildF1Snapshot([
+    { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: null },
+    { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: 15.7025 },
+  ], "2026-08-17", target);
+  assert.equal(missingAndValue.reportedCount, 1);
+  assert.equal(missingAndValue.validCount, 1);
+  assert.equal(missingAndValue.medianNetProfitYoy, 15.7025);
+  const duplicateMissing = buildF1Snapshot([
+    { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: null },
+    { ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: null },
+    { ts_code: "B", ann_date: "20260802", end_date: target, netprofit_yoy: 1 },
+  ], "2026-08-17", target);
+  assert.equal(duplicateMissing.reportedCount, 2);
+  assert.equal(duplicateMissing.validCount, 1);
+  assert.equal(duplicateMissing.missingCount, 1);
+  assert.throws(() => buildF1Snapshot(rows.concat({ ts_code: "B", ann_date: "20260809", end_date: target, netprofit_yoy: 21 }), "2026-08-17", target), /conflicting netprofit_yoy/);
+  for (const invalid of [Number.NaN, Infinity, "not-a-number"]) {
+    assert.throws(() => buildF1Snapshot([{ ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: invalid }], "2026-08-17", target), /invalid netprofit_yoy/);
+  }
+  assert.throws(() => buildF1Snapshot([{ ts_code: "A", ann_date: "invalid", end_date: target, netprofit_yoy: 1 }], "2026-08-17", target), /invalid ann_date/);
+  assert.throws(() => buildF1Snapshot([{ ts_code: "A", ann_date: "20260230", end_date: target, netprofit_yoy: 1 }], "2026-08-17", target), /invalid ann_date/);
+  assert.throws(() => buildF1Snapshot([{ ts_code: "", ann_date: "20260801", end_date: target, netprofit_yoy: 1 }], "2026-08-17", target), /empty ts_code/);
+  assert.throws(() => buildF1Snapshot([{ ts_code: "A", ann_date: "20260801", end_date: target, netprofit_yoy: null }], "2026-08-17", target), /no valid netprofit_yoy sample/);
+  assert.throws(() => buildF1Snapshot([{ ts_code: "A", ann_date: "20260818", end_date: target, netprofit_yoy: 1 }], "2026-08-17", target), /no reported companies/);
+});
+
+test("requests fina_indicator_vip once with the target period and exact fields", async () => {
+  const source = await generatorSource();
+  assert.equal((source.match(/callTushare\("fina_indicator_vip"/g) ?? []).length, 1);
+  assert.match(source, /callTushare\("fina_indicator_vip", \{ period: targetPeriod \}, "ts_code,ann_date,end_date,netprofit_yoy"/);
 });
 
 test("builds B1 earnings yields from the shared snapshot and rejects non-positive or invalid PE", async () => {

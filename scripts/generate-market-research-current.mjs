@@ -36,6 +36,13 @@ function subtractDays(value, days) {
   return date.toISOString().slice(0, 10);
 }
 
+export function quarterEndOnOrBefore(asOf) {
+  const compact = compactDate(asOf);
+  const year = Number(compact.slice(0, 4));
+  const candidates = [`${year}0331`, `${year}0630`, `${year}0930`, `${year}1231`].filter(value => value <= compact);
+  return candidates.at(-1) ?? `${year - 1}1231`;
+}
+
 function decodeHtml(value) {
   return value.replace(/&nbsp;|&#160;/gi, " ").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">");
@@ -328,6 +335,61 @@ export function buildB2Snapshot(rows, snapshot, b4) {
   return { tradeDate: snapshot.tradeDate, observedCount, missingCount: rows.length - observedCount, observedMarketCapWan, marketCapCoverage, weightedDividendYield };
 }
 
+export function buildF1Snapshot(rows, requestedAsOf, targetPeriod) {
+  const asOf = compactDate(requestedAsOf);
+  const validDate = value => {
+    if (!/^\d{8}$/.test(String(value ?? ""))) return false;
+    const displayed = displayDate(String(value));
+    const parsed = new Date(`${displayed}T00:00:00Z`);
+    return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === displayed;
+  };
+  const normalizeGrowth = (value, tsCode, annDate) => {
+    if (value === null || value === undefined || value === "") return null;
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) throw new Error(`Tushare fina_indicator_vip contains invalid netprofit_yoy for ${tsCode} at ${annDate}`);
+    return numeric;
+  };
+  const unique = new Map();
+  let excludedMissingAnnDateCount = 0;
+  for (const row of rows) {
+    if (String(row?.end_date ?? "") !== targetPeriod) continue;
+    if (row?.ann_date === null || row?.ann_date === undefined || row?.ann_date === "") {
+      excludedMissingAnnDateCount += 1;
+      continue;
+    }
+    const annDate = String(row?.ann_date ?? "");
+    if (!validDate(annDate)) throw new Error("Tushare fina_indicator_vip contains invalid ann_date");
+    if (annDate > asOf) continue;
+    const tsCode = typeof row?.ts_code === "string" ? row.ts_code.trim() : "";
+    if (!tsCode) throw new Error("Tushare fina_indicator_vip contains an empty ts_code");
+    const growth = normalizeGrowth(row.netprofit_yoy, tsCode, annDate);
+    const key = `${tsCode}|${annDate}`;
+    if (!unique.has(key)) unique.set(key, { tsCode, annDate, growth: null, hasValue: false });
+    const record = unique.get(key);
+    if (growth !== null) {
+      if (record.hasValue && !Object.is(record.growth, growth)) throw new Error(`Tushare fina_indicator_vip contains conflicting netprofit_yoy for ${tsCode} at ${annDate}`);
+      record.growth = growth;
+      record.hasValue = true;
+    }
+  }
+  const latestByCompany = new Map();
+  for (const record of unique.values()) {
+    const previous = latestByCompany.get(record.tsCode);
+    if (!previous || record.annDate > previous.annDate) latestByCompany.set(record.tsCode, record);
+  }
+  const reportedCount = latestByCompany.size;
+  if (!reportedCount) throw new Error("Tushare fina_indicator_vip contains no reported companies by as-of date");
+  const validRecords = [...latestByCompany.values()].filter(record => record.growth !== null);
+  const values = validRecords.map(record => record.growth).sort((a, b) => a - b);
+  const validCount = values.length;
+  if (!validCount) throw new Error("Tushare fina_indicator_vip contains no valid netprofit_yoy sample");
+  const middle = Math.floor(validCount / 2);
+  const medianNetProfitYoy = validCount % 2 ? values[middle] : (values[middle - 1] + values[middle]) / 2;
+  const latestAnnDate = validRecords.map(record => record.annDate).sort().at(-1);
+  if (!Number.isFinite(medianNetProfitYoy) || !latestAnnDate) throw new Error("F1 reported earnings-growth result is invalid");
+  return { targetPeriod, reportedCount, validCount, missingCount: reportedCount - validCount, medianNetProfitYoy, latestAnnDate, excludedMissingAnnDateCount };
+}
+
 export function buildL2Snapshot(rows, report, official) {
   const matches = rows.filter(row => String(row.month) === report.dataMonth);
   if (matches.length !== 1) throw new Error(`Tushare cn_m must contain exactly one row for ${report.dataMonth}`);
@@ -426,7 +488,7 @@ export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), y10 };
 }
 
-export function buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -445,8 +507,16 @@ export function buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3
   const signedYoy = value => `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
   const l4Raw = `一般公共预算累计收入 ${(l4.revenue / 10000).toFixed(4)}万亿元（同比 ${signedYoy(l4.revenueYoy)}） / 累计支出 ${(l4.expenditure / 10000).toFixed(4)}万亿元（同比 ${signedYoy(l4.expenditureYoy)}）`;
   const l5Raw = `美国10年实际国债收益率 ${l5.y10.toFixed(2)}%`;
+  const f1GrowthText = `${f1.medianNetProfitYoy > 0 ? "+" : ""}${f1.medianNetProfitYoy.toFixed(1)}%`;
+  const f1Raw = `已披露样本归母净利润同比中位数 ${f1GrowthText} / 有值 ${f1.validCount}家 / 缺失 ${f1.missingCount}家`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
+  components.F = components.F.map(indicator => indicator.id === "F1" ? {
+    ...indicator, raw: f1Raw, period: displayMonth(f1.targetPeriod), release: displayDate(f1.latestAnnDate),
+    coverage: `${f1.validCount}/${f1.reportedCount}家已披露样本`, quality: "A",
+    note: "当前仅使用最新已结束季度中、截至信息截止日已经披露且netprofit_yoy有合法值的公司，计算归母净利润同比中位数，作为F1第一阶段已披露样本盈利同比代理；公告日期缺失记录已排除。当前不是全A总利润增长率，也未处理完整财报修订PIT、历史趋势或样本选择偏差，因此不计算F1评分。",
+    dataStatus: "generated",
+  } : indicator);
   components.L = components.L.map(indicator => {
     if (indicator.id === "L1") return { ...indicator, raw: l1Raw, period: l1.date, release: l1.date, coverage: "4/4名义期限", quality: "A", note: "当前仅接入SHIBOR隔夜、1周、3月、1年真实名义资金利率，作为L1第一阶段名义利率代理；尚未接入CPI/通胀预期和实际利率，也不计算历史分位、趋势和L1评分。", dataStatus: "generated" };
     if (indicator.id === "L2") return {
@@ -490,7 +560,7 @@ export function buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3
   });
   return {
     ...template, schemaVersion: 4, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official", providers: ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.pbc.title, reportUrl: evidence.pbc.href, publishedAt: evidence.pbc.publishedAt }, L4: { provider: "中华人民共和国财政部", indexUrl: MOF_INDEX_URL, reportTitle: evidence.mof.title, reportUrl: evidence.mof.href, publishedAt: evidence.mof.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official", providers: ["Tushare Pro", "中国人民银行", "中华人民共和国财政部"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month", "us_trycr", "daily_basic", "fina_indicator_vip"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.pbc.title, reportUrl: evidence.pbc.href, publishedAt: evidence.pbc.publishedAt }, L4: { provider: "中华人民共和国财政部", indexUrl: MOF_INDEX_URL, reportTitle: evidence.mof.title, reportUrl: evidence.mof.href, publishedAt: evidence.mof.publishedAt } } },
     asOf: requestedAsOf,
     diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
@@ -499,6 +569,7 @@ export function buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3
     dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: `仅${generatedLabel}已由真实数据生成，其余${pendingCount}项待接入` },
     recentHistory: [],
     recentEvents: [
+      { date: displayDate(f1.latestAnnDate).slice(5), title: "F1已披露样本盈利同比代理快照生成", detail: f1Raw, group: "F1", tone: "blue" },
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
@@ -523,6 +594,9 @@ export async function main(argv = process.argv.slice(2)) {
   const token = process.env.TUSHARE_TOKEN;
   if (!token) throw new Error("TUSHARE_TOKEN is required");
   const requestedAsOf = parseAsOf(argv);
+  const targetPeriod = quarterEndOnOrBefore(requestedAsOf);
+  const f1Rows = await callTushare("fina_indicator_vip", { period: targetPeriod }, "ts_code,ann_date,end_date,netprofit_yoy", token);
+  const f1 = buildF1Snapshot(f1Rows, requestedAsOf, targetPeriod);
   const startDate = subtractDays(requestedAsOf, 45);
   const rows = await Promise.all(MARKET_INDEX_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f", token)]));
   const snapshot = selectLatestCommonSnapshot(Object.fromEntries(rows), requestedAsOf);
@@ -542,11 +616,12 @@ export async function main(argv = process.argv.slice(2)) {
   const l4 = { ...mofOfficial, dataMonth: mofReport.dataMonth, listingDate: mofReport.listingDate };
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, b1, b2, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, f1, b1, b2, b4, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
+  console.log(`F1: ${current.components.F.find(indicator => indicator.id === "F1").raw} (${f1.reportedCount} reported, ${f1.excludedMissingAnnDateCount} missing ann_date excluded, target ${targetPeriod}, latest ${f1.latestAnnDate})`);
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
