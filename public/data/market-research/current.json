@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-17T07:19:17.045Z",
+  "generatedAt": "2026-08-17T07:28:05.632Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2 cross-verified by PBOC",
@@ -10,7 +10,8 @@
     ],
     "apis": [
       "index_dailybasic",
-      "cn_m"
+      "cn_m",
+      "shibor"
     ],
     "instruments": [
       {
@@ -41,8 +42,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L2、B3、B5已生成",
-    "diagnosis": "当前仅L2、B3、B5已由真实数据生成，其余11项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L1、L2、B3、B5已生成",
+    "diagnosis": "当前仅L1、L2、B3、B5已由真实数据生成，其余10项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -69,8 +70,8 @@
       "title": "货币信用",
       "score": null,
       "status": "数据接入中",
-      "coverage": "1/5",
-      "updatedAt": "2026-08-14",
+      "coverage": "2/5",
+      "updatedAt": "2026-08-17",
       "tone": "pending",
       "trend": [],
       "drivers": [],
@@ -165,12 +166,19 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "21.4%",
+    "coverage": "28.6%",
     "pitStatus": "待接入",
-    "warning": "仅L2、B3、B5已由真实数据生成，其余11项待接入"
+    "warning": "仅L1、L2、B3、B5已由真实数据生成，其余10项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
+    {
+      "date": "08-17",
+      "title": "L1名义资金利率代理快照生成",
+      "detail": "SHIBOR隔夜 1.3620% / 1周 1.3854% / 3月 1.4300% / 1年 1.4800% / 1Y-ON期限差 +0.1180pct",
+      "group": "L1",
+      "tone": "blue"
+    },
     {
       "date": "08-14",
       "title": "L2货币供应量快照生成",
@@ -257,15 +265,15 @@
         "id": "L1",
         "name": "利率与实际利率",
         "score": null,
-        "raw": null,
+        "raw": "SHIBOR隔夜 1.3620% / 1周 1.3854% / 3月 1.4300% / 1年 1.4800% / 1Y-ON期限差 +0.1180pct",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-17",
+        "release": "2026-08-17",
+        "coverage": "4/4名义期限",
+        "quality": "A",
+        "note": "当前仅接入SHIBOR隔夜、1周、3月、1年真实名义资金利率，作为L1第一阶段名义利率代理；尚未接入CPI/通胀预期和实际利率，也不计算历史分位、趋势和L1评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "L2",

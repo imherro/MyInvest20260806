@@ -168,7 +168,36 @@ export function buildL2Snapshot(rows, report, official) {
   return { m1Yoy, m2Yoy, gap: m1Yoy - m2Yoy, period: displayMonth(report.dataMonth), release: report.listingDate };
 }
 
-export function buildGeneratedCurrent(template, snapshot, l2, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function selectLatestShiborSnapshot(rows, requestedAsOf) {
+  const requested = compactDate(requestedAsOf);
+  const windowStart = compactDate(subtractDays(requestedAsOf, 30));
+  const validDate = value => {
+    if (!/^\d{8}$/.test(String(value ?? ""))) return false;
+    const displayed = displayDate(String(value));
+    const parsed = new Date(`${displayed}T00:00:00Z`);
+    return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().slice(0, 10) === displayed;
+  };
+  const eligibleDates = rows.map(row => String(row?.date ?? "")).filter(date => validDate(date) && date >= windowStart && date <= requested).sort().reverse();
+  const selectedDate = eligibleDates[0];
+  if (!selectedDate) throw new Error(`No valid Tushare shibor row found in the 30-day window ending ${requestedAsOf}`);
+  const matches = rows.filter(row => String(row?.date) === selectedDate);
+  if (matches.length !== 1) throw new Error(`Tushare shibor must contain exactly one row for ${selectedDate}`);
+  const row = matches[0];
+  const finiteRate = (value, label) => {
+    const rate = value === null || value === undefined || value === "" ? Number.NaN : Number(value);
+    if (!Number.isFinite(rate)) throw new Error(`Invalid SHIBOR ${label} for ${selectedDate}`);
+    return rate;
+  };
+  const overnight = finiteRate(row.on, "ON");
+  const oneWeek = finiteRate(row["1w"], "1W");
+  const threeMonth = finiteRate(row["3m"], "3M");
+  const oneYear = finiteRate(row["1y"], "1Y");
+  const termSpread = oneYear - overnight;
+  if (!Number.isFinite(termSpread)) throw new Error(`Invalid SHIBOR 1Y-ON term spread for ${selectedDate}`);
+  return { date: displayDate(selectedDate), overnight, oneWeek, threeMonth, oneYear, termSpread };
+}
+
+export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -178,12 +207,18 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
   const b5Raw = `沪深300换手率 ${broad.turnoverRate.toFixed(2)}%（自由流通 ${broad.turnoverRateF.toFixed(2)}%）；创业板指换手率 ${technology.turnoverRate.toFixed(2)}%（自由流通 ${technology.turnoverRateF.toFixed(2)}%）；自由流通换手比 ${relativeFreeTurnover.toFixed(2)}x`;
   const gapText = `${l2.gap >= 0 ? "+" : ""}${l2.gap.toFixed(2)}pct`;
   const l2Raw = `M1同比 ${l2.m1Yoy.toFixed(2)}% / M2同比 ${l2.m2Yoy.toFixed(2)}% / 剪刀差 ${gapText}`;
+  const spreadText = `${l1.termSpread >= 0 ? "+" : ""}${l1.termSpread.toFixed(4)}pct`;
+  const l1Raw = `SHIBOR隔夜 ${l1.overnight.toFixed(4)}% / 1周 ${l1.oneWeek.toFixed(4)}% / 3月 ${l1.threeMonth.toFixed(4)}% / 1年 ${l1.oneYear.toFixed(4)}% / 1Y-ON期限差 ${spreadText}`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
-  components.L = components.L.map(indicator => indicator.id === "L2" ? {
-    ...indicator, raw: l2Raw, period: l2.period, release: l2.release, coverage: "100%", quality: "A",
-    note: `${l2.period >= "2025-01" ? "真实货币供应量月度快照；发布日期由中国人民银行金融统计数据报告确认，M1/M2与Tushare cn_m交叉校验一致；M1按2025年1月起修订口径理解。" : "该月份属于历史M1统计口径，不得与2025年后的新口径序列直接拼接。"}历史分位、趋势和L2评分尚未实现。`, dataStatus: "generated",
-  } : indicator);
+  components.L = components.L.map(indicator => {
+    if (indicator.id === "L1") return { ...indicator, raw: l1Raw, period: l1.date, release: l1.date, coverage: "4/4名义期限", quality: "A", note: "当前仅接入SHIBOR隔夜、1周、3月、1年真实名义资金利率，作为L1第一阶段名义利率代理；尚未接入CPI/通胀预期和实际利率，也不计算历史分位、趋势和L1评分。", dataStatus: "generated" };
+    if (indicator.id === "L2") return {
+      ...indicator, raw: l2Raw, period: l2.period, release: l2.release, coverage: "100%", quality: "A",
+      note: `${l2.period >= "2025-01" ? "真实货币供应量月度快照；发布日期由中国人民银行金融统计数据报告确认，M1/M2与Tushare cn_m交叉校验一致；M1按2025年1月起修订口径理解。" : "该月份属于历史M1统计口径，不得与2025年后的新口径序列直接拼接。"}历史分位、趋势和L2评分尚未实现。`, dataStatus: "generated",
+    };
+    return indicator;
+  });
   components.B = components.B.map(indicator => {
     if (indicator.id === "B3") return { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" };
     if (indicator.id === "B5") return { ...indicator, raw: b5Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。", dataStatus: "generated" };
@@ -204,7 +239,7 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
   });
   return {
     ...template, schemaVersion: 3, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
     asOf: requestedAsOf,
     diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
@@ -213,6 +248,7 @@ export function buildGeneratedCurrent(template, snapshot, l2, evidence, requeste
     dataQuality: { grade: "Partial", coverage: totalCoverage, pitStatus: "待接入", warning: `仅${generatedLabel}已由真实数据生成，其余${pendingCount}项待接入` },
     recentHistory: [],
     recentEvents: [
+      { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
@@ -236,13 +272,16 @@ export async function main(argv = process.argv.slice(2)) {
   const report = selectLatestPublishedReport(parsePbcReportIndex(await fetchText(PBOC_INDEX_URL)), requestedAsOf);
   const official = parsePbcFinancialReport(await fetchText(report.href), report);
   const l2 = buildL2Snapshot(await callTushare("cn_m", { m: report.dataMonth }, "month,m1_yoy,m2_yoy", token), report, official);
+  const shiborStartDate = subtractDays(requestedAsOf, 30);
+  const l1 = selectLatestShiborSnapshot(await callTushare("shibor", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,on,1w,3m,1y", token), requestedAsOf);
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, l2, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, l1, l2, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
+  console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
