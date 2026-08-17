@@ -131,7 +131,11 @@ export function parseMofFiscalReportIndex(html) {
     const dataMonth = parseMofFiscalReportTitle(title);
     if (!dataMonth) continue;
     const followingStart = (match.index ?? 0) + match[0].length;
-    const followingEnd = index + 1 < anchors.length ? anchors[index + 1].index : html.length;
+    const remaining = html.slice(followingStart);
+    const nextAnchorOffset = remaining.search(/<a\b/i);
+    const closingItemOffset = remaining.search(/<\/li\s*>/i);
+    const boundaryOffsets = [nextAnchorOffset, closingItemOffset].filter(offset => offset >= 0);
+    const followingEnd = boundaryOffsets.length ? followingStart + Math.min(...boundaryOffsets) : html.length;
     const dateMatch = html.slice(followingStart, followingEnd).match(/\b(\d{4}-\d{2}-\d{2})\b/);
     if (!dateMatch) throw new Error(`MOF listing date missing for ${title}`);
     reports.push({ title, href: validateMofReportUrl(hrefMatch[1]), listingDate: dateMatch[1], dataMonth });

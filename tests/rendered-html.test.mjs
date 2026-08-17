@@ -499,6 +499,10 @@ test("selects the latest non-future MOF listing without borrowing the next item 
   const crossItemDate = `<a href="./202607/a.htm" title="2026年上半年财政收支情况">上半年</a>
     <a href="./202609/b.htm" title="2026年前三季度财政收支情况">前三季度</a><span>2026-10-22</span>`;
   assert.throws(() => parseMofFiscalReportIndex(crossItemDate), /listing date missing/);
+  const outOfItemDate = `<li><a href="./202607/a.htm" title="2026年上半年财政收支情况">上半年</a></li>
+    <span>2026-07-22</span>
+    <li><a href="./202609/b.htm" title="2026年前三季度财政收支情况">前三季度</a><span>2026-10-22</span></li>`;
+  assert.throws(() => parseMofFiscalReportIndex(outOfItemDate), /MOF listing date missing for 2026年上半年财政收支情况/);
 });
 
 test("validates MOF article identity and parses signed fiscal values", async () => {
