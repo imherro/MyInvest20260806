@@ -84,6 +84,14 @@ async function b5HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b5.json", import.meta.url)), "utf8"));
 }
 
+async function b2HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-b2.mjs", import.meta.url).href);
+}
+
+async function b2HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/b2.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -732,6 +740,85 @@ test("missing-token B5 failure preserves B5, B3, B1 and current files", async ()
   const before = await Promise.all(paths.map(value => readFile(value)));
   const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b5.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /TUSHARE_TOKEN is required/);
+  assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("validates the B3 schedule before building B2 history", async () => {
+  const { validateB3Schedule } = await b2HistoryGenerator();
+  const fixture = {
+    schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" },
+    range: { startAsOf: "2026-01-31", endAsOf: "2026-02-28" },
+    points: [
+      { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked" },
+      { asOf: "2026-02-28", periodDate: "2026-02-27", releaseDate: "2026-02-27", revisionStatus: "not_tracked" },
+    ],
+  };
+  assert.equal(validateB3Schedule(fixture, "2026-08-17"), fixture);
+  assert.throws(() => validateB3Schedule({ ...fixture, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/);
+  assert.throws(() => validateB3Schedule({ ...fixture, points: [fixture.points[0], fixture.points[0]], range: { ...fixture.range, endAsOf: fixture.points[0].asOf } }, "2026-08-17"), /unique and strictly ascending/);
+  assert.throws(() => validateB3Schedule({ ...fixture, points: [...fixture.points].reverse(), range: { startAsOf: fixture.range.endAsOf, endAsOf: fixture.range.startAsOf } }, "2026-08-17"), /unique and strictly ascending/);
+  const badDate = structuredClone(fixture); badDate.points[0].releaseDate = "2026-01-29";
+  assert.throws(() => validateB3Schedule(badDate, "2026-08-17"), /PIT dates/);
+  const revision = structuredClone(fixture); revision.points[0].revisionStatus = "final";
+  assert.throws(() => validateB3Schedule(revision, "2026-08-17"), /revisionStatus/);
+});
+
+test("B2 history points directly reuse production B4/B2 snapshot rules", async () => {
+  const { buildB2HistoryPoint, buildB2MonthlyHistory } = await b2HistoryGenerator();
+  const point = { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked" };
+  const rows = [
+    { ts_code: "A", trade_date: "20260130", total_mv: 60, dv_ttm: 2 },
+    { ts_code: "B", trade_date: "20260130", total_mv: 40, dv_ttm: 1 },
+  ];
+  assert.deepEqual(buildB2HistoryPoint(point, rows), { ...point, stockCount: 2, observedCount: 2, missingCount: 0, totalMarketCapWan: 100, observedMarketCapWan: 100, marketCapCoverage: 100, weightedDividendYield: 1.6 });
+  for (const missing of [null, undefined, ""]) {
+    const result = buildB2HistoryPoint(point, [{ ...rows[0], dv_ttm: missing }, rows[1]]);
+    assert.equal(result.observedCount, 1); assert.equal(result.missingCount, 1); assert.equal(result.weightedDividendYield, 1); assert.equal(result.marketCapCoverage, 40);
+  }
+  assert.throws(() => buildB2HistoryPoint(point, rows.map(row => ({ ...row, trade_date: "20260129" }))), /outside 20260130/);
+  assert.throws(() => buildB2HistoryPoint(point, [{ ...rows[0], total_mv: 0 }, rows[1]]), /invalid total_mv/);
+  assert.throws(() => buildB2HistoryPoint(point, [{ ...rows[0], dv_ttm: -1 }, rows[1]]), /invalid dv_ttm/);
+  assert.throws(() => buildB2HistoryPoint(point, [rows[0], { ...rows[0] }]), /duplicate ts_code/);
+  assert.throws(() => buildB2HistoryPoint(point, Array.from({ length: 6000 }, (_, index) => ({ ts_code: `S${index}`, trade_date: "20260130", total_mv: 1, dv_ttm: 1 }))), /6000-row limit/);
+  const b3 = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: point.asOf, endAsOf: point.asOf }, points: [point] };
+  assert.throws(() => buildB2MonthlyHistory(b3, new Map([["20260129", rows]]), "2026-08-17"), /fallback is forbidden/);
+});
+
+test("B2 history generator requests daily_basic once per B3 point with an exact contract", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-b2.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("daily_basic"/g) ?? []).length, 1);
+  assert.match(source, /for \(const point of b3\.points\)/);
+  assert.match(source, /callTushare\("daily_basic", \{ trade_date: compactDate\(point\.periodDate\) \}, FIELDS, token\)/);
+  assert.match(source, /const FIELDS = "ts_code,trade_date,total_mv,dv_ttm"/);
+  assert.doesNotMatch(source, /callTushare\("(?:daily|trade_cal|stock_basic|bak_basic)"/);
+  assert.match(source, /buildB4Snapshot\(rows, snapshot\)/);
+  assert.match(source, /buildB2Snapshot\(rows, snapshot, b4\)/);
+});
+
+test("checked-in B2 history is aligned with B3 and contains valid full-market snapshots", async () => {
+  const [b2, b3] = await Promise.all([b2HistoryData(), b3HistoryData()]);
+  assert.equal(b2.points.length, 139);
+  assert.equal(b2.points.length, b3.points.length);
+  assert.equal(b2.requestedAsOf, b3.requestedAsOf);
+  assert.deepEqual(b2.range, b3.range);
+  for (let index = 0; index < b2.points.length; index += 1) {
+    const point = b2.points[index];
+    for (const key of ["asOf", "periodDate", "releaseDate", "revisionStatus"]) assert.equal(point[key], b3.points[index][key]);
+    assert.ok(point.stockCount > 0); assert.ok(point.observedCount > 0); assert.equal(point.missingCount, point.stockCount - point.observedCount);
+    assert.ok(point.totalMarketCapWan > 0); assert.ok(point.observedMarketCapWan > 0);
+    assert.ok(point.marketCapCoverage > 0 && point.marketCapCoverage <= 100);
+    assert.ok(Number.isFinite(point.weightedDividendYield) && point.weightedDividendYield >= 0);
+  }
+  assert.doesNotMatch(JSON.stringify(b2), /"(?:score|position|trend|percentile|zScore|normalized|signal|state|valuationState|riskLevel|riskFreeRate|dividendSpread)"/);
+});
+
+test("missing-token B2 failure preserves B2, B5, B3, B1 and current files", async () => {
+  const paths = ["../public/data/market-research/history/b2.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value)));
+  const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-b2.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /TUSHARE_TOKEN is required/);
   assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);

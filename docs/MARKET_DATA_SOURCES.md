@@ -70,6 +70,8 @@ SHIBOR属于名义银行间资金利率，官方在每个交易日11:00发布。
 
 当前尚未接入中国长期无风险利率，所以B2只是A股有值样本市值加权TTM股息率代理，不是“股息率－无风险利率”；不计算历史分位、趋势或评分。
 
+阶段04D的B2月度历史继续使用当前已有的 Tushare Pro `daily_basic` API，字段严格为 `ts_code,trade_date,total_mv,dv_ttm`；`dv_ttm` 是TTM股息率，`total_mv` 单位为万元，单次最多6000条。每月只按B3指定的 `periodDate` 请求一次全A截面，空股息率不当作0；历史仍没有无风险利率，因此不是完整B2。
+
 ## B4 总市值/GDP——第一阶段A股当日总市值代理
 
 - 提供方/API：Tushare Pro `daily_basic`，与B2共享一次请求，字段严格为 `ts_code,trade_date,total_mv,dv_ttm`；`total_mv` 单位为万元。

@@ -32,3 +32,11 @@ B5历史以B3为唯一月度日期日程表，逐点继承日期、范围与 `re
 ```powershell
 node scripts/generate-market-research-history-b5.mjs --as-of 2026-08-17
 ```
+
+## B2 全市场月度股息率截面历史
+
+阶段04D新增B2月度市值加权TTM股息率代理历史。日期逐点继承B3，每月按B3指定交易日请求一次全A `daily_basic` 截面，并直接复用当前快照的B4总市值校验与B2加权计算逻辑。空 `dv_ttm` 不当作0，而是从有值样本及其市值中排除。当前仍未接入中国长期无风险利率，所以不是完整的“股息率－无风险利率”指标，也不包含评分、分位或状态判断。
+
+```powershell
+node scripts/generate-market-research-history-b2.mjs --as-of 2026-08-17
+```
