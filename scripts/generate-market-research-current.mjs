@@ -112,7 +112,25 @@ export function parsePbcFinancialReport(html, expectedReport) {
   const publishedAt = publishedMatch[1];
   if (publishedAt.slice(0, 10) !== expectedReport.listingDate) throw new Error("PBOC article date does not match its listing date");
   const text = htmlToText(html);
-  return { title, publishedAt, m1Yoy: parseYearOnYear(text, "狭义货币（M1）"), m2Yoy: parseYearOnYear(text, "广义货币（M2）") };
+  const stockMatch = text.match(/社会融资规模存量为\s*([0-9]+(?:\.[0-9]+)?)\s*万亿元[，,]\s*同比(增长|下降)\s*([0-9]+(?:\.[0-9]+)?)%/)
+    ?? text.match(/社会融资规模存量为\s*([0-9]+(?:\.[0-9]+)?)\s*万亿元[，,]\s*(同比持平)/);
+  if (!stockMatch) throw new Error("Unable to parse PBOC social financing stock and year-on-year value");
+  const socialFinancingStock = Number(stockMatch[1]);
+  const socialFinancingStockYoy = stockMatch[2] === "同比持平" ? 0 : (stockMatch[2] === "下降" ? -1 : 1) * Number(stockMatch[3]);
+  const incrementMatch = text.match(/社会融资规模增量累计为\s*([0-9]+(?:\.[0-9]+)?)\s*万亿元/);
+  if (!incrementMatch) throw new Error("Unable to parse PBOC social financing cumulative increment");
+  const socialFinancingIncrementCum = Number(incrementMatch[1]);
+  if (![socialFinancingStock, socialFinancingStockYoy, socialFinancingIncrementCum].every(Number.isFinite)) {
+    throw new Error("PBOC social financing values are not finite");
+  }
+  return {
+    title, publishedAt,
+    m1Yoy: parseYearOnYear(text, "狭义货币（M1）"),
+    m2Yoy: parseYearOnYear(text, "广义货币（M2）"),
+    socialFinancingStock,
+    socialFinancingStockYoy,
+    socialFinancingIncrementCum,
+  };
 }
 
 export async function fetchText(url, fetchImpl = fetch) {
@@ -168,6 +186,44 @@ export function buildL2Snapshot(rows, report, official) {
   return { m1Yoy, m2Yoy, gap: m1Yoy - m2Yoy, period: displayMonth(report.dataMonth), release: report.listingDate };
 }
 
+export function buildL3Snapshot(rows, report, official) {
+  const matches = rows.filter(row => String(row.month) === report.dataMonth);
+  if (matches.length !== 1) throw new Error(`Tushare sf_month must contain exactly one row for ${report.dataMonth}`);
+  const row = matches[0];
+  const finiteValue = (value, label) => {
+    const numeric = value === null || value === undefined || value === "" ? Number.NaN : Number(value);
+    if (!Number.isFinite(numeric)) throw new Error(`Tushare sf_month contains invalid ${label} for ${report.dataMonth}`);
+    return numeric;
+  };
+  const incMonth = finiteValue(row.inc_month, "inc_month");
+  const incCumval = finiteValue(row.inc_cumval, "inc_cumval");
+  const stock = finiteValue(row.stk_endval, "stk_endval");
+  const officialStock = finiteValue(official.socialFinancingStock, "PBOC socialFinancingStock");
+  const officialStockYoy = finiteValue(official.socialFinancingStockYoy, "PBOC socialFinancingStockYoy");
+  const officialIncrementCum = finiteValue(official.socialFinancingIncrementCum, "PBOC socialFinancingIncrementCum");
+  if (stock <= 0) throw new Error(`Tushare sf_month stk_endval must be greater than zero for ${report.dataMonth}`);
+  const incMonthTrillion = incMonth / 10000;
+  const incCumTrillion = incCumval / 10000;
+  const stockDifference = Math.abs(officialStock - stock);
+  const cumulativeDifference = Math.abs(officialIncrementCum - incCumTrillion);
+  const exceedsTolerance = difference => difference > 0.005 + 1e-12;
+  if (exceedsTolerance(stockDifference)) throw new Error("PBOC/Tushare social financing stock values differ by more than 0.005 trillion yuan");
+  if (exceedsTolerance(cumulativeDifference)) throw new Error("PBOC/Tushare social financing cumulative increment values differ by more than 0.005 trillion yuan");
+  return {
+    month: report.dataMonth,
+    incMonth,
+    incCumval,
+    stock,
+    incMonthTrillion,
+    incCumTrillion,
+    stockYoy: officialStockYoy,
+    stockDifference,
+    cumulativeDifference,
+    period: displayMonth(report.dataMonth),
+    release: report.listingDate,
+  };
+}
+
 export function selectLatestShiborSnapshot(rows, requestedAsOf) {
   const requested = compactDate(requestedAsOf);
   const windowStart = compactDate(subtractDays(requestedAsOf, 30));
@@ -197,7 +253,7 @@ export function selectLatestShiborSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), overnight, oneWeek, threeMonth, oneYear, termSpread };
 }
 
-export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
@@ -209,6 +265,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requ
   const l2Raw = `M1同比 ${l2.m1Yoy.toFixed(2)}% / M2同比 ${l2.m2Yoy.toFixed(2)}% / 剪刀差 ${gapText}`;
   const spreadText = `${l1.termSpread >= 0 ? "+" : ""}${l1.termSpread.toFixed(4)}pct`;
   const l1Raw = `SHIBOR隔夜 ${l1.overnight.toFixed(4)}% / 1周 ${l1.oneWeek.toFixed(4)}% / 3月 ${l1.threeMonth.toFixed(4)}% / 1年 ${l1.oneYear.toFixed(4)}% / 1Y-ON期限差 ${spreadText}`;
+  const l3Raw = `社融当月增量 ${l3.incMonthTrillion.toFixed(4)}万亿元 / 年内累计 ${l3.incCumTrillion.toFixed(2)}万亿元 / 存量 ${l3.stock.toFixed(2)}万亿元 / 存量同比 ${l3.stockYoy.toFixed(1)}%`;
   const pending = indicator => ({ ...indicator, score: null, raw: null, position: null, trend: null, period: null, release: null, coverage: null, quality: null, note: "真实数据尚未接入", dataStatus: "pending" });
   const components = Object.fromEntries(Object.entries(template.components).map(([code, indicators]) => [code, indicators.map(pending)]));
   components.L = components.L.map(indicator => {
@@ -216,6 +273,10 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requ
     if (indicator.id === "L2") return {
       ...indicator, raw: l2Raw, period: l2.period, release: l2.release, coverage: "100%", quality: "A",
       note: `${l2.period >= "2025-01" ? "真实货币供应量月度快照；发布日期由中国人民银行金融统计数据报告确认，M1/M2与Tushare cn_m交叉校验一致；M1按2025年1月起修订口径理解。" : "该月份属于历史M1统计口径，不得与2025年后的新口径序列直接拼接。"}历史分位、趋势和L2评分尚未实现。`, dataStatus: "generated",
+    };
+    if (indicator.id === "L3") return {
+      ...indicator, raw: l3Raw, period: l3.period, release: l3.release, coverage: "1/1全国社融", quality: "A",
+      note: "当前接入全国社会融资规模当月增量、累计增量、存量及存量同比，作为L3第一阶段信用规模代理；尚未计算真正的信用脉冲——未做历史增量变化、名义GDP归一化或滚动标准化，因此不计算L3评分。", dataStatus: "generated",
     };
     return indicator;
   });
@@ -239,7 +300,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requ
   });
   return {
     ...template, schemaVersion: 3, generatedAt,
-    source: { mode: "generated", label: "Real current snapshot; L2 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
+    source: { mode: "generated", label: "Real current snapshot; L2/L3 cross-verified by PBOC", providers: ["Tushare Pro", "中国人民银行"], apis: ["index_dailybasic", "cn_m", "shibor", "sf_month"], instruments: MARKET_INDEX_INSTRUMENTS, releaseEvidence: { L2: { provider: "中国人民银行", indexUrl: PBOC_INDEX_URL, reportTitle: evidence.title, reportUrl: evidence.href, publishedAt: evidence.publishedAt } } },
     asOf: requestedAsOf,
     diagnosis: { states: ["F 待计算", "L 数据接入中", "B 数据接入中"], headline: `真实市场数据接入中：${generatedLabel}已生成`, diagnosis: `当前仅${generatedLabel}已由真实数据生成，其余${pendingCount}项尚未接入，因此暂不形成F/L/B综合市场判断。`, investmentImplication: null, riskNote: null, positionBias: null },
     cards, policyOverlay: { status: null, tone: "pending", reasons: [] },
@@ -250,6 +311,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, evidence, requ
     recentEvents: [
       { date: l1.date.slice(5), title: "L1名义资金利率代理快照生成", detail: l1Raw, group: "L1", tone: "blue" },
       { date: l2.release.slice(5), title: "L2货币供应量快照生成", detail: l2Raw, group: "L2", tone: "blue" },
+      { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
     ].sort((a, b) => b.date.localeCompare(a.date)), components,
@@ -274,15 +336,17 @@ export async function main(argv = process.argv.slice(2)) {
   const l2 = buildL2Snapshot(await callTushare("cn_m", { m: report.dataMonth }, "month,m1_yoy,m2_yoy", token), report, official);
   const shiborStartDate = subtractDays(requestedAsOf, 30);
   const l1 = selectLatestShiborSnapshot(await callTushare("shibor", { start_date: compactDate(shiborStartDate), end_date: compactDate(requestedAsOf) }, "date,on,1w,3m,1y", token), requestedAsOf);
+  const l3 = buildL3Snapshot(await callTushare("sf_month", { m: report.dataMonth }, "month,inc_month,inc_cumval,stk_endval", token), report, official);
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, l1, l2, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, { ...report, publishedAt: official.publishedAt }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
   console.log(`PBOC: ${report.title} (${official.publishedAt})`);
   console.log(`L1: ${current.components.L.find(indicator => indicator.id === "L1").raw}`);
   console.log(`L2: ${current.components.L.find(indicator => indicator.id === "L2").raw}`);
+  console.log(`L3: ${current.components.L.find(indicator => indicator.id === "L3").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
 }

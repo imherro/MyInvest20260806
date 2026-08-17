@@ -84,7 +84,7 @@ test("current.json contains the complete F/L/B market research contract", async 
   assert.equal(current.schemaVersion, 3);
   assert.equal(current.source.mode, "generated");
   assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行"]);
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month"]);
   assert.equal("api" in current.source, false);
   assert.equal(current.source.releaseEvidence.L2.provider, "中国人民银行");
   assert.doesNotMatch(JSON.stringify(current.source), /cn_schedule/);
@@ -136,13 +136,14 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains real L1, L2, B3 and B5 snapshots with 10 explicitly pending indicators", async () => {
+test("contains real L1, L2, L3, B3 and B5 snapshots with 9 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
   const l2 = current.components.L.find((item) => item.id === "L2");
   const b5 = current.components.B.find((item) => item.id === "B5");
   const l1 = current.components.L.find((item) => item.id === "L1");
+  const l3 = current.components.L.find((item) => item.id === "L3");
 
   assert.equal(b3.dataStatus, "generated");
   assert.match(b3.raw, /沪深300 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}；创业板指 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}/);
@@ -168,6 +169,16 @@ test("contains real L1, L2, B3 and B5 snapshots with 10 explicitly pending indic
   assert.match(l1.note, /名义利率代理/);
   assert.match(l1.note, /尚未接入.*实际利率/);
   assert.match(l1.note, /不计算.*L1评分/);
+  assert.equal(l3.dataStatus, "generated");
+  assert.match(l3.raw, /社融当月增量 -?\d+\.\d{4}万亿元 \/ 年内累计 -?\d+\.\d{2}万亿元 \/ 存量 \d+\.\d{2}万亿元 \/ 存量同比 -?\d+\.\d%/);
+  assert.equal(l3.period, l2.period);
+  assert.equal(l3.release, l2.release);
+  assert.equal(l3.score, null);
+  assert.equal(l3.position, null);
+  assert.equal(l3.trend, null);
+  assert.match(l3.note, /第一阶段信用规模代理/);
+  assert.match(l3.note, /未做.*GDP归一化/);
+  assert.match(l3.note, /不计算L3评分/);
   assert.equal(b5.dataStatus, "generated");
   assert.match(b5.raw, /沪深300换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；创业板指换手率 \d+\.\d{2}%（自由流通 \d+\.\d{2}%）；自由流通换手比 \d+\.\d{2}x/);
   assert.equal(b5.period, b3.period);
@@ -177,25 +188,31 @@ test("contains real L1, L2, B3 and B5 snapshots with 10 explicitly pending indic
   assert.equal(b5.trend, null);
   assert.match(b5.note, /第一阶段交易活跃度代理/);
   assert.match(b5.note, /不计算B5评分/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 4);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 10);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 5);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 9);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "28.6%");
+  assert.equal(current.dataQuality.coverage, "35.7%");
   assert.equal(current.dataQuality.pitStatus, "待接入");
-  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "2/5", "2/5"]);
-  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release].sort().reverse()[0]);
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "3/5", "2/5"]);
+  assert.equal(current.cards.find((card) => card.code === "L").updatedAt, [l1.release, l2.release, l3.release].sort().reverse()[0]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
 
-test("disables unsupported aggregate diagnoses while only four indicators are generated", async () => {
+test("disables unsupported aggregate diagnoses while only five indicators are generated", async () => {
   const current = await currentMarketData();
   const serialized = JSON.stringify({ diagnosis: current.diagnosis, jointState: current.jointState });
 
   assert.doesNotMatch(serialized, /F 偏强|L 偏正|B 温热|黄金环境|热牛阶段/);
   assert.equal(current.diagnosis.investmentImplication, null);
+  assert.equal(current.diagnosis.riskNote, null);
   assert.equal(current.diagnosis.positionBias, null);
   assert.equal(current.jointState.nearestState, null);
+  assert.equal(current.jointState.transitioningTo, null);
+  assert.equal(current.jointState.trendLabel, null);
+  assert.equal(current.jointState.description, "数据不足，暂不判断");
+  assert.equal(current.dataQuality.pitStatus, "待接入");
+  assert.ok(current.cards.every((card) => card.score === null));
 });
 
 test("selects the latest common trading date and builds mixed-frequency current data offline", async () => {
@@ -211,31 +228,34 @@ test("selects the latest common trading date and builds mixed-frequency current 
   const snapshot = selectLatestCommonSnapshot(rows, "2026-08-17");
   const l2 = { m1Yoy: 4, m2Yoy: 7.7, gap: -3.7, period: "2026-07", release: "2026-08-14" };
   const l1 = { date: "2026-08-14", overnight: 1.2345, oneWeek: 1.3456, threeMonth: 1.4567, oneYear: 1.5678, termSpread: 0.3333 };
+  const l3 = { month: "202607", incMonth: 12345, incCumval: 222500, stock: 463.27, incMonthTrillion: 1.2345, incCumTrillion: 22.25, stockYoy: 7.4, stockDifference: 0, cumulativeDifference: 0, period: "2026-07", release: "2026-08-14" };
   const evidence = { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" };
-  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
+  const generated = buildGeneratedCurrent(template, snapshot, l1, l2, l3, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
   assert.equal(generated.asOf, "2026-08-17");
   assert.equal(generated.components.B[2].period, "2026-08-14");
   assert.equal(generated.components.L[1].period, "2026-07");
   assert.deepEqual(snapshot.values["000300.SH"], { peTtm: 14.3637, pb: 1.4639, turnoverRate: 0.5, turnoverRateF: 1 });
-  assert.equal(generated.dataQuality.coverage, "28.6%");
+  assert.equal(generated.dataQuality.coverage, "35.7%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
   assert.match(generated.components.B[4].raw, /0\.50%.*1\.00%.*2\.00%.*4\.00%.*4\.00x/);
   assert.equal(generated.components.B[4].period, generated.components.B[2].period);
   assert.equal(generated.components.B[4].release, generated.components.B[2].release);
   assert.match(generated.components.L[0].raw, /1\.2345%.*1\.3456%.*1\.4567%.*1\.5678%.*\+0\.3333pct/);
-  assert.match(generated.diagnosis.headline, /L1、L2、B3、B5/);
-  assert.match(generated.dataQuality.warning, /其余10项/);
+  assert.match(generated.components.L[2].raw, /1\.2345万亿元.*22\.25万亿元.*463\.27万亿元.*7\.4%/);
+  assert.match(generated.diagnosis.headline, /L1、L2、L3、B3、B5/);
+  assert.match(generated.dataQuality.warning, /其余9项/);
   assert.equal(generated.recentEvents.some((event) => event.group === "L1" && event.detail === generated.components.L[0].raw), true);
   assert.equal(generated.recentEvents.some((event) => event.group === "B5" && event.detail === generated.components.B[4].raw), true);
+  assert.equal(generated.recentEvents.some((event) => event.group === "L3" && event.detail === generated.components.L[2].raw), true);
 });
 
-test("requests index turnover fields and records the exact three APIs", async () => {
+test("requests index turnover fields and records the exact four APIs", async () => {
   const source = await generatorSource();
   assert.match(source, /"ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f"/);
   const current = await currentMarketData();
-  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m", "shibor", "sf_month"]);
 });
 
 test("selects and validates the latest SHIBOR row within the 30-day as-of window", async () => {
@@ -256,6 +276,12 @@ test("selects and validates the latest SHIBOR row within the 30-day as-of window
 test("requests the exact SHIBOR fields", async () => {
   const source = await generatorSource();
   assert.match(source, /callTushare\("shibor",[^\n]+"date,on,1w,3m,1y"/);
+});
+
+test("requests the exact sf_month fields without another PBOC report fetch", async () => {
+  const source = await generatorSource();
+  assert.match(source, /callTushare\("sf_month", \{ m: report\.dataMonth \}, "month,inc_month,inc_cumval,stk_endval"/);
+  assert.equal((source.match(/fetchText\(report\.href\)/g) ?? []).length, 1);
 });
 
 test("fails closed when the shared B3/B5 snapshot has invalid turnover data", async () => {
@@ -336,14 +362,22 @@ test("PBOC HTML requests reject every HTTP redirect", async () => {
   assert.equal(requestOptions.redirect, "error");
 });
 
-test("validates PBOC article identity, publication date and signed M1/M2 values", async () => {
+test("validates PBOC article identity and parses signed monetary and social-financing values", async () => {
   const { parsePbcFinancialReport } = await marketGenerator();
   const expected = { title: "2026年7月金融统计数据报告", listingDate: "2026-08-14" };
-  const fixture = `<meta name="ArticleTitle" content="2026年7月金融统计数据报告"><span id="shijian">2026-08-14 16:30:05</span><p>广义货币（M2）余额同比增长7.7%。狭义货币（M1）余额同比下降0.4%。</p>`;
-  assert.deepEqual(parsePbcFinancialReport(fixture, expected), { title: expected.title, publishedAt: "2026-08-14 16:30:05", m1Yoy: -0.4, m2Yoy: 7.7 });
+  const base = `<meta name="ArticleTitle" content="2026年7月金融统计数据报告"><span id="shijian">2026-08-14 16:30:05</span><p>广义货币（M2）余额同比增长7.7%。狭义货币（M1）余额同比下降0.4%。`;
+  const fixture = `${base}社会融资规模存量为463.27万亿元，同比增长7.4%。前七个月社会融资规模增量累计为22.25万亿元。</p>`;
+  assert.deepEqual(parsePbcFinancialReport(fixture, expected), {
+    title: expected.title, publishedAt: "2026-08-14 16:30:05", m1Yoy: -0.4, m2Yoy: 7.7,
+    socialFinancingStock: 463.27, socialFinancingStockYoy: 7.4, socialFinancingIncrementCum: 22.25,
+  });
+  assert.equal(parsePbcFinancialReport(`${base}社会融资规模存量为463.27万亿元，同比下降1.2%。社会融资规模增量累计为22.25万亿元。</p>`, expected).socialFinancingStockYoy, -1.2);
+  assert.equal(parsePbcFinancialReport(`${base}社会融资规模存量为463.27万亿元，同比持平。社会融资规模增量累计为22.25万亿元。</p>`, expected).socialFinancingStockYoy, 0);
   assert.throws(() => parsePbcFinancialReport(fixture, { ...expected, title: "错误标题" }), /title mismatch/);
   assert.throws(() => parsePbcFinancialReport(fixture, { ...expected, listingDate: "2026-08-13" }), /does not match/);
   assert.throws(() => parsePbcFinancialReport(fixture.replace("狭义货币（M1）", "M1缺失"), expected), /Unable to parse/);
+  assert.throws(() => parsePbcFinancialReport(fixture.replace("社会融资规模存量为", "社融存量缺失"), expected), /social financing stock/);
+  assert.throws(() => parsePbcFinancialReport(fixture.replace("社会融资规模增量累计为", "社融累计缺失"), expected), /cumulative increment/);
 });
 
 test("builds L2 only when Tushare and PBOC agree within 0.05pct", async () => {
@@ -357,6 +391,33 @@ test("builds L2 only when Tushare and PBOC agree within 0.05pct", async () => {
   assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: "x", m2_yoy: "7.7" }], report, official), /invalid M1\/M2/);
   assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: 3.9, m2_yoy: 7.7 }], report, official), /M1 YoY/);
   assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: 4, m2_yoy: 7.6 }], report, official), /M2 YoY/);
+});
+
+test("builds L3 only from one exact sf_month row and dual-source agreement", async () => {
+  const { buildL3Snapshot } = await marketGenerator();
+  const report = { dataMonth: "202607", listingDate: "2026-08-14" };
+  const official = { socialFinancingStock: 463.27, socialFinancingStockYoy: 7.4, socialFinancingIncrementCum: 22.25 };
+  const row = { month: "202607", inc_month: 12345, inc_cumval: 222500, stk_endval: 463.27 };
+  const result = buildL3Snapshot([row, { ...row, month: "202606" }], report, official);
+  assert.deepEqual(result, {
+    month: "202607", incMonth: 12345, incCumval: 222500, stock: 463.27,
+    incMonthTrillion: 1.2345, incCumTrillion: 22.25, stockYoy: 7.4,
+    stockDifference: 0, cumulativeDifference: 0, period: "2026-07", release: "2026-08-14",
+  });
+  assert.equal(buildL3Snapshot([{ ...row, inc_month: -100 }], report, official).incMonthTrillion, -0.01);
+  assert.throws(() => buildL3Snapshot([], report, official), /exactly one row/);
+  assert.throws(() => buildL3Snapshot([row, row], report, official), /exactly one row/);
+  for (const invalid of [null, "", Number.NaN]) {
+    assert.throws(() => buildL3Snapshot([{ ...row, inc_month: invalid }], report, official), /invalid inc_month/);
+  }
+  assert.throws(() => buildL3Snapshot([{ ...row, inc_cumval: Infinity }], report, official), /invalid inc_cumval/);
+  assert.throws(() => buildL3Snapshot([{ ...row, stk_endval: undefined }], report, official), /invalid stk_endval/);
+  assert.throws(() => buildL3Snapshot([{ ...row, stk_endval: 0 }], report, official), /greater than zero/);
+  assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingStock: Number.NaN }), /PBOC socialFinancingStock/);
+  assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingStockYoy: null }), /PBOC socialFinancingStockYoy/);
+  assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingIncrementCum: Infinity }), /PBOC socialFinancingIncrementCum/);
+  assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingStock: 463.276 }), /stock values differ/);
+  assert.throws(() => buildL3Snapshot([row], report, { ...official, socialFinancingIncrementCum: 22.256 }), /cumulative increment values differ/);
 });
 
 test("rejects future as-of dates", async () => {
