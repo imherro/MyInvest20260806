@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-08-17T08:03:11.392Z",
+  "generatedAt": "2026-08-17T08:15:29.131Z",
   "source": {
     "mode": "generated",
     "label": "Real current snapshot; L2/L3 PBOC-verified; L4 MOF official",
@@ -52,8 +52,8 @@
       "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B3、B5已生成",
-    "diagnosis": "当前仅L1、L2、L3、L4、L5、B3、B5已由真实数据生成，其余7项尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L1、L2、L3、L4、L5、B1、B3、B5已生成",
+    "diagnosis": "当前仅L1、L2、L3、L4、L5、B1、B3、B5已由真实数据生成，其余6项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -94,7 +94,7 @@
       "title": "估值泡沫",
       "score": null,
       "status": "数据接入中",
-      "coverage": "2/5",
+      "coverage": "3/5",
       "updatedAt": "2026-08-14",
       "tone": "pending",
       "trend": [],
@@ -176,9 +176,9 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "50.0%",
+    "coverage": "57.1%",
     "pitStatus": "待接入",
-    "warning": "仅L1、L2、L3、L4、L5、B3、B5已由真实数据生成，其余7项待接入"
+    "warning": "仅L1、L2、L3、L4、L5、B1、B3、B5已由真实数据生成，其余6项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
@@ -208,6 +208,13 @@
       "title": "L5外部金融条件代理快照生成",
       "detail": "美国10年实际国债收益率 2.41%",
       "group": "L5",
+      "tone": "blue"
+    },
+    {
+      "date": "08-14",
+      "title": "B1指数盈利收益率代理快照生成",
+      "detail": "沪深300盈利收益率 6.96%；创业板指盈利收益率 2.25%",
+      "group": "B1",
       "tone": "blue"
     },
     {
@@ -368,15 +375,15 @@
         "id": "B1",
         "name": "ERP股权风险溢价",
         "score": null,
-        "raw": null,
+        "raw": "沪深300盈利收益率 6.96%；创业板指盈利收益率 2.25%",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-08-14",
+        "release": "2026-08-14",
+        "coverage": "2/2代理指数",
+        "quality": "A",
+        "note": "当前仅根据沪深300与创业板指PE TTM反算指数盈利收益率，作为B1第一阶段股权端收益率代理；尚未接入中国长期无风险利率，因此当前不是ERP，也不计算历史分位、趋势或B1评分。",
+        "dataStatus": "generated"
       },
       {
         "id": "B2",

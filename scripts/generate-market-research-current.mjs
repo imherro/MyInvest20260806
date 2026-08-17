@@ -266,6 +266,21 @@ export function selectLatestCommonSnapshot(rowsByCode, requestedAsOf) {
   return { tradeDate, values };
 }
 
+export function buildB1Snapshot(snapshot) {
+  const earningsYield = (value, label) => {
+    const peTtm = value === null || value === undefined || value === "" ? Number.NaN : Number(value);
+    if (!Number.isFinite(peTtm) || peTtm <= 0) throw new Error(`${label} PE TTM must be finite and greater than zero`);
+    const result = 100 / peTtm;
+    if (!Number.isFinite(result)) throw new Error(`${label} earnings yield is not finite`);
+    return result;
+  };
+  return {
+    tradeDate: snapshot.tradeDate,
+    broadEarningsYield: earningsYield(snapshot.values?.["000300.SH"]?.peTtm, "沪深300"),
+    growthEarningsYield: earningsYield(snapshot.values?.["399006.SZ"]?.peTtm, "创业板指"),
+  };
+}
+
 export function buildL2Snapshot(rows, report, official) {
   const matches = rows.filter(row => String(row.month) === report.dataMonth);
   if (matches.length !== 1) throw new Error(`Tushare cn_m must contain exactly one row for ${report.dataMonth}`);
@@ -364,11 +379,12 @@ export function selectLatestUsRealYieldSnapshot(rows, requestedAsOf) {
   return { date: displayDate(selectedDate), y10 };
 }
 
-export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
+export function buildGeneratedCurrent(template, snapshot, b1, l1, l2, l3, l4, l5, evidence, requestedAsOf, generatedAt = new Date().toISOString()) {
   const b3Date = displayDate(snapshot.tradeDate);
   const broad = snapshot.values["000300.SH"];
   const technology = snapshot.values["399006.SZ"];
   const b3Raw = `沪深300 PE TTM ${broad.peTtm.toFixed(2)} / PB ${broad.pb.toFixed(2)}；创业板指 PE TTM ${technology.peTtm.toFixed(2)} / PB ${technology.pb.toFixed(2)}`;
+  const b1Raw = `沪深300盈利收益率 ${b1.broadEarningsYield.toFixed(2)}%；创业板指盈利收益率 ${b1.growthEarningsYield.toFixed(2)}%`;
   const relativeFreeTurnover = technology.turnoverRateF / broad.turnoverRateF;
   if (!Number.isFinite(relativeFreeTurnover)) throw new Error("Relative free-turnover ratio is not finite");
   const b5Raw = `沪深300换手率 ${broad.turnoverRate.toFixed(2)}%（自由流通 ${broad.turnoverRateF.toFixed(2)}%）；创业板指换手率 ${technology.turnoverRate.toFixed(2)}%（自由流通 ${technology.turnoverRateF.toFixed(2)}%）；自由流通换手比 ${relativeFreeTurnover.toFixed(2)}x`;
@@ -403,6 +419,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, ev
     return indicator;
   });
   components.B = components.B.map(indicator => {
+    if (indicator.id === "B1") return { ...indicator, raw: b1Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅根据沪深300与创业板指PE TTM反算指数盈利收益率，作为B1第一阶段股权端收益率代理；尚未接入中国长期无风险利率，因此当前不是ERP，也不计算历史分位、趋势或B1评分。", dataStatus: "generated" };
     if (indicator.id === "B3") return { ...indicator, raw: b3Raw, period: b3Date, release: b3Date, coverage: "100%", quality: "A", note: "当前为真实截面估值；历史分位和最终B3评分尚未实现。", dataStatus: "generated" };
     if (indicator.id === "B5") return { ...indicator, raw: b5Raw, period: b3Date, release: b3Date, coverage: "2/2代理指数", quality: "A", note: "当前仅接入沪深300与创业板指真实换手率截面，作为B5第一阶段交易活跃度代理；尚未接入全市场涨跌停、市场宽度、成交集中度和历史分位，因此不能据此判断投机高温或低温，也不计算B5评分。", dataStatus: "generated" };
     return indicator;
@@ -436,6 +453,7 @@ export function buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, ev
       { date: l3.release.slice(5), title: "L3社会融资规模代理快照生成", detail: l3Raw, group: "L3", tone: "blue" },
       { date: l4.listingDate.slice(5), title: "L4财政收支规模代理快照生成", detail: l4Raw, group: "L4", tone: "blue" },
       { date: l5.date.slice(5), title: "L5外部金融条件代理快照生成", detail: l5Raw, group: "L5", tone: "blue" },
+      { date: b3Date.slice(5), title: "B1指数盈利收益率代理快照生成", detail: b1Raw, group: "B1", tone: "blue" },
       { date: b3Date.slice(5), title: "B3真实估值截面生成", detail: b3Raw, group: "B3", tone: "blue" },
       { date: b3Date.slice(5), title: "B5交易活跃度代理快照生成", detail: b5Raw, group: "B5", tone: "blue" },
     ].sort((a, b) => b.date.localeCompare(a.date)), components,
@@ -455,6 +473,7 @@ export async function main(argv = process.argv.slice(2)) {
   const startDate = subtractDays(requestedAsOf, 45);
   const rows = await Promise.all(MARKET_INDEX_INSTRUMENTS.map(async instrument => [instrument.code, await callTushare("index_dailybasic", { ts_code: instrument.code, start_date: compactDate(startDate), end_date: compactDate(requestedAsOf) }, "ts_code,trade_date,pe_ttm,pb,turnover_rate,turnover_rate_f", token)]));
   const snapshot = selectLatestCommonSnapshot(Object.fromEntries(rows), requestedAsOf);
+  const b1 = buildB1Snapshot(snapshot);
   const report = selectLatestPublishedReport(parsePbcReportIndex(await fetchText(PBOC_INDEX_URL)), requestedAsOf);
   const official = parsePbcFinancialReport(await fetchText(report.href), report);
   const l2 = buildL2Snapshot(await callTushare("cn_m", { m: report.dataMonth }, "month,m1_yoy,m2_yoy", token), report, official);
@@ -467,7 +486,7 @@ export async function main(argv = process.argv.slice(2)) {
   const l4 = { ...mofOfficial, dataMonth: mofReport.dataMonth, listingDate: mofReport.listingDate };
   const target = path.resolve("public/data/market-research/current.json");
   const template = JSON.parse(await readFile(target, "utf8"));
-  const current = buildGeneratedCurrent(template, snapshot, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
+  const current = buildGeneratedCurrent(template, snapshot, b1, l1, l2, l3, l4, l5, { pbc: { ...report, publishedAt: official.publishedAt }, mof: { ...mofReport, publishedAt: mofOfficial.publishedAt } }, requestedAsOf);
   if (!isMarketResearchCurrent(current)) throw new Error("Generated current.json failed the current MarketResearchCurrent contract");
   await writeAtomically(target, current);
   console.log(`Generated ${path.relative(process.cwd(), target)} with information cutoff ${current.asOf}`);
@@ -478,6 +497,7 @@ export async function main(argv = process.argv.slice(2)) {
   console.log(`MOF: ${mofReport.title} (${mofOfficial.publishedAt}) ${mofReport.href}`);
   console.log(`L4: ${current.components.L.find(indicator => indicator.id === "L4").raw}`);
   console.log(`L5: ${current.components.L.find(indicator => indicator.id === "L5").raw}`);
+  console.log(`B1: ${current.components.B.find(indicator => indicator.id === "B1").raw}`);
   console.log(`B3: ${current.components.B.find(indicator => indicator.id === "B3").raw}`);
   console.log(`B5: ${current.components.B.find(indicator => indicator.id === "B5").raw}`);
 }
