@@ -18,14 +18,23 @@ export type RegimeIndicator = {
 };
 
 export type MarketResearchCurrent = {
-  schemaVersion: 2;
+  schemaVersion: 3;
   generatedAt: string;
   source: {
     mode: "generated";
     label: string;
-    provider: "Tushare Pro";
-    api: "index_dailybasic";
+    providers: string[];
+    apis: string[];
     instruments: Array<{ code: string; name: string; role: "broad" | "technology" }>;
+    releaseEvidence: {
+      L2: {
+        provider: "中国人民银行";
+        indexUrl: string;
+        reportTitle: string;
+        reportUrl: string;
+        publishedAt: string;
+      };
+    };
   };
   asOf: DisplayValue;
   diagnosis: {
@@ -81,15 +90,19 @@ function isIndicator(value: unknown): value is RegimeIndicator {
 }
 
 export function isMarketResearchCurrent(value: unknown): value is MarketResearchCurrent {
-  if (!isObject(value) || value.schemaVersion !== 2 || !isString(value.generatedAt) || !isDisplayValue(value.asOf)) return false;
+  if (!isObject(value) || value.schemaVersion !== 3 || !isString(value.generatedAt) || !isDisplayValue(value.asOf)) return false;
 
   const source = value.source;
+  const evidence = isObject(source) && isObject(source.releaseEvidence) ? source.releaseEvidence.L2 : null;
   if (!isObject(source) || source.mode !== "generated" || !isString(source.label)
-    || source.provider !== "Tushare Pro" || source.api !== "index_dailybasic"
+    || !isStringArray(source.providers) || source.providers.length === 0
+    || !isStringArray(source.apis) || source.apis.length === 0
     || !Array.isArray(source.instruments) || source.instruments.length !== 2
     || !source.instruments.every(instrument => isObject(instrument)
       && isString(instrument.code) && isString(instrument.name)
-      && (instrument.role === "broad" || instrument.role === "technology"))) return false;
+      && (instrument.role === "broad" || instrument.role === "technology"))
+    || !isObject(evidence) || evidence.provider !== "中国人民银行"
+    || !["indexUrl", "reportTitle", "reportUrl", "publishedAt"].every(field => isString(evidence[field]))) return false;
 
   const diagnosis = value.diagnosis;
   if (!isObject(diagnosis) || !isStringArray(diagnosis.states)) return false;

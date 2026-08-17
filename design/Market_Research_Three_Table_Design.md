@@ -1,5 +1,7 @@
 # MyInvest 市场研究三表状态引擎：工程实施基线
 
+> 本文件保留任务01历史工程基线；当前实施状态和数据契约以 `docs/MARKET_RESEARCH_DESIGN.md` 与 `docs/MARKET_RESEARCH_CURRENT_JSON.md` 为准。
+
 > 版本：任务01收口版  
 > 状态：已与产品设计会话统一  
 > 当前范围：静态原型、本地运行

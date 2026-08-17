@@ -1,27 +1,21 @@
 # 市场研究 current.json 数据契约
 
-`public/data/market-research/current.json` 是市场研究当前状态的唯一数据源。页面请求 `/data/market-research/current.json`，不从 TypeScript Mock 回退。
+`public/data/market-research/current.json` 是市场研究当前状态的唯一数据源。页面请求该文件，不回退到TypeScript Mock。
 
-## Schema v2
+## Schema v3
 
-- `schemaVersion` 固定为 `2`。
-- `source.mode` 固定为 `generated`，并记录 `provider`、`api` 与两只指数代码。
-- 每项指标都有 `dataStatus`：`generated` 表示真实生成，`pending` 表示尚未接入；`manual_sample` 只保留为类型枚举，不得用于当前生成结果。
-- 暂无值的标量使用 JSON `null`，界面统一显示 `—`；列表无项目时使用空数组。
-- HTTP、JSON或结构校验失败时，页面显示“当前市场数据加载失败”，不展示旧值。
+- `schemaVersion` 固定为 `3`。
+- `asOf`：信息截止日，按自然日日终（EOD）理解；不支持日内PIT。
+- 指标 `period`：数据所属期；B3为交易日，L2为统计月份。
+- 指标 `release`：公开发布日期/可用日期。
+- `generatedAt`：文件生成时间，不能代替指标数据时间。
+- `source.providers`：当前为 `Tushare Pro`、`中国人民银行`。
+- `source.apis`：当前为 `index_dailybasic`、`cn_m`；PBOC为HTML发布证据，不伪装成API。
+- `source.releaseEvidence.L2`：保存PBOC栏目URL、实际报告标题、文章URL和完整发布时间。
+- `dataStatus`：`generated`为真实生成，`pending`为尚未接入；`manual_sample`仅保留类型枚举。
+- 暂无值使用JSON `null`，界面统一显示 `—`。
 
-## B3 MVP定义
-
-B3“PE/PB与估值分化”使用 Tushare Pro `index_dailybasic`：
-
-- 宽基：沪深300 `000300.SH`。
-- 科技成长：创业板指 `399006.SZ`。
-- 字段：`trade_date`、`pe_ttm`、`pb`。
-- 日期：选择不晚于 `--as-of` 且两只指数均有数据的最近共同交易日。
-- 输出：两只指数的 PE TTM 与 PB 截面值。
-- 本轮不计算历史分位、趋势和最终B3评分，因此 `position`、`trend`、`score` 均为 `null`。
-
-沪深300是跨沪深市场的稳定宽基代表；`index_dailybasic` 当前支持的科技成长代表中，创业板指具有长期连续序列，因此用于观察结构分化。
+当前2/14项为真实数据：L2、B3；其余12项为 `pending`。F/L/B一级评分、联合市场判断、投资含义和仓位倾向仍为 `null`，PIT状态仍为“待接入”。
 
 ## 生成方式
 
@@ -30,6 +24,6 @@ $env:TUSHARE_TOKEN = "你的token"
 npm run market:generate -- --as-of 2026-08-17
 ```
 
-Token只从 `process.env.TUSHARE_TOKEN` 读取，不写入代码、日志或JSON。生成器先在内存构造并通过运行时守卫，随后写临时文件并原子替换 `current.json`。失败时退出非零状态。
+`--as-of`不能晚于本地当天。B3独立选择最近共同交易日；L2只从PBOC固定栏目首页选择不晚于`asOf`的最近合格报告。若首页不覆盖所请求的较早日期，则失败关闭；03B不翻历史分页、不使用搜索引擎、不猜文章URL。
 
-当前状态为1/14：仅B3是`generated`；其余13项为`pending`，F/L/B聚合分和联合市场判断全部关闭。
+生成器先完成B3、PBOC证据、PBOC正文M1/M2、Tushare `cn_m`及双源一致性验证，再在内存构造Schema v3，通过运行时守卫后原子替换文件。任何失败都不得写入部分结果。

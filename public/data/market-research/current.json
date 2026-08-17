@@ -1,11 +1,17 @@
 {
-  "schemaVersion": 2,
-  "generatedAt": "2026-08-17T06:36:16.705Z",
+  "schemaVersion": 3,
+  "generatedAt": "2026-08-17T07:00:51.014Z",
   "source": {
     "mode": "generated",
-    "label": "Tushare generated current snapshot",
-    "provider": "Tushare Pro",
-    "api": "index_dailybasic",
+    "label": "Tushare + PBOC verified current snapshot",
+    "providers": [
+      "Tushare Pro",
+      "中国人民银行"
+    ],
+    "apis": [
+      "index_dailybasic",
+      "cn_m"
+    ],
     "instruments": [
       {
         "code": "000300.SH",
@@ -17,17 +23,26 @@
         "name": "创业板指",
         "role": "technology"
       }
-    ]
+    ],
+    "releaseEvidence": {
+      "L2": {
+        "provider": "中国人民银行",
+        "indexUrl": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/index.html",
+        "reportTitle": "2026年7月金融统计数据报告",
+        "reportUrl": "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/2026081416320925645/index.html",
+        "publishedAt": "2026-08-14 16:30:05"
+      }
+    }
   },
-  "asOf": "2026-08-14",
+  "asOf": "2026-08-17",
   "diagnosis": {
     "states": [
       "F 待计算",
-      "L 待计算",
+      "L 数据接入中",
       "B 数据接入中"
     ],
-    "headline": "真实市场数据接入中：B3估值截面已生成",
-    "diagnosis": "当前仅B3已由真实市场数据生成，其余指标尚未接入，因此暂不形成F/L/B综合市场判断。",
+    "headline": "真实市场数据接入中：L2、B3已生成",
+    "diagnosis": "当前仅L2和B3已由真实数据生成，其余12项尚未接入，因此暂不形成F/L/B综合市场判断。",
     "investmentImplication": null,
     "riskNote": null,
     "positionBias": null
@@ -53,9 +68,9 @@
       "metaphor": "汽油",
       "title": "货币信用",
       "score": null,
-      "status": "待计算",
-      "coverage": "0/5",
-      "updatedAt": null,
+      "status": "数据接入中",
+      "coverage": "1/5",
+      "updatedAt": "2026-08-14",
       "tone": "pending",
       "trend": [],
       "drivers": [],
@@ -150,12 +165,19 @@
   "risks": [],
   "dataQuality": {
     "grade": "Partial",
-    "coverage": "7.1%",
+    "coverage": "14.3%",
     "pitStatus": "待接入",
-    "warning": "仅B3已由真实数据生成，其余13项待接入"
+    "warning": "仅L2、B3已由真实数据生成，其余12项待接入"
   },
   "recentHistory": [],
   "recentEvents": [
+    {
+      "date": "08-14",
+      "title": "L2货币供应量快照生成",
+      "detail": "M1同比 4.00% / M2同比 7.70% / 剪刀差 -3.70pct",
+      "group": "L2",
+      "tone": "blue"
+    },
     {
       "date": "08-14",
       "title": "B3真实估值截面生成",
@@ -242,15 +264,15 @@
         "id": "L2",
         "name": "M1/M2货币活化",
         "score": null,
-        "raw": null,
+        "raw": "M1同比 4.00% / M2同比 7.70% / 剪刀差 -3.70pct",
         "position": null,
         "trend": null,
-        "period": null,
-        "release": null,
-        "coverage": null,
-        "quality": null,
-        "note": "真实数据尚未接入",
-        "dataStatus": "pending"
+        "period": "2026-07",
+        "release": "2026-08-14",
+        "coverage": "100%",
+        "quality": "A",
+        "note": "真实货币供应量月度快照；发布日期由中国人民银行金融统计数据报告确认，M1/M2与Tushare cn_m交叉校验一致；M1按2025年1月起修订口径理解。历史分位、趋势和L2评分尚未实现。",
+        "dataStatus": "generated"
       },
       {
         "id": "L3",

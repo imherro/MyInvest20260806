@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
@@ -76,10 +77,13 @@ test("current.json contains the complete F/L/B market research contract", async 
   const isMarketResearchCurrent = await currentMarketGuard();
 
   assert.equal(isMarketResearchCurrent(current), true);
-  assert.equal(current.schemaVersion, 2);
+  assert.equal(current.schemaVersion, 3);
   assert.equal(current.source.mode, "generated");
-  assert.equal(current.source.provider, "Tushare Pro");
-  assert.equal(current.source.api, "index_dailybasic");
+  assert.deepEqual(current.source.providers, ["Tushare Pro", "中国人民银行"]);
+  assert.deepEqual(current.source.apis, ["index_dailybasic", "cn_m"]);
+  assert.equal("api" in current.source, false);
+  assert.equal(current.source.releaseEvidence.L2.provider, "中国人民银行");
+  assert.doesNotMatch(JSON.stringify(current.source), /cn_schedule/);
   assert.deepEqual(current.cards.map((card) => card.code), ["F", "L", "B"]);
 
   for (const text of [
@@ -128,21 +132,32 @@ test("defines explicit missing-value behavior", async () => {
   assert.match(source, /isMarketResearchCurrent/);
 });
 
-test("contains one real B3 snapshot and 13 explicitly pending indicators", async () => {
+test("contains real L2 and B3 snapshots with 12 explicitly pending indicators", async () => {
   const current = await currentMarketData();
   const components = [...current.components.F, ...current.components.L, ...current.components.B];
   const b3 = current.components.B.find((item) => item.id === "B3");
+  const l2 = current.components.L.find((item) => item.id === "L2");
 
   assert.equal(b3.dataStatus, "generated");
   assert.match(b3.raw, /沪深300 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}；创业板指 PE TTM \d+\.\d{2} \/ PB \d+\.\d{2}/);
-  assert.equal(b3.period, current.asOf);
+  assert.notEqual(b3.period, current.asOf);
+  assert.equal(b3.period, "2026-08-14");
   assert.equal(b3.position, null);
   assert.equal(b3.score, null);
   assert.match(b3.note, /历史分位和最终B3评分尚未实现/);
-  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 1);
-  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 13);
+  assert.equal(l2.dataStatus, "generated");
+  assert.match(l2.raw, /M1同比 4\.00% \/ M2同比 7\.70% \/ 剪刀差 -3\.70pct/);
+  assert.equal(l2.period, "2026-07");
+  assert.equal(l2.release, "2026-08-14");
+  assert.equal(l2.score, null);
+  assert.equal(l2.position, null);
+  assert.equal(l2.trend, null);
+  assert.equal(components.filter((item) => item.dataStatus === "generated").length, 2);
+  assert.equal(components.filter((item) => item.dataStatus === "pending" && item.score === null).length, 12);
   assert.match(current.dataQuality.coverage, /^\d+(?:\.\d+)?%$/);
-  assert.equal(current.dataQuality.coverage, "7.1%");
+  assert.equal(current.dataQuality.coverage, "14.3%");
+  assert.equal(current.dataQuality.pitStatus, "待接入");
+  assert.deepEqual(current.cards.map((card) => card.coverage), ["0/4", "1/5", "1/5"]);
   assert.ok(current.cards.every((card) => card.score === null));
   assert.match(current.cards.find((card) => card.code === "B").directionNote, /越高代表泡沫风险越高/);
 });
@@ -157,7 +172,7 @@ test("disables unsupported aggregate diagnoses while only B3 is generated", asyn
   assert.equal(current.jointState.nearestState, null);
 });
 
-test("selects the latest common trading date and builds B3 without network access", async () => {
+test("selects the latest common trading date and builds mixed-frequency current data offline", async () => {
   const { buildGeneratedCurrent, selectLatestCommonSnapshot } = await marketGenerator();
   const template = await currentMarketData();
   const rows = {
@@ -168,11 +183,15 @@ test("selects the latest common trading date and builds B3 without network acces
     "399006.SZ": [{ trade_date: "20260814", pe_ttm: 44.4014, pb: 6.0352 }],
   };
   const snapshot = selectLatestCommonSnapshot(rows, "2026-08-17");
-  const generated = buildGeneratedCurrent(template, snapshot, "2026-08-17T10:00:00.000Z");
+  const l2 = { m1Yoy: 4, m2Yoy: 7.7, gap: -3.7, period: "2026-07", release: "2026-08-14" };
+  const evidence = { title: "2026年7月金融统计数据报告", href: "https://www.pbc.gov.cn/diaochatongjisi/116219/116225/example/index.html", publishedAt: "2026-08-14 16:30:05" };
+  const generated = buildGeneratedCurrent(template, snapshot, l2, evidence, "2026-08-17", "2026-08-17T10:00:00.000Z");
 
   assert.equal(snapshot.tradeDate, "20260814");
-  assert.equal(generated.asOf, "2026-08-14");
-  assert.equal(generated.dataQuality.coverage, "7.1%");
+  assert.equal(generated.asOf, "2026-08-17");
+  assert.equal(generated.components.B[2].period, "2026-08-14");
+  assert.equal(generated.components.L[1].period, "2026-07");
+  assert.equal(generated.dataQuality.coverage, "14.3%");
   assert.match(generated.components.B[2].raw, /14\.36.*1\.46.*44\.40.*6\.04/);
 });
 
@@ -188,6 +207,74 @@ test("generator refuses to run without exposing or fabricating a Tushare token",
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /TUSHARE_TOKEN is required/);
   assert.doesNotMatch(result.stdout, /Generated public/);
+});
+
+test("missing-token failure leaves current.json byte-for-byte unchanged", async () => {
+  const target = fileURLToPath(new URL("../public/data/market-research/current.json", import.meta.url));
+  const before = createHash("sha256").update(await readFile(target)).digest("hex");
+  const env = { ...process.env };
+  delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, ["scripts/generate-market-research-current.mjs", "--as-of", "2026-08-17"], {
+    cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8", env,
+  });
+  const after = createHash("sha256").update(await readFile(target)).digest("hex");
+  assert.notEqual(result.status, 0);
+  assert.equal(after, before);
+});
+
+test("parses only supported PBOC financial-report titles", async () => {
+  const { parsePbcFinancialReportTitle, validatePbcReportUrl } = await marketGenerator();
+  assert.equal(parsePbcFinancialReportTitle("2026年1月金融统计数据报告"), "202601");
+  assert.equal(parsePbcFinancialReportTitle("2026年一季度金融统计数据报告"), "202603");
+  assert.equal(parsePbcFinancialReportTitle("2026年上半年金融统计数据报告"), "202606");
+  assert.equal(parsePbcFinancialReportTitle("2026年前三季度金融统计数据报告"), "202609");
+  assert.equal(parsePbcFinancialReportTitle("2026年金融统计数据报告"), "202612");
+  assert.equal(parsePbcFinancialReportTitle("2026年7月社会融资规模存量统计数据报告"), null);
+  assert.match(validatePbcReportUrl("/diaochatongjisi/116219/116225/a/index.html"), /^https:\/\/www\.pbc\.gov\.cn\//);
+  assert.throws(() => validatePbcReportUrl("https://example.com/index.html"), /Unsafe/);
+  assert.throws(() => validatePbcReportUrl("/diaochatongjisi/116219/116225/index.html"), /Unsafe/);
+});
+
+test("parses and selects the latest non-future report from a minimal PBOC index fixture", async () => {
+  const { parsePbcReportIndex, selectLatestPublishedReport } = await marketGenerator();
+  const fixture = `
+    <a href="/diaochatongjisi/116219/116225/a/index.html" title="2026年上半年金融统计数据报告">上半年</a><span>2026-07-15</span>
+    <a href="/diaochatongjisi/116219/116225/b/index.html" title="2026年7月金融统计数据报告">7月</a><span>2026-08-14</span>
+    <a href="/diaochatongjisi/116219/116225/c/index.html" title="2026年8月金融统计数据报告">8月</a><span>2026-09-14</span>`;
+  const reports = parsePbcReportIndex(fixture);
+  assert.equal(selectLatestPublishedReport(reports, "2026-08-17").dataMonth, "202607");
+  assert.equal(selectLatestPublishedReport(reports, "2026-07-20").dataMonth, "202606");
+  assert.throws(() => selectLatestPublishedReport(reports, "2026-01-01"), /historical pagination is not implemented/);
+});
+
+test("validates PBOC article identity, publication date and signed M1/M2 values", async () => {
+  const { parsePbcFinancialReport } = await marketGenerator();
+  const expected = { title: "2026年7月金融统计数据报告", listingDate: "2026-08-14" };
+  const fixture = `<meta name="ArticleTitle" content="2026年7月金融统计数据报告"><span id="shijian">2026-08-14 16:30:05</span><p>广义货币（M2）余额同比增长7.7%。狭义货币（M1）余额同比下降0.4%。</p>`;
+  assert.deepEqual(parsePbcFinancialReport(fixture, expected), { title: expected.title, publishedAt: "2026-08-14 16:30:05", m1Yoy: -0.4, m2Yoy: 7.7 });
+  assert.throws(() => parsePbcFinancialReport(fixture, { ...expected, title: "错误标题" }), /title mismatch/);
+  assert.throws(() => parsePbcFinancialReport(fixture, { ...expected, listingDate: "2026-08-13" }), /does not match/);
+  assert.throws(() => parsePbcFinancialReport(fixture.replace("狭义货币（M1）", "M1缺失"), expected), /Unable to parse/);
+});
+
+test("builds L2 only when Tushare and PBOC agree within 0.05pct", async () => {
+  const { buildL2Snapshot } = await marketGenerator();
+  const report = { dataMonth: "202607", listingDate: "2026-08-14" };
+  const official = { m1Yoy: 4, m2Yoy: 7.7 };
+  const result = buildL2Snapshot([{ month: "202607", m1_yoy: "4.00", m2_yoy: "7.70" }], report, official);
+  assert.equal(result.gap, -3.7);
+  assert.equal(result.period, "2026-07");
+  assert.throws(() => buildL2Snapshot([], report, official), /exactly one row/);
+  assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: "x", m2_yoy: "7.7" }], report, official), /invalid M1\/M2/);
+  assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: 3.9, m2_yoy: 7.7 }], report, official), /M1 YoY/);
+  assert.throws(() => buildL2Snapshot([{ month: "202607", m1_yoy: 4, m2_yoy: 7.6 }], report, official), /M2 YoY/);
+});
+
+test("rejects future as-of dates", async () => {
+  const { parseAsOf } = await marketGenerator();
+  assert.equal(parseAsOf(["--as-of", "2026-08-17"], "2026-08-17"), "2026-08-17");
+  assert.throws(() => parseAsOf(["--as-of", "2026-08-18"], "2026-08-17"), /cannot be in the future/);
+  assert.throws(() => parseAsOf(["--as-of", "2026-02-31"], "2026-08-17"), /must use YYYY-MM-DD/);
 });
 
 test("rejects current.json shapes that could crash the market page", async () => {
