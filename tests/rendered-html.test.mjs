@@ -132,6 +132,14 @@ async function l1HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l1.json", import.meta.url)), "utf8"));
 }
 
+async function l5HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-l5.mjs", import.meta.url).href);
+}
+
+async function l5HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l5.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -1209,6 +1217,48 @@ test("missing-token L1 failure preserves L1, F1-F3, B1-B5 and current files", as
   const paths = ["../public/data/market-research/history/l1.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
   const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l1.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("builds L5 month ends with the production US real-yield selector", async () => {
+  const { buildL5MonthlyHistory } = await l5HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-07-31" }, points: [{ asOf: "2026-01-31" }, { asOf: "2026-07-31" }] };
+  const rows = [{ date: "20260129", y10: -0.25 }, { date: "20260130", y10: 2.4 }, { date: "20260131", y10: 9.9 }, { date: "20260202", y10: 8.8 }, { date: "20260730", y10: 2.6 }, { date: "20260731", y10: 9.8 }, { date: "20260803", y10: 8.7 }];
+  const result = buildL5MonthlyHistory(schedule, new Map([["2026", rows]]), "2026-08-17");
+  assert.deepEqual(result.points[0], { asOf: "2026-01-31", periodDate: "2026-01-30", releaseDate: "2026-01-30", revisionStatus: "not_tracked", realYield10Y: 2.4 });
+  assert.deepEqual(result.points[1], { asOf: "2026-07-31", periodDate: "2026-07-30", releaseDate: "2026-07-30", revisionStatus: "not_tracked", realYield10Y: 2.6 });
+  const negative = buildL5MonthlyHistory({ ...schedule, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" }, points: [schedule.points[0]] }, new Map([["2026", [rows[0]]]]), "2026-08-17"); assert.equal(negative.points[0].realYield10Y, -0.25);
+  for (const invalid of [null, undefined, "", Number.NaN, Infinity, "bad"]) assert.throws(() => buildL5MonthlyHistory({ ...schedule, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" }, points: [schedule.points[0]] }, new Map([["2026", [{ date: "20260130", y10: invalid }]]]), "2026-08-17"), /Invalid US 10Y/);
+});
+
+test("validates annual US real-yield batches and the L5 monthly schedule", async () => {
+  const { validateMonthlySchedule, validateUsRealYieldYearBatch } = await l5HistoryGenerator();
+  const schedule = { schemaVersion: 1, requestedAsOf: "2026-08-17", indicator: { id: "B3", frequency: "monthly" }, range: { startAsOf: "2026-01-31", endAsOf: "2026-01-31" }, points: [{ asOf: "2026-01-31" }] };
+  assert.equal(validateMonthlySchedule(schedule, "2026-08-17"), schedule); assert.throws(() => validateMonthlySchedule({ ...schedule, requestedAsOf: "2026-08-16" }, "2026-08-17"), /requestedAsOf/); assert.throws(() => validateMonthlySchedule({ ...schedule, points: [schedule.points[0], schedule.points[0]] }, "2026-08-17"), /unique and strictly ascending/);
+  const row = date => ({ date, y10: 1 });
+  assert.equal(validateUsRealYieldYearBatch([row("20260130")], "2026", "20260101", "20260731").length, 1);
+  assert.throws(() => validateUsRealYieldYearBatch([], "2026", "20260101", "20260731"), /no rows/);
+  assert.throws(() => validateUsRealYieldYearBatch([row("20260230")], "2026", "20260101", "20260731"), /invalid date/);
+  assert.throws(() => validateUsRealYieldYearBatch([row("20260801")], "2026", "20260101", "20260731"), /outside/);
+  assert.throws(() => validateUsRealYieldYearBatch([row("20260130"), row("20260130")], "2026", "20260101", "20260731"), /duplicate date/);
+  assert.throws(() => validateUsRealYieldYearBatch(Array.from({ length: 2000 }, () => row("20260130")), "2026", "20260101", "20260731"), /2000-row limit/);
+});
+
+test("L5 generator makes one sequential us_trycr request per calendar year", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-l5.mjs", import.meta.url)), "utf8");
+  assert.equal((source.match(/callTushare\("us_trycr"/g) ?? []).length, 1); assert.match(source, /for \(const year of years\)/); assert.match(source, /callTushare\("us_trycr", \{ start_date: startDate, end_date: endDate \}, FIELDS, token\)/); assert.match(source, /const FIELDS = "date,y10"/); assert.match(source, /selectLatestUsRealYieldSnapshot/); assert.doesNotMatch(source, /callTushare\("(?:us_tycr|us_tbr|shibor|daily|trade_cal)"|Promise\.all/);
+  const b3 = await b3HistoryData(); const first = Number(b3.range.startAsOf.slice(0, 4)); const last = Number(b3.range.endAsOf.slice(0, 4)); const years = Array.from({ length: last - first + 1 }, (_, index) => String(first + index)); assert.equal(years.length, 12); assert.equal(years[0], "2015"); assert.equal(years.at(-1), "2026");
+});
+
+test("checked-in L5 history is a complete strictly prior US real-yield monthly series", async () => {
+  const [l5, b3] = await Promise.all([l5HistoryData(), b3HistoryData()]); assert.equal(l5.points.length, 139); assert.equal(l5.requestedAsOf, b3.requestedAsOf); assert.deepEqual(l5.range, b3.range);
+  for (let index = 0; index < l5.points.length; index += 1) { const point = l5.points[index]; assert.equal(point.asOf, b3.points[index].asOf); assert.equal(point.releaseDate, point.periodDate); assert.ok(point.releaseDate < point.asOf); assert.equal(point.revisionStatus, "not_tracked"); assert.ok(Number.isFinite(point.realYield10Y)); const elapsed = (new Date(`${point.asOf}T00:00:00Z`) - new Date(`${point.periodDate}T00:00:00Z`)) / 86400000; assert.ok(elapsed > 0 && elapsed <= 30); }
+  assert.doesNotMatch(JSON.stringify(l5), /"(?:dxy|vix|creditSpread|globalLiquidity|score|position|trend|percentile|zScore|normalized|signal|state|riskOn|riskOff)"/i);
+});
+
+test("missing-token L5 failure preserves L5, L1, F1-F3, B1-B5 and current files", async () => {
+  const paths = ["../public/data/market-research/history/l5.json", "../public/data/market-research/history/l1.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
+  const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l5.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {

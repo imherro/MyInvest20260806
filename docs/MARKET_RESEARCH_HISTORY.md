@@ -82,3 +82,11 @@ node scripts/generate-market-research-history-f2.mjs --as-of 2026-08-17
 ```powershell
 node scripts/generate-market-research-history-l1.mjs --as-of 2026-08-17
 ```
+
+## L5 月度美国10年实际国债收益率代理历史
+
+04J新增L5月度美国10年实际国债收益率代理历史。使用B3月末asOf日程，底层 `us_trycr` 按自然年顺序请求；每个月直接复用current的 `selectLatestUsRealYieldSnapshot`，只允许使用严格早于中国asOf日期且处于30自然日窗口内的最新美国数据，以保持当前跨时区保守语义。当前只包含美国10年实际收益率，不代表完整外部金融条件。
+
+```powershell
+node scripts/generate-market-research-history-l5.mjs --as-of 2026-08-17
+```
