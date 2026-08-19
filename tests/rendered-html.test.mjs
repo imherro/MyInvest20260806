@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readFile, readdir } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -170,6 +171,14 @@ async function l4FieldAuditGenerator() {
 
 async function l4FieldAuditData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-field-audit.json", import.meta.url)), "utf8"));
+}
+
+async function l4HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-l4.mjs", import.meta.url).href);
+}
+
+async function l4HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4.json", import.meta.url)), "utf8"));
 }
 
 async function f4HistoryGenerator() {
@@ -2002,4 +2011,76 @@ test("keeps unsupported certainty language out of the user interface", async () 
   assert.match(source, /<span>信息截止<\/span><b>\{display\(data\.asOf\)\}<\/b>/);
   assert.match(source, /当前为真实数据快照（L2\/L3经PBOC交叉验证，L4来自财政部官方）/);
   assert.doesNotMatch(source, /当前为双源校验真实快照/);
+});
+
+test("projects the frozen L4 audit into a conservative partial PIT history", async () => {
+  const generator = await l4HistoryGenerator();
+  const auditBytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-field-audit.json", import.meta.url)));
+  const scheduleBytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/b3.json", import.meta.url)));
+  const audit = generator.canonicalJson(auditBytes, generator.EXPECTED_FIELD_AUDIT_SHA256, "FIELD_AUDIT").data;
+  const schedule = generator.canonicalJson(scheduleBytes, generator.EXPECTED_SCHEDULE_SHA256, "SCHEDULE").data;
+  assert.throws(() => generator.canonicalJson(Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), auditBytes]), generator.EXPECTED_FIELD_AUDIT_SHA256, "X"), /BOM/);
+  assert.throws(() => generator.canonicalJson(Buffer.from([0xc3, 0x28]), generator.EXPECTED_FIELD_AUDIT_SHA256, "X"), /UTF8/);
+  assert.throws(() => generator.canonicalJson(Buffer.from("{}"), generator.EXPECTED_FIELD_AUDIT_SHA256, "X"), /TERMINAL_NEWLINE/);
+  assert.throws(() => generator.canonicalJson(Buffer.from("{}\n\n"), generator.EXPECTED_FIELD_AUDIT_SHA256, "X"), /TERMINAL_NEWLINE/);
+
+  const history = generator.buildHistory(audit, schedule);
+  assert.equal(history.points.length, 139);
+  assert.deepEqual([history.points[0].period, history.points[0].asOf], ["201412", "2015-01-31"]);
+  assert.deepEqual([history.points.at(-1).period, history.points.at(-1).asOf], ["202606", "2026-07-31"]);
+  history.points.forEach(point => assert.equal(generator.previousMonth(point.asOf), point.period));
+  assert.deepEqual(history.periodCoverage, { required: 139, officialReports: 119, completeUnique: 103, partialAmbiguous: 14, pitUnavailableOfficialReports: 2, missingOfficialReports: 20 });
+  assert.deepEqual(Object.fromEntries(["complete", "partial", "unavailable"].map(status => [status, history.points.filter(point => point.dataStatus === status).length])), { complete: 103, partial: 14, unavailable: 22 });
+  assert.deepEqual(Object.fromEntries(["official_report", "official_report_not_yet_released", "missing_official_report"].map(status => [status, history.points.filter(point => point.sourceStatus === status).length])), { official_report: 117, official_report_not_yet_released: 2, missing_official_report: 20 });
+  assert.deepEqual(history.fieldCoverage, {
+    revenueCumYi: { unique: 117, ambiguous: 0, missing: 20, pitUnavailable: 2, null: 22 },
+    revenueYoyPct: { unique: 104, ambiguous: 13, missing: 20, pitUnavailable: 2, null: 35 },
+    expenditureCumYi: { unique: 117, ambiguous: 0, missing: 20, pitUnavailable: 2, null: 22 },
+    expenditureYoyPct: { unique: 114, ambiguous: 3, missing: 20, pitUnavailable: 2, null: 25 },
+  });
+  assert.equal(history.historyStatus, "partial_official_pit");
+  assert.equal(history.scoreEligible, false); assert.equal(history.jointEligible, false); assert.equal(history.source.carryForward, false);
+  assert.equal(history.source.releaseDateQuality, "official_report_date_or_after_asof_or_unavailable");
+
+  const unique = history.points[0];
+  assert.equal(typeof unique.revenueCumYi, "string"); assert.ok(unique.evidence.revenueCumYi); assert.ok(unique.publicationDate <= unique.asOf);
+  const ambiguous = history.points.find(point => point.ambiguousFields.length);
+  assert.equal(ambiguous[ambiguous.ambiguousFields[0]], null); assert.equal(ambiguous.evidence[ambiguous.ambiguousFields[0]], null);
+  const missing = history.points.find(point => point.sourceStatus === "missing_official_report");
+  assert.deepEqual(missing.missingFields, ["revenueCumYi", "revenueYoyPct", "expenditureCumYi", "expenditureYoyPct"]);
+  assert.ok(missing.missingFields.every(name => missing[name] === null && missing.evidence[name] === null));
+  for (const [period, asOf, publicationDate] of [["201912", "2020-01-31", "2020-02-10"], ["202312", "2024-01-31", "2024-02-01"]]) {
+    const point = history.points.find(item => item.period === period);
+    assert.equal(point.asOf, asOf); assert.equal(point.publicationDate, publicationDate); assert.equal(point.releaseDate, null);
+    assert.equal(point.sourceStatus, "official_report_not_yet_released"); assert.equal(point.releaseDateQuality, "official_report_after_asof");
+    assert.ok(Object.values(point.fieldStatus).every(field => field.status === "pit_unavailable" && field.candidateCount === 0));
+    assert.ok(["revenueCumYi", "revenueYoyPct", "expenditureCumYi", "expenditureYoyPct"].every(name => point[name] === null && point.evidence[name] === null));
+  }
+  const thirdFuture = structuredClone(audit); thirdFuture.months[0].publicationDate = "2015-02-01";
+  assert.throws(() => generator.buildHistory(thirdFuture, schedule), /UNREVIEWED_FUTURE_PUBLICATION/);
+  for (const forbidden of ["value", "score", "fiscalPulse", "jointState"]) assert.ok(history.points.every(point => !(forbidden in point)));
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-l4.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /\bfetch\b|TUSHARE_TOKEN|https?:\/\//);
+  assert.deepEqual(await l4HistoryData(), history);
+});
+
+test("L4 input drift fails atomically without network fallback", async () => {
+  const generator = await l4HistoryGenerator(); const root = await mkdtemp(path.join(os.tmpdir(), "l4-pit-"));
+  const historyDirectory = path.join(root, "public/data/market-research/history"); await mkdir(historyDirectory, { recursive: true });
+  const auditBytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-field-audit.json", import.meta.url)));
+  const scheduleBytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/b3.json", import.meta.url)));
+  await writeFile(path.join(historyDirectory, "l4-field-audit.json"), auditBytes); await writeFile(path.join(historyDirectory, "b3.json"), scheduleBytes);
+  const originalFetch = globalThis.fetch; globalThis.fetch = async () => { throw new Error("network forbidden"); };
+  const previousToken = process.env.TUSHARE_TOKEN; delete process.env.TUSHARE_TOKEN;
+  try {
+    await generator.generate({ root, argv: ["--as-of", "2026-08-17"] });
+    const valid = await readFile(path.join(historyDirectory, "l4.json"));
+    await writeFile(path.join(historyDirectory, "l4-field-audit.json"), Buffer.concat([auditBytes.subarray(0, -2), Buffer.from(" \n")]));
+    await assert.rejects(generator.generate({ root, argv: ["--as-of", "2026-08-17"] }), /CANONICAL_HASH_MISMATCH/);
+    assert.deepEqual(await readFile(path.join(historyDirectory, "l4.json")), valid);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousToken === undefined) delete process.env.TUSHARE_TOKEN; else process.env.TUSHARE_TOKEN = previousToken;
+    await rm(root, { recursive: true, force: true });
+  }
 });
