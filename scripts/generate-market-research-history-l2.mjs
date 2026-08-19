@@ -6,7 +6,7 @@ import { callTushare, parseAsOf } from "./generate-market-research-current.mjs";
 
 const INPUT = "public/data/market-research/history/b3.json";
 const OUTPUT = "public/data/market-research/history/l2.json";
-const FIELDS = "month,m1_yoy";
+const FIELDS = "month,m1_yoy,m2_yoy";
 
 const validDate = value => {
   const date = /^\d{4}-\d{2}-\d{2}$/.test(String(value ?? "")) ? new Date(`${value}T00:00:00Z`) : new Date(Number.NaN);
@@ -35,6 +35,24 @@ export function selectedPeriodForAsOf(asOf) {
   let period = shiftMonth(asOf.slice(0, 7).replace("-", ""), -1);
   while (conservativeReleaseDate(period) > asOf) period = shiftMonth(period, -1);
   return period;
+}
+
+function plainDecimal(value) {
+  if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`Invalid finite decimal value ${value}`);
+  const match = String(value).match(/^(-?)(\d+)(?:\.(\d*))?(?:e([+-]?\d+))?$/i);
+  if (!match) throw new Error(`Invalid decimal value ${value}`);
+  const sign = match[1]; const integer = match[2]; const fraction = match[3] ?? ""; const exponent = Number(match[4] ?? 0); const digits = `${integer}${fraction}`; const point = integer.length + exponent;
+  if (point <= 0) return `${sign}0.${"0".repeat(-point)}${digits}`;
+  if (point >= digits.length) return `${sign}${digits}${"0".repeat(point - digits.length)}`;
+  return `${sign}${digits.slice(0, point)}.${digits.slice(point)}`;
+}
+
+function scaledInteger(value, scale) {
+  const text = plainDecimal(value); const negative = text.startsWith("-"); const unsigned = negative ? text.slice(1) : text; const [integer, fraction = ""] = unsigned.split("."); const scaled = BigInt(`${integer}${fraction.padEnd(scale, "0")}`); return negative ? -scaled : scaled;
+}
+
+export function exactDecimalSubtract(left, right) {
+  const decimals = value => (plainDecimal(value).split(".")[1] ?? "").length; const scale = Math.max(decimals(left), decimals(right)); const difference = scaledInteger(left, scale) - scaledInteger(right, scale); const negative = difference < 0n; const digits = (negative ? -difference : difference).toString().padStart(scale + 1, "0"); const fraction = scale === 0 ? "" : digits.slice(-scale).replace(/0+$/, ""); const rendered = scale === 0 ? digits : fraction ? `${digits.slice(0, -scale)}.${fraction}` : digits.slice(0, -scale); const result = Number(`${negative ? "-" : ""}${rendered}`); if (!Number.isFinite(result)) throw new Error("L2 gap subtraction produced a non-finite value"); return result;
 }
 
 export function validateMonthlySchedule(b3, requestedAsOf) {
@@ -66,7 +84,8 @@ export function normalizeCnMRows(rows, startPeriod, endPeriod) {
     if (seen.has(month)) throw new Error(`Tushare cn_m contains duplicate month ${month}`);
     seen.add(month);
     if (row?.m1_yoy === null || row?.m1_yoy === "" || !Number.isFinite(Number(row?.m1_yoy))) throw new Error(`Tushare cn_m contains invalid m1_yoy for ${month}`);
-    return { month, m1_yoy: Number(row.m1_yoy) };
+    if (row?.m2_yoy === null || row?.m2_yoy === "" || !Number.isFinite(Number(row?.m2_yoy))) throw new Error(`Tushare cn_m contains invalid m2_yoy for ${month}`);
+    return { month, m1_yoy: Number(row.m1_yoy), m2_yoy: Number(row.m2_yoy) };
   }).sort((a, b) => a.month.localeCompare(b.month));
   const expected = monthsBetween(startPeriod, endPeriod);
   if (normalized.length !== expected.length || normalized.some((row, index) => row.month !== expected[index])) throw new Error("Tushare cn_m response has missing or non-contiguous months");
@@ -79,10 +98,12 @@ export function sourceSnapshotSha256(rows) {
 
 export function assertNoSilentRevision(existing, normalizedRows) {
   if (!existing?.points) return;
-  const incoming = new Map(normalizedRows.map(row => [row.month, row.m1_yoy]));
+  const incoming = new Map(normalizedRows.map(row => [row.month, row]));
   const changed = [];
   for (const point of existing.points) {
-    if (point?.source === "tushare" && point.dataset === "cn_m" && point.sourceField === "m1_yoy" && incoming.has(point.period) && point.value !== incoming.get(point.period)) changed.push(point.period);
+    const row = incoming.get(point?.period);
+    if (!row || point?.source !== "tushare" || point.dataset !== "cn_m") continue;
+    if ("value" in point ? point.value !== row.m1_yoy : point.m1Yoy !== row.m1_yoy || point.m2Yoy !== row.m2_yoy || point.gap !== exactDecimalSubtract(row.m1_yoy, row.m2_yoy)) changed.push(point.period);
   }
   if (changed.length) throw new Error(`Tushare cn_m historical revision requires review: ${[...new Set(changed)].join(",")}`);
 }
@@ -99,15 +120,15 @@ export function buildL2MonthlyHistory(b3, rows, requestedAsOf) {
     if (!row) throw new Error(`Missing L2 value for selected period ${period}`);
     const releaseDate = conservativeReleaseDate(period);
     if (releaseDate > asOf) throw new Error(`L2 conservative releaseDate exceeds asOf for ${period}`);
-    return { indicatorId: "L2", asOf, period, value: row.m1_yoy, unit: "pct", source: "tushare", dataset: "cn_m", sourceField: "m1_yoy", releaseDate, releaseDateQuality: "conservative_proxy", pitScope: "release_lag_only", valueVintage: "latest_available_snapshot" };
+    return { indicatorId: "L2", asOf, period, m1Yoy: row.m1_yoy, m2Yoy: row.m2_yoy, gap: exactDecimalSubtract(row.m1_yoy, row.m2_yoy), units: { m1Yoy: "pct", m2Yoy: "pct", gap: "pct_point" }, source: "tushare", dataset: "cn_m", sourceFields: ["m1_yoy", "m2_yoy"], releaseDate, releaseDateQuality: "conservative_proxy", pitScope: "release_lag_only", valueVintage: "latest_available_snapshot" };
   });
   return {
     schemaVersion: 1,
     generatedAt: `${requestedAsOf}T00:00:00.000Z`,
     requestedAsOf,
-    indicator: { id: "L2", name: "中国M1同比增速", frequency: "monthly", asOfRule: "latest_period_released_by_next_calendar_month_end" },
+    indicator: { id: "L2", name: "M1/M2货币活化", frequency: "monthly", asOfRule: "latest_period_released_by_next_calendar_month_end" },
     range: { ...b3.range, startPeriod, endPeriod },
-    source: { provider: "Tushare Pro", api: "cn_m", field: "m1_yoy", scheduleInput: INPUT, releaseDateQuality: "conservative_proxy", pitScope: "release_lag_only", valueVintage: "latest_available_snapshot" },
+    source: { provider: "Tushare Pro", api: "cn_m", fields: ["m1_yoy", "m2_yoy"], scheduleInput: INPUT, releaseDateQuality: "conservative_proxy", pitScope: "release_lag_only", valueVintage: "latest_available_snapshot" },
     sourceQuery: { api: "cn_m", startM: startPeriod, endM: endPeriod, fields: FIELDS.split(",") },
     sourceSnapshotSha256: sourceSnapshotSha256(normalized),
     points,
