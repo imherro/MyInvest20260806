@@ -156,6 +156,14 @@ async function l3HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l3.json", import.meta.url)), "utf8"));
 }
 
+async function l4SourceAuditGenerator() {
+  return import(new URL("../scripts/audit-market-research-history-l4-source.mjs", import.meta.url).href);
+}
+
+async function l4SourceAuditData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url)), "utf8"));
+}
+
 async function f4HistoryGenerator() {
   return import(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url).href);
 }
@@ -1372,6 +1380,60 @@ test("L3 partial generator requests one exact sf_month range and fails atomicall
   const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-l3.mjs", import.meta.url)), "utf8"); assert.equal((source.match(/callTushare\("sf_month"/g) ?? []).length, 1); assert.match(source, /\{ start_m: sourceStartPeriod, end_m: endPeriod \}, FIELDS, token/); assert.match(source, /const FIELDS = "month,inc_month,inc_cumval,stk_endval"/); assert.doesNotMatch(source, /forward.?fill|backward.?fill|interpolat|nearest|stk_yoy/i);
   const output = fileURLToPath(new URL("../public/data/market-research/history/l3.json", import.meta.url)); const joint = fileURLToPath(new URL("../public/data/market-research/history/joint.json", import.meta.url)); const before = await Promise.all([readFile(output), readFile(joint)]); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l3.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all([readFile(output), readFile(joint)]), before); assert.equal((await readdir(path.dirname(output))).some(name => name.startsWith("l3.json.tmp-")), false);
+});
+
+test("L4 source audit enforces frozen listing and report path policies", async () => {
+  const { validateListingUrl, normalizeReportHref } = await l4SourceAuditGenerator();
+  assert.equal(validateListingUrl("https://www.mof.gov.cn/gkml/caizhengshuju/index_2.htm"), "https://www.mof.gov.cn/gkml/caizhengshuju/index_2.htm");
+  for (const value of ["http://www.mof.gov.cn/gkml/caizhengshuju/", "https://evil.mof.gov.cn/gkml/caizhengshuju/", "https://www.mof.gov.cn/other/", "https://user@www.mof.gov.cn/gkml/caizhengshuju/", "https://www.mof.gov.cn:444/gkml/caizhengshuju/"]) assert.throws(() => validateListingUrl(value), /Unsafe/);
+  assert.deepEqual(normalizeReportHref("http://gks.mof.gov.cn/tongjishuju/202607/t1.htm?x=1"), { sourceHref: "http://gks.mof.gov.cn/tongjishuju/202607/t1.htm?x=1", resolvedUrl: "http://gks.mof.gov.cn/tongjishuju/202607/t1.htm?x=1", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/202607/t1.htm?x=1", reportPathPolicy: "gks_statistics", transportTransformation: "http_to_https_protocol_only" });
+  assert.deepEqual(normalizeReportHref("../../zhengwuxinxi/caizhengxinwen/201905/t1.htm", "https://www.mof.gov.cn/gkml/caizhengshuju/index_10.htm"), { sourceHref: "../../zhengwuxinxi/caizhengxinwen/201905/t1.htm", resolvedUrl: "https://www.mof.gov.cn/zhengwuxinxi/caizhengxinwen/201905/t1.htm", normalizedUrl: "https://www.mof.gov.cn/zhengwuxinxi/caizhengxinwen/201905/t1.htm", reportPathPolicy: "www_fiscal_news", transportTransformation: "relative_resolve_https_direct" });
+  for (const value of ["http://www.mof.gov.cn/zhengwuxinxi/caizhengxinwen/t1.htm", "https://gks.mof.gov.cn/other/t1.htm", "https://mof.gov.cn/tongjishuju/t1.htm", "ftp://gks.mof.gov.cn/tongjishuju/t1.htm"]) assert.throws(() => normalizeReportHref(value), /Unsafe/);
+});
+
+test("L4 source audit maps historical fiscal titles and only accepts explicit visible dates", async () => {
+  const { classifyFiscalTitle, parseFiscalTitle, parsePublicationDate, normalizedContentSha256, decodeUtf8Strict } = await l4SourceAuditGenerator();
+  assert.equal(parseFiscalTitle("2019年4月财政收支情况"), "201904"); assert.equal(parseFiscalTitle("2026年1-5月财政收支情况"), "202605"); assert.equal(parseFiscalTitle("2026年一季度财政收支情况"), "202603"); assert.equal(parseFiscalTitle("2026年上半年财政收支情况"), "202606"); assert.equal(parseFiscalTitle("2025年前三季度财政收支情况"), "202509"); assert.equal(parseFiscalTitle("2025年财政收支情况"), "202512");
+  for (const title of ["2026年5月份全国彩票销售情况", "2026年中央财政预算", "2025年度部门决算", "地方财政收支情况"]) assert.equal(classifyFiscalTitle(title).classification, "excluded");
+  assert.deepEqual(parsePublicationDate('<div class="laiyuan"><p>发布日期：2019年05月08日</p></div>'), { publicationDate: "2019-05-08", publicationDateEvidence: "visible_text:.docreltime|.laiyuan 发布日期" }); assert.deepEqual(parsePublicationDate('<meta name="PubDate" content="2019-05-08"><p>URL 20190508</p>'), { publicationDate: null, publicationDateEvidence: null });
+  assert.equal(normalizedContentSha256("a\r\nb\r"), normalizedContentSha256("a\nb\n")); assert.notEqual(normalizedContentSha256("a"), normalizedContentSha256("b")); assert.throws(() => decodeUtf8Strict(Buffer.from([0xef, 0xbb, 0xbf, 0x61])), /BOM/); assert.throws(() => decodeUtf8Strict(Buffer.from([0xff])), /encoded data/);
+});
+
+test("L4 source audit discovers only rendered DOM hrefs and hashes sorted link sets", async () => {
+  const { ENTRY_URL, extractRenderedLinks, renderedLinkSetSha256 } = await l4SourceAuditGenerator();
+  const dom = `<html><body>财政数据<a href="index_1.htm">2</a><a href="http://gks.mof.gov.cn/tongjishuju/202607/t1.htm" title="2026年上半年财政收支情况">报告</a><a href="https://example.com/t2.htm" title="2026年5月财政收支情况">坏链接</a></body></html>`;
+  assert.throws(() => extractRenderedLinks(dom, ENTRY_URL), /outside frozen scope/);
+  const clean = dom.replace(/<a href="https:\/\/example[\s\S]*?<\/a>/, ""); const discovered = extractRenderedLinks(clean, ENTRY_URL); assert.equal(discovered.pagination.length, 1); assert.equal(discovered.reports.length, 1); assert.equal(discovered.pagination[0].url.endsWith("index_1.htm"), true); assert.equal(discovered.pagination.some(item => item.url.endsWith("index_2.htm")), false);
+  const reversed = { pagination: [...discovered.pagination].reverse(), reports: [...discovered.reports].reverse() }; assert.equal(renderedLinkSetSha256(discovered), renderedLinkSetSha256(reversed)); assert.notEqual(renderedLinkSetSha256(discovered), renderedLinkSetSha256({ pagination: [], reports: discovered.reports }));
+});
+
+test("L4 source audit requires complete mechanically linked pagination", async () => {
+  const { ENTRY_URL, discoverListingPages } = await l4SourceAuditGenerator();
+  const page1 = "https://www.mof.gov.cn/gkml/caizhengshuju/index_1.htm";
+  const dom = new Map([[ENTRY_URL, '<html><body>财政数据<script>var currentPage = 0; var countPage = 2;</script><a href="index_1.htm">2</a></body></html>'], [page1, '<html><body>财政数据<script>var currentPage = 1; var countPage = 2;</script><a href="index.htm">1</a></body></html>']]);
+  const complete = await discoverListingPages("unused", "unused", { fetchHtml: async url => dom.get(url), renderDom: async url => dom.get(url) }); assert.equal(complete.listings.length, 2); assert.deepEqual(complete.reports, []);
+  await assert.rejects(discoverListingPages("unused", "unused", { fetchHtml: async () => dom.get(ENTRY_URL), renderDom: async () => dom.get(ENTRY_URL) }), /traversal incomplete/);
+  const conflict = new Map(dom); conflict.set(page1, conflict.get(page1).replace("countPage = 2", "countPage = 3")); await assert.rejects(discoverListingPages("unused", "unused", { fetchHtml: async url => conflict.get(url), renderDom: async url => conflict.get(url) }), /conflicts/);
+});
+
+test("L4 source audit coverage is mechanical and preserves different-URL ambiguity", async () => {
+  const { buildAudit } = await l4SourceAuditGenerator(); const listings = [{ url: "https://www.mof.gov.cn/gkml/caizhengshuju/", rawContentSha256: "a", renderedLinkSetSha256: "b", discoveredPaginationHrefs: [], discoveredReportHrefs: [] }];
+  const base = { title: "2014年财政收支情况", sourceHref: "x", resolvedUrl: "https://gks.mof.gov.cn/tongjishuju/a.htm", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/a.htm", sourceListingUrl: listings[0].url, reportPathPolicy: "gks_statistics", transportTransformation: "https_direct", publicationDate: "2015-01-30", publicationDateEvidence: "visible_text", contentSha256: "same", classification: "candidate" };
+  const audit = buildAudit("2026-08-19", listings, [{ ...base, period: "201412" }, { ...base, period: "201502", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/b.htm" }, { ...base, period: "201502", normalizedUrl: "https://www.mof.gov.cn/zhengwuxinxi/caizhengxinwen/c.htm" }, { ...base, period: "201503", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/d.htm", publicationDate: null, publicationDateEvidence: null }]);
+  assert.equal(audit.requiredRange.count, 139); assert.equal(audit.coverage.uniqueCoveredPeriods.includes("201412"), true); assert.equal(audit.coverage.ambiguousPeriods.includes("201502"), true); assert.equal(audit.coverage.duplicateOrRevisionPeriods.includes("201502"), true); assert.equal(audit.coverage.missingPublicationDatePeriods.includes("201503"), true); assert.equal(audit.coverage.missingPeriods.includes("201504"), true); assert.equal(audit.reports.filter(report => report.period === "201502").every(report => report.contentRelationship === "identical_body_hash"), true);
+  assert.equal(audit.auditStatus, "source_coverage_only"); assert.equal(audit.scoreEligible, false); assert.equal(audit.jointEligible, false); for (const forbidden of ["value", "pulse", "score", "direction", "threshold", "revenue", "expenditure", "yoy"]) assert.equal(Object.hasOwn(audit, forbidden), false);
+});
+
+test("checked-in L4 source audit is a deterministic official coverage-only artifact", async () => {
+  const audit = await l4SourceAuditData(); assert.equal(audit.source.pageCount, 20); assert.equal(audit.reports.length, 119); assert.equal(audit.coverage.uniqueCoveredPeriods.length, 119); assert.equal(audit.coverage.missingPeriods.length, 20); assert.deepEqual(audit.coverage.ambiguousPeriods, []); assert.deepEqual(audit.coverage.missingPublicationDatePeriods, []); assert.deepEqual(audit.coverage.duplicateOrRevisionPeriods, []); assert.equal(audit.ambiguousReports.length, 0);
+  assert.equal(audit.reports.every(report => report.normalizedUrl.startsWith("https://") && report.publicationDate && report.publicationDateEvidence), true); assert.equal(audit.reports.filter(report => report.reportPathPolicy === "www_fiscal_news").length, 1); assert.equal(audit.reports.filter(report => report.reportPathPolicy === "gks_statistics").length, 118);
+  const serialized = JSON.stringify(audit).toLowerCase(); for (const forbidden of ['"value"', '"pulse"', '"score"', '"direction"', '"threshold"', '"revenue"', '"expenditure"', '"yoy"']) assert.equal(serialized.includes(forbidden), false);
+  const joint = await jointHistoryData(); assert.deepEqual(joint.intentionallyMissing, ["L3", "L4"]); assert.equal(joint.includedIndicators.includes("L4"), false);
+});
+
+test("L4 source audit validates Chrome before network and preserves its artifact on failure", async () => {
+  const output = fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url)); const before = await readFile(output); const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/audit-market-research-history-l4-source.mjs", import.meta.url)), "--as-of", "2026-08-19"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /--chrome-path absolute executable path is required/); assert.deepEqual(await readFile(output), before); assert.equal((await readdir(path.dirname(output))).some(name => name.startsWith("l4-source-audit.json.tmp-")), false);
+  const source = await readFile(fileURLToPath(new URL("../scripts/audit-market-research-history-l4-source.mjs", import.meta.url)), "utf8"); assert.doesNotMatch(source, /ignore-certificate-errors|shell:\s*true|puppeteer|playwright/i); assert.match(source, /finally\s*\{\s*await rm\(profile, \{ recursive: true, force: true \}\)/);
 });
 
 test("builds F4 month ends from L plus D candidates on strictly prior index dates", async () => {
