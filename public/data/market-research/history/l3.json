@@ -1,0 +1,5329 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-17T00:00:00.000Z",
+  "requestedAsOf": "2026-08-17",
+  "historyStatus": "partial_field_coverage",
+  "scoreEligible": false,
+  "jointEligible": false,
+  "fieldCoverage": {
+    "incMonth": {
+      "present": 139,
+      "required": 139
+    },
+    "incCumval": {
+      "present": 139,
+      "required": 139
+    },
+    "stkEndval": {
+      "present": 131,
+      "required": 139
+    },
+    "stkYoy": {
+      "present": 120,
+      "required": 139
+    }
+  },
+  "indicator": {
+    "id": "L3",
+    "name": "信用脉冲",
+    "frequency": "monthly",
+    "asOfRule": "latest_period_released_by_next_calendar_month_end"
+  },
+  "range": {
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31",
+    "startPeriod": "201412",
+    "endPeriod": "202606",
+    "sourceStartPeriod": "201312"
+  },
+  "source": {
+    "provider": "Tushare Pro",
+    "api": "sf_month",
+    "fields": [
+      "inc_month",
+      "inc_cumval",
+      "stk_endval"
+    ],
+    "scheduleInput": "public/data/market-research/history/b3.json",
+    "releaseDateQuality": "conservative_proxy",
+    "pitScope": "release_lag_only",
+    "valueVintage": "latest_available_snapshot"
+  },
+  "sourceQuery": {
+    "api": "sf_month",
+    "startM": "201312",
+    "endM": "202606",
+    "fields": [
+      "month",
+      "inc_month",
+      "inc_cumval",
+      "stk_endval"
+    ]
+  },
+  "sourceSnapshotSha256": "204a9390bf0ca9cd095549318351b8022e73935612caa0495cac5b2261e92c53",
+  "sourceRows": [
+    {
+      "month": "201312",
+      "inc_month": 12322,
+      "inc_cumval": 172904,
+      "stk_endval": 107.46
+    },
+    {
+      "month": "201401",
+      "inc_month": 26004,
+      "inc_cumval": 26004,
+      "stk_endval": null
+    },
+    {
+      "month": "201402",
+      "inc_month": 9370,
+      "inc_cumval": 35374,
+      "stk_endval": null
+    },
+    {
+      "month": "201403",
+      "inc_month": 20934,
+      "inc_cumval": 56308,
+      "stk_endval": null
+    },
+    {
+      "month": "201404",
+      "inc_month": 15259,
+      "inc_cumval": 71567,
+      "stk_endval": null
+    },
+    {
+      "month": "201405",
+      "inc_month": 14013,
+      "inc_cumval": 85580,
+      "stk_endval": null
+    },
+    {
+      "month": "201406",
+      "inc_month": 19673,
+      "inc_cumval": 105253,
+      "stk_endval": null
+    },
+    {
+      "month": "201407",
+      "inc_month": 2737,
+      "inc_cumval": 107990,
+      "stk_endval": null
+    },
+    {
+      "month": "201408",
+      "inc_month": 9577,
+      "inc_cumval": 117567,
+      "stk_endval": null
+    },
+    {
+      "month": "201409",
+      "inc_month": 11355,
+      "inc_cumval": 128922,
+      "stk_endval": null
+    },
+    {
+      "month": "201410",
+      "inc_month": 6627,
+      "inc_cumval": 135549,
+      "stk_endval": null
+    },
+    {
+      "month": "201411",
+      "inc_month": 11463,
+      "inc_cumval": 147012,
+      "stk_endval": null
+    },
+    {
+      "month": "201412",
+      "inc_month": 16945,
+      "inc_cumval": 164133,
+      "stk_endval": 122.86
+    },
+    {
+      "month": "201501",
+      "inc_month": 20468.67,
+      "inc_cumval": 20468.67,
+      "stk_endval": null
+    },
+    {
+      "month": "201502",
+      "inc_month": 13564.18,
+      "inc_cumval": 34032.85,
+      "stk_endval": null
+    },
+    {
+      "month": "201503",
+      "inc_month": 12406.67,
+      "inc_cumval": 46439.52,
+      "stk_endval": 127.68
+    },
+    {
+      "month": "201504",
+      "inc_month": 10556.93,
+      "inc_cumval": 56996.45,
+      "stk_endval": null
+    },
+    {
+      "month": "201505",
+      "inc_month": 12361.5,
+      "inc_cumval": 69357.95,
+      "stk_endval": null
+    },
+    {
+      "month": "201506",
+      "inc_month": 18334.17,
+      "inc_cumval": 87692.12,
+      "stk_endval": 131.7
+    },
+    {
+      "month": "201507",
+      "inc_month": 7418.66,
+      "inc_cumval": 95110.78,
+      "stk_endval": null
+    },
+    {
+      "month": "201508",
+      "inc_month": 10856.47,
+      "inc_cumval": 105967.25,
+      "stk_endval": null
+    },
+    {
+      "month": "201509",
+      "inc_month": 13289.77,
+      "inc_cumval": 119257.02,
+      "stk_endval": 134.7
+    },
+    {
+      "month": "201510",
+      "inc_month": 5303.39,
+      "inc_cumval": 124560.41,
+      "stk_endval": null
+    },
+    {
+      "month": "201511",
+      "inc_month": 10224.27,
+      "inc_cumval": 134784.69,
+      "stk_endval": null
+    },
+    {
+      "month": "201512",
+      "inc_month": 18151.39,
+      "inc_cumval": 152936.08,
+      "stk_endval": 138.14
+    },
+    {
+      "month": "201601",
+      "inc_month": 34757.72,
+      "inc_cumval": 34757.72,
+      "stk_endval": 141.57
+    },
+    {
+      "month": "201602",
+      "inc_month": 8312.09,
+      "inc_cumval": 43069.81,
+      "stk_endval": 142.52
+    },
+    {
+      "month": "201603",
+      "inc_month": 23930.51,
+      "inc_cumval": 67000.33,
+      "stk_endval": 144.75
+    },
+    {
+      "month": "201604",
+      "inc_month": 7809.39,
+      "inc_cumval": 74809.72,
+      "stk_endval": 145.59
+    },
+    {
+      "month": "201605",
+      "inc_month": 6769.54,
+      "inc_cumval": 81579.26,
+      "stk_endval": 146.33
+    },
+    {
+      "month": "201606",
+      "inc_month": 16479,
+      "inc_cumval": 98058.72,
+      "stk_endval": 147.99
+    },
+    {
+      "month": "201607",
+      "inc_month": 4791,
+      "inc_cumval": 102849.72,
+      "stk_endval": 148.37
+    },
+    {
+      "month": "201608",
+      "inc_month": 14605,
+      "inc_cumval": 117454.72,
+      "stk_endval": 149.81
+    },
+    {
+      "month": "201609",
+      "inc_month": 17115,
+      "inc_cumval": 134569.72,
+      "stk_endval": 151.51
+    },
+    {
+      "month": "201610",
+      "inc_month": 8865,
+      "inc_cumval": 143434.72,
+      "stk_endval": 152.43
+    },
+    {
+      "month": "201611",
+      "inc_month": 18328,
+      "inc_cumval": 161762.72,
+      "stk_endval": 154.35
+    },
+    {
+      "month": "201612",
+      "inc_month": 16260,
+      "inc_cumval": 178022.72,
+      "stk_endval": 155.99
+    },
+    {
+      "month": "201701",
+      "inc_month": 37720.08,
+      "inc_cumval": 37720.08,
+      "stk_endval": 184.14
+    },
+    {
+      "month": "201702",
+      "inc_month": 11055.32,
+      "inc_cumval": 48775.4,
+      "stk_endval": 185.25
+    },
+    {
+      "month": "201703",
+      "inc_month": 25471.64,
+      "inc_cumval": 74247.04,
+      "stk_endval": 187.79
+    },
+    {
+      "month": "201704",
+      "inc_month": 19558.92,
+      "inc_cumval": 93805.96,
+      "stk_endval": 189.71
+    },
+    {
+      "month": "201705",
+      "inc_month": 17811.73,
+      "inc_cumval": 111617.7,
+      "stk_endval": 191.46
+    },
+    {
+      "month": "201706",
+      "inc_month": 25885.91,
+      "inc_cumval": 137503.61,
+      "stk_endval": 193.97
+    },
+    {
+      "month": "201707",
+      "inc_month": 21188.11,
+      "inc_cumval": 158691.71,
+      "stk_endval": 195.98
+    },
+    {
+      "month": "201708",
+      "inc_month": 20485.51,
+      "inc_cumval": 179177.22,
+      "stk_endval": 197.94
+    },
+    {
+      "month": "201709",
+      "inc_month": 25438.61,
+      "inc_cumval": 204615.83,
+      "stk_endval": 200.44
+    },
+    {
+      "month": "201710",
+      "inc_month": 15861.15,
+      "inc_cumval": 220476.98,
+      "stk_endval": 201.96
+    },
+    {
+      "month": "201711",
+      "inc_month": 22955.98,
+      "inc_cumval": 243432.96,
+      "stk_endval": 204.19
+    },
+    {
+      "month": "201712",
+      "inc_month": 18102.88,
+      "inc_cumval": 261535.84,
+      "stk_endval": 205.91
+    },
+    {
+      "month": "201801",
+      "inc_month": 31417.22,
+      "inc_cumval": 31417.22,
+      "stk_endval": 208.88
+    },
+    {
+      "month": "201802",
+      "inc_month": 12064.39,
+      "inc_cumval": 43481.61,
+      "stk_endval": 210.05
+    },
+    {
+      "month": "201803",
+      "inc_month": 17091.48,
+      "inc_cumval": 60573.09,
+      "stk_endval": 211.62
+    },
+    {
+      "month": "201804",
+      "inc_month": 22242.94,
+      "inc_cumval": 82816.03,
+      "stk_endval": 213.72
+    },
+    {
+      "month": "201805",
+      "inc_month": 11233.62,
+      "inc_cumval": 94049.65,
+      "stk_endval": 214.81
+    },
+    {
+      "month": "201806",
+      "inc_month": 20372.96,
+      "inc_cumval": 114422.61,
+      "stk_endval": 216.78
+    },
+    {
+      "month": "201807",
+      "inc_month": 18381.94,
+      "inc_cumval": 132804.56,
+      "stk_endval": 218.49
+    },
+    {
+      "month": "201808",
+      "inc_month": 24078.25,
+      "inc_cumval": 156882.81,
+      "stk_endval": 220.74
+    },
+    {
+      "month": "201809",
+      "inc_month": 23061.25,
+      "inc_cumval": 179944.06,
+      "stk_endval": 222.9
+    },
+    {
+      "month": "201810",
+      "inc_month": 9537.8,
+      "inc_cumval": 189481.86,
+      "stk_endval": 223.75
+    },
+    {
+      "month": "201811",
+      "inc_month": 16127.17,
+      "inc_cumval": 205609.02,
+      "stk_endval": 225.24
+    },
+    {
+      "month": "201812",
+      "inc_month": 19311.17,
+      "inc_cumval": 224920.2,
+      "stk_endval": 227.04
+    },
+    {
+      "month": "201901",
+      "inc_month": 46791.14,
+      "inc_cumval": 46791.14,
+      "stk_endval": 231.55
+    },
+    {
+      "month": "201902",
+      "inc_month": 9665.13,
+      "inc_cumval": 56456.27,
+      "stk_endval": 232.41
+    },
+    {
+      "month": "201903",
+      "inc_month": 29602.34,
+      "inc_cumval": 86058.6,
+      "stk_endval": 235.24
+    },
+    {
+      "month": "201904",
+      "inc_month": 16709.54,
+      "inc_cumval": 102768.14,
+      "stk_endval": 236.81
+    },
+    {
+      "month": "201905",
+      "inc_month": 17123.73,
+      "inc_cumval": 119891.87,
+      "stk_endval": 238.5
+    },
+    {
+      "month": "201906",
+      "inc_month": 26243.3,
+      "inc_cumval": 146135.17,
+      "stk_endval": 241.05
+    },
+    {
+      "month": "201907",
+      "inc_month": 12872.11,
+      "inc_cumval": 159007.28,
+      "stk_endval": 242.19
+    },
+    {
+      "month": "201908",
+      "inc_month": 21955.77,
+      "inc_cumval": 180963.05,
+      "stk_endval": 244.31
+    },
+    {
+      "month": "201909",
+      "inc_month": 25142.21,
+      "inc_cumval": 206105.26,
+      "stk_endval": 246.68
+    },
+    {
+      "month": "201910",
+      "inc_month": 8680,
+      "inc_cumval": 214785.26,
+      "stk_endval": 247.42
+    },
+    {
+      "month": "201911",
+      "inc_month": 19936.92,
+      "inc_cumval": 234722.18,
+      "stk_endval": 249.27
+    },
+    {
+      "month": "201912",
+      "inc_month": 22013,
+      "inc_cumval": 255752.46,
+      "stk_endval": 251.31
+    },
+    {
+      "month": "202001",
+      "inc_month": 50535,
+      "inc_cumval": 50535,
+      "stk_endval": 256.34
+    },
+    {
+      "month": "202002",
+      "inc_month": 8737,
+      "inc_cumval": 59272,
+      "stk_endval": 257.17
+    },
+    {
+      "month": "202003",
+      "inc_month": 51838,
+      "inc_cumval": 111110,
+      "stk_endval": 262.27
+    },
+    {
+      "month": "202004",
+      "inc_month": 31027,
+      "inc_cumval": 142137,
+      "stk_endval": 265.22
+    },
+    {
+      "month": "202005",
+      "inc_month": 31866,
+      "inc_cumval": 174003,
+      "stk_endval": 268.38
+    },
+    {
+      "month": "202006",
+      "inc_month": 34681,
+      "inc_cumval": 208684,
+      "stk_endval": 271.78
+    },
+    {
+      "month": "202007",
+      "inc_month": 16928,
+      "inc_cumval": 225612,
+      "stk_endval": 273.33
+    },
+    {
+      "month": "202008",
+      "inc_month": 35853,
+      "inc_cumval": 261465,
+      "stk_endval": 276.73
+    },
+    {
+      "month": "202009",
+      "inc_month": 34693,
+      "inc_cumval": 296158,
+      "stk_endval": 280.05
+    },
+    {
+      "month": "202010",
+      "inc_month": 13929,
+      "inc_cumval": 310087,
+      "stk_endval": 281.25
+    },
+    {
+      "month": "202011",
+      "inc_month": 21355,
+      "inc_cumval": 331442,
+      "stk_endval": 283.25
+    },
+    {
+      "month": "202012",
+      "inc_month": 16476,
+      "inc_cumval": 347918,
+      "stk_endval": 284.75
+    },
+    {
+      "month": "202101",
+      "inc_month": 51884,
+      "inc_cumval": 51884,
+      "stk_endval": 289.74
+    },
+    {
+      "month": "202102",
+      "inc_month": 17243,
+      "inc_cumval": 69127,
+      "stk_endval": 291.36
+    },
+    {
+      "month": "202103",
+      "inc_month": 33762,
+      "inc_cumval": 102889,
+      "stk_endval": 294.56
+    },
+    {
+      "month": "202104",
+      "inc_month": 18570,
+      "inc_cumval": 121459,
+      "stk_endval": 296.15
+    },
+    {
+      "month": "202105",
+      "inc_month": 19522,
+      "inc_cumval": 140981,
+      "stk_endval": 297.98
+    },
+    {
+      "month": "202106",
+      "inc_month": 37017,
+      "inc_cumval": 177998,
+      "stk_endval": 301.56
+    },
+    {
+      "month": "202107",
+      "inc_month": 10752,
+      "inc_cumval": 188750,
+      "stk_endval": 302.47
+    },
+    {
+      "month": "202108",
+      "inc_month": 29893,
+      "inc_cumval": 218643,
+      "stk_endval": 305.29
+    },
+    {
+      "month": "202109",
+      "inc_month": 29026,
+      "inc_cumval": 247669,
+      "stk_endval": 308.05
+    },
+    {
+      "month": "202110",
+      "inc_month": 16176,
+      "inc_cumval": 263845,
+      "stk_endval": 309.45
+    },
+    {
+      "month": "202111",
+      "inc_month": 25983,
+      "inc_cumval": 289828,
+      "stk_endval": 311.9
+    },
+    {
+      "month": "202112",
+      "inc_month": 23580,
+      "inc_cumval": 313408,
+      "stk_endval": 314.12
+    },
+    {
+      "month": "202201",
+      "inc_month": 61759,
+      "inc_cumval": 61759,
+      "stk_endval": 320.03
+    },
+    {
+      "month": "202202",
+      "inc_month": 12170,
+      "inc_cumval": 73929,
+      "stk_endval": 321.12
+    },
+    {
+      "month": "202203",
+      "inc_month": 46565,
+      "inc_cumval": 120494,
+      "stk_endval": 325.63
+    },
+    {
+      "month": "202204",
+      "inc_month": 9327,
+      "inc_cumval": 129821,
+      "stk_endval": 326.47
+    },
+    {
+      "month": "202205",
+      "inc_month": 28415,
+      "inc_cumval": 158236,
+      "stk_endval": 329.2
+    },
+    {
+      "month": "202206",
+      "inc_month": 51926,
+      "inc_cumval": 210162,
+      "stk_endval": 334.28
+    },
+    {
+      "month": "202207",
+      "inc_month": 7785,
+      "inc_cumval": 217947,
+      "stk_endval": 334.9
+    },
+    {
+      "month": "202208",
+      "inc_month": 24712,
+      "inc_cumval": 242659,
+      "stk_endval": 337.22
+    },
+    {
+      "month": "202209",
+      "inc_month": 35411,
+      "inc_cumval": 278070,
+      "stk_endval": 340.65
+    },
+    {
+      "month": "202210",
+      "inc_month": 9134,
+      "inc_cumval": 287204,
+      "stk_endval": 341.42
+    },
+    {
+      "month": "202211",
+      "inc_month": 19837,
+      "inc_cumval": 307041,
+      "stk_endval": 343.19
+    },
+    {
+      "month": "202212",
+      "inc_month": 13063,
+      "inc_cumval": 320104,
+      "stk_endval": 344.21
+    },
+    {
+      "month": "202301",
+      "inc_month": 59956,
+      "inc_cumval": 59956,
+      "stk_endval": 350.93
+    },
+    {
+      "month": "202302",
+      "inc_month": 31610,
+      "inc_cumval": 91566,
+      "stk_endval": 353.97
+    },
+    {
+      "month": "202303",
+      "inc_month": 53867,
+      "inc_cumval": 145433,
+      "stk_endval": 359.02
+    },
+    {
+      "month": "202304",
+      "inc_month": 12249,
+      "inc_cumval": 157682,
+      "stk_endval": 359.95
+    },
+    {
+      "month": "202305",
+      "inc_month": 15560,
+      "inc_cumval": 173242,
+      "stk_endval": 361.42
+    },
+    {
+      "month": "202306",
+      "inc_month": 42265,
+      "inc_cumval": 215507,
+      "stk_endval": 365.45
+    },
+    {
+      "month": "202307",
+      "inc_month": 5366,
+      "inc_cumval": 220873,
+      "stk_endval": 365.77
+    },
+    {
+      "month": "202308",
+      "inc_month": 31279,
+      "inc_cumval": 252152,
+      "stk_endval": 368.61
+    },
+    {
+      "month": "202309",
+      "inc_month": 41326,
+      "inc_cumval": 293478,
+      "stk_endval": 372.5
+    },
+    {
+      "month": "202310",
+      "inc_month": 18441,
+      "inc_cumval": 311919,
+      "stk_endval": 374.17
+    },
+    {
+      "month": "202311",
+      "inc_month": 24554,
+      "inc_cumval": 336473,
+      "stk_endval": 376.39
+    },
+    {
+      "month": "202312",
+      "inc_month": 19326,
+      "inc_cumval": 355799,
+      "stk_endval": 378.08
+    },
+    {
+      "month": "202401",
+      "inc_month": 64734,
+      "inc_cumval": 64734,
+      "stk_endval": 384.32
+    },
+    {
+      "month": "202402",
+      "inc_month": 14959,
+      "inc_cumval": 79693,
+      "stk_endval": 385.71
+    },
+    {
+      "month": "202403",
+      "inc_month": 48335,
+      "inc_cumval": 128028,
+      "stk_endval": 390.32
+    },
+    {
+      "month": "202404",
+      "inc_month": -658,
+      "inc_cumval": 127370,
+      "stk_endval": 389.93
+    },
+    {
+      "month": "202405",
+      "inc_month": 20623,
+      "inc_cumval": 147993,
+      "stk_endval": 391.93
+    },
+    {
+      "month": "202406",
+      "inc_month": 32985,
+      "inc_cumval": 180978,
+      "stk_endval": 395.1
+    },
+    {
+      "month": "202407",
+      "inc_month": 7707,
+      "inc_cumval": 188685,
+      "stk_endval": 395.72
+    },
+    {
+      "month": "202408",
+      "inc_month": 30323,
+      "inc_cumval": 219008,
+      "stk_endval": 398.56
+    },
+    {
+      "month": "202409",
+      "inc_month": 37635,
+      "inc_cumval": 256643,
+      "stk_endval": 402.19
+    },
+    {
+      "month": "202410",
+      "inc_month": 14120,
+      "inc_cumval": 270763,
+      "stk_endval": 403.45
+    },
+    {
+      "month": "202411",
+      "inc_month": 23288,
+      "inc_cumval": 294051,
+      "stk_endval": 405.6
+    },
+    {
+      "month": "202412",
+      "inc_month": 28537,
+      "inc_cumval": 322558,
+      "stk_endval": 408.34
+    },
+    {
+      "month": "202501",
+      "inc_month": 70546,
+      "inc_cumval": 70546,
+      "stk_endval": 415.19
+    },
+    {
+      "month": "202502",
+      "inc_month": 22331,
+      "inc_cumval": 92877,
+      "stk_endval": 417.29
+    },
+    {
+      "month": "202503",
+      "inc_month": 58961,
+      "inc_cumval": 151838,
+      "stk_endval": 422.97
+    },
+    {
+      "month": "202504",
+      "inc_month": 11599,
+      "inc_cumval": 163437,
+      "stk_endval": 424
+    },
+    {
+      "month": "202505",
+      "inc_month": 22899,
+      "inc_cumval": 186336,
+      "stk_endval": 426.16
+    },
+    {
+      "month": "202506",
+      "inc_month": 42251,
+      "inc_cumval": 228588,
+      "stk_endval": 430.24
+    },
+    {
+      "month": "202507",
+      "inc_month": 11307,
+      "inc_cumval": 239895,
+      "stk_endval": 431.25
+    },
+    {
+      "month": "202508",
+      "inc_month": 25660,
+      "inc_cumval": 265555,
+      "stk_endval": 433.65
+    },
+    {
+      "month": "202509",
+      "inc_month": 35299,
+      "inc_cumval": 300854,
+      "stk_endval": 437.08
+    },
+    {
+      "month": "202510",
+      "inc_month": 8178,
+      "inc_cumval": 309032,
+      "stk_endval": 437.71
+    },
+    {
+      "month": "202511",
+      "inc_month": 24926,
+      "inc_cumval": 333958,
+      "stk_endval": 440.07
+    },
+    {
+      "month": "202512",
+      "inc_month": 22075,
+      "inc_cumval": 356033,
+      "stk_endval": 442.12
+    },
+    {
+      "month": "202601",
+      "inc_month": 72185,
+      "inc_cumval": 72185,
+      "stk_endval": 449.11
+    },
+    {
+      "month": "202602",
+      "inc_month": 23837,
+      "inc_cumval": 96022,
+      "stk_endval": 451.4
+    },
+    {
+      "month": "202603",
+      "inc_month": 52240,
+      "inc_cumval": 148262,
+      "stk_endval": 456.46
+    },
+    {
+      "month": "202604",
+      "inc_month": 6238,
+      "inc_cumval": 154500,
+      "stk_endval": 456.88
+    },
+    {
+      "month": "202605",
+      "inc_month": 20293,
+      "inc_cumval": 174793,
+      "stk_endval": 458.81
+    },
+    {
+      "month": "202606",
+      "inc_month": 33671,
+      "inc_cumval": 208464,
+      "stk_endval": 462.06
+    }
+  ],
+  "points": [
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-01-31",
+      "period": "201412",
+      "incMonth": 16945,
+      "incCumval": 164133,
+      "stkEndval": 122.86,
+      "stkYoy": 14.33,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2015-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-02-28",
+      "period": "201501",
+      "incMonth": 20468.67,
+      "incCumval": 20468.67,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-03-31",
+      "period": "201502",
+      "incMonth": 13564.18,
+      "incCumval": 34032.85,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-04-30",
+      "period": "201503",
+      "incMonth": 12406.67,
+      "incCumval": 46439.52,
+      "stkEndval": 127.68,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-05-31",
+      "period": "201504",
+      "incMonth": 10556.93,
+      "incCumval": 56996.45,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-06-30",
+      "period": "201505",
+      "incMonth": 12361.5,
+      "incCumval": 69357.95,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-07-31",
+      "period": "201506",
+      "incMonth": 18334.17,
+      "incCumval": 87692.12,
+      "stkEndval": 131.7,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-08-31",
+      "period": "201507",
+      "incMonth": 7418.66,
+      "incCumval": 95110.78,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-09-30",
+      "period": "201508",
+      "incMonth": 10856.47,
+      "incCumval": 105967.25,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-10-31",
+      "period": "201509",
+      "incMonth": 13289.77,
+      "incCumval": 119257.02,
+      "stkEndval": 134.7,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-11-30",
+      "period": "201510",
+      "incMonth": 5303.39,
+      "incCumval": 124560.41,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2015-12-31",
+      "period": "201511",
+      "incMonth": 10224.27,
+      "incCumval": 134784.69,
+      "stkEndval": null,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkEndval",
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2015-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-01-31",
+      "period": "201512",
+      "incMonth": 18151.39,
+      "incCumval": 152936.08,
+      "stkEndval": 138.14,
+      "stkYoy": 12.44,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2016-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-02-29",
+      "period": "201601",
+      "incMonth": 34757.72,
+      "incCumval": 34757.72,
+      "stkEndval": 141.57,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-02-29",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-03-31",
+      "period": "201602",
+      "incMonth": 8312.09,
+      "incCumval": 43069.81,
+      "stkEndval": 142.52,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-04-30",
+      "period": "201603",
+      "incMonth": 23930.51,
+      "incCumval": 67000.33,
+      "stkEndval": 144.75,
+      "stkYoy": 13.37,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2016-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-05-31",
+      "period": "201604",
+      "incMonth": 7809.39,
+      "incCumval": 74809.72,
+      "stkEndval": 145.59,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-06-30",
+      "period": "201605",
+      "incMonth": 6769.54,
+      "incCumval": 81579.26,
+      "stkEndval": 146.33,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-07-31",
+      "period": "201606",
+      "incMonth": 16479,
+      "incCumval": 98058.72,
+      "stkEndval": 147.99,
+      "stkYoy": 12.37,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2016-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-08-31",
+      "period": "201607",
+      "incMonth": 4791,
+      "incCumval": 102849.72,
+      "stkEndval": 148.37,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-09-30",
+      "period": "201608",
+      "incMonth": 14605,
+      "incCumval": 117454.72,
+      "stkEndval": 149.81,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-10-31",
+      "period": "201609",
+      "incMonth": 17115,
+      "incCumval": 134569.72,
+      "stkEndval": 151.51,
+      "stkYoy": 12.48,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2016-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-11-30",
+      "period": "201610",
+      "incMonth": 8865,
+      "incCumval": 143434.72,
+      "stkEndval": 152.43,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2016-12-31",
+      "period": "201611",
+      "incMonth": 18328,
+      "incCumval": 161762.72,
+      "stkEndval": 154.35,
+      "stkYoy": null,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [
+        "stkYoy"
+      ],
+      "dataStatus": "partial",
+      "releaseDate": "2016-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-01-31",
+      "period": "201612",
+      "incMonth": 16260,
+      "incCumval": 178022.72,
+      "stkEndval": 155.99,
+      "stkYoy": 12.92,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-02-28",
+      "period": "201701",
+      "incMonth": 37720.08,
+      "incCumval": 37720.08,
+      "stkEndval": 184.14,
+      "stkYoy": 30.07,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-03-31",
+      "period": "201702",
+      "incMonth": 11055.32,
+      "incCumval": 48775.4,
+      "stkEndval": 185.25,
+      "stkYoy": 29.98,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-04-30",
+      "period": "201703",
+      "incMonth": 25471.64,
+      "incCumval": 74247.04,
+      "stkEndval": 187.79,
+      "stkYoy": 29.73,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-05-31",
+      "period": "201704",
+      "incMonth": 19558.92,
+      "incCumval": 93805.96,
+      "stkEndval": 189.71,
+      "stkYoy": 30.3,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-06-30",
+      "period": "201705",
+      "incMonth": 17811.73,
+      "incCumval": 111617.7,
+      "stkEndval": 191.46,
+      "stkYoy": 30.84,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-07-31",
+      "period": "201706",
+      "incMonth": 25885.91,
+      "incCumval": 137503.61,
+      "stkEndval": 193.97,
+      "stkYoy": 31.07,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-08-31",
+      "period": "201707",
+      "incMonth": 21188.11,
+      "incCumval": 158691.71,
+      "stkEndval": 195.98,
+      "stkYoy": 32.09,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-09-30",
+      "period": "201708",
+      "incMonth": 20485.51,
+      "incCumval": 179177.22,
+      "stkEndval": 197.94,
+      "stkYoy": 32.13,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-10-31",
+      "period": "201709",
+      "incMonth": 25438.61,
+      "incCumval": 204615.83,
+      "stkEndval": 200.44,
+      "stkYoy": 32.29,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-11-30",
+      "period": "201710",
+      "incMonth": 15861.15,
+      "incCumval": 220476.98,
+      "stkEndval": 201.96,
+      "stkYoy": 32.49,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2017-12-31",
+      "period": "201711",
+      "incMonth": 22955.98,
+      "incCumval": 243432.96,
+      "stkEndval": 204.19,
+      "stkYoy": 32.29,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2017-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-01-31",
+      "period": "201712",
+      "incMonth": 18102.88,
+      "incCumval": 261535.84,
+      "stkEndval": 205.91,
+      "stkYoy": 32,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-02-28",
+      "period": "201801",
+      "incMonth": 31417.22,
+      "incCumval": 31417.22,
+      "stkEndval": 208.88,
+      "stkYoy": 13.44,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-03-31",
+      "period": "201802",
+      "incMonth": 12064.39,
+      "incCumval": 43481.61,
+      "stkEndval": 210.05,
+      "stkYoy": 13.39,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-04-30",
+      "period": "201803",
+      "incMonth": 17091.48,
+      "incCumval": 60573.09,
+      "stkEndval": 211.62,
+      "stkYoy": 12.69,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-05-31",
+      "period": "201804",
+      "incMonth": 22242.94,
+      "incCumval": 82816.03,
+      "stkEndval": 213.72,
+      "stkYoy": 12.66,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-06-30",
+      "period": "201805",
+      "incMonth": 11233.62,
+      "incCumval": 94049.65,
+      "stkEndval": 214.81,
+      "stkYoy": 12.2,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-07-31",
+      "period": "201806",
+      "incMonth": 20372.96,
+      "incCumval": 114422.61,
+      "stkEndval": 216.78,
+      "stkYoy": 11.76,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-08-31",
+      "period": "201807",
+      "incMonth": 18381.94,
+      "incCumval": 132804.56,
+      "stkEndval": 218.49,
+      "stkYoy": 11.49,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-09-30",
+      "period": "201808",
+      "incMonth": 24078.25,
+      "incCumval": 156882.81,
+      "stkEndval": 220.74,
+      "stkYoy": 11.52,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-10-31",
+      "period": "201809",
+      "incMonth": 23061.25,
+      "incCumval": 179944.06,
+      "stkEndval": 222.9,
+      "stkYoy": 11.21,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-11-30",
+      "period": "201810",
+      "incMonth": 9537.8,
+      "incCumval": 189481.86,
+      "stkEndval": 223.75,
+      "stkYoy": 10.79,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2018-12-31",
+      "period": "201811",
+      "incMonth": 16127.17,
+      "incCumval": 205609.02,
+      "stkEndval": 225.24,
+      "stkYoy": 10.31,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2018-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-01-31",
+      "period": "201812",
+      "incMonth": 19311.17,
+      "incCumval": 224920.2,
+      "stkEndval": 227.04,
+      "stkYoy": 10.26,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-02-28",
+      "period": "201901",
+      "incMonth": 46791.14,
+      "incCumval": 46791.14,
+      "stkEndval": 231.55,
+      "stkYoy": 10.85,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-03-31",
+      "period": "201902",
+      "incMonth": 9665.13,
+      "incCumval": 56456.27,
+      "stkEndval": 232.41,
+      "stkYoy": 10.65,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-04-30",
+      "period": "201903",
+      "incMonth": 29602.34,
+      "incCumval": 86058.6,
+      "stkEndval": 235.24,
+      "stkYoy": 11.16,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-05-31",
+      "period": "201904",
+      "incMonth": 16709.54,
+      "incCumval": 102768.14,
+      "stkEndval": 236.81,
+      "stkYoy": 10.8,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-06-30",
+      "period": "201905",
+      "incMonth": 17123.73,
+      "incCumval": 119891.87,
+      "stkEndval": 238.5,
+      "stkYoy": 11.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-07-31",
+      "period": "201906",
+      "incMonth": 26243.3,
+      "incCumval": 146135.17,
+      "stkEndval": 241.05,
+      "stkYoy": 11.2,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-08-31",
+      "period": "201907",
+      "incMonth": 12872.11,
+      "incCumval": 159007.28,
+      "stkEndval": 242.19,
+      "stkYoy": 10.85,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-09-30",
+      "period": "201908",
+      "incMonth": 21955.77,
+      "incCumval": 180963.05,
+      "stkEndval": 244.31,
+      "stkYoy": 10.68,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-10-31",
+      "period": "201909",
+      "incMonth": 25142.21,
+      "incCumval": 206105.26,
+      "stkEndval": 246.68,
+      "stkYoy": 10.67,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-11-30",
+      "period": "201910",
+      "incMonth": 8680,
+      "incCumval": 214785.26,
+      "stkEndval": 247.42,
+      "stkYoy": 10.58,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2019-12-31",
+      "period": "201911",
+      "incMonth": 19936.92,
+      "incCumval": 234722.18,
+      "stkEndval": 249.27,
+      "stkYoy": 10.67,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2019-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-01-31",
+      "period": "201912",
+      "incMonth": 22013,
+      "incCumval": 255752.46,
+      "stkEndval": 251.31,
+      "stkYoy": 10.69,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-02-29",
+      "period": "202001",
+      "incMonth": 50535,
+      "incCumval": 50535,
+      "stkEndval": 256.34,
+      "stkYoy": 10.71,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-02-29",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-03-31",
+      "period": "202002",
+      "incMonth": 8737,
+      "incCumval": 59272,
+      "stkEndval": 257.17,
+      "stkYoy": 10.65,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-04-30",
+      "period": "202003",
+      "incMonth": 51838,
+      "incCumval": 111110,
+      "stkEndval": 262.27,
+      "stkYoy": 11.49,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-05-31",
+      "period": "202004",
+      "incMonth": 31027,
+      "incCumval": 142137,
+      "stkEndval": 265.22,
+      "stkYoy": 12,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-06-30",
+      "period": "202005",
+      "incMonth": 31866,
+      "incCumval": 174003,
+      "stkEndval": 268.38,
+      "stkYoy": 12.53,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-07-31",
+      "period": "202006",
+      "incMonth": 34681,
+      "incCumval": 208684,
+      "stkEndval": 271.78,
+      "stkYoy": 12.75,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-08-31",
+      "period": "202007",
+      "incMonth": 16928,
+      "incCumval": 225612,
+      "stkEndval": 273.33,
+      "stkYoy": 12.86,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-09-30",
+      "period": "202008",
+      "incMonth": 35853,
+      "incCumval": 261465,
+      "stkEndval": 276.73,
+      "stkYoy": 13.27,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-10-31",
+      "period": "202009",
+      "incMonth": 34693,
+      "incCumval": 296158,
+      "stkEndval": 280.05,
+      "stkYoy": 13.53,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-11-30",
+      "period": "202010",
+      "incMonth": 13929,
+      "incCumval": 310087,
+      "stkEndval": 281.25,
+      "stkYoy": 13.67,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2020-12-31",
+      "period": "202011",
+      "incMonth": 21355,
+      "incCumval": 331442,
+      "stkEndval": 283.25,
+      "stkYoy": 13.63,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2020-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-01-31",
+      "period": "202012",
+      "incMonth": 16476,
+      "incCumval": 347918,
+      "stkEndval": 284.75,
+      "stkYoy": 13.31,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-02-28",
+      "period": "202101",
+      "incMonth": 51884,
+      "incCumval": 51884,
+      "stkEndval": 289.74,
+      "stkYoy": 13.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-03-31",
+      "period": "202102",
+      "incMonth": 17243,
+      "incCumval": 69127,
+      "stkEndval": 291.36,
+      "stkYoy": 13.29,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-04-30",
+      "period": "202103",
+      "incMonth": 33762,
+      "incCumval": 102889,
+      "stkEndval": 294.56,
+      "stkYoy": 12.31,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-05-31",
+      "period": "202104",
+      "incMonth": 18570,
+      "incCumval": 121459,
+      "stkEndval": 296.15,
+      "stkYoy": 11.66,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-06-30",
+      "period": "202105",
+      "incMonth": 19522,
+      "incCumval": 140981,
+      "stkEndval": 297.98,
+      "stkYoy": 11.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-07-31",
+      "period": "202106",
+      "incMonth": 37017,
+      "incCumval": 177998,
+      "stkEndval": 301.56,
+      "stkYoy": 10.96,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-08-31",
+      "period": "202107",
+      "incMonth": 10752,
+      "incCumval": 188750,
+      "stkEndval": 302.47,
+      "stkYoy": 10.66,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-09-30",
+      "period": "202108",
+      "incMonth": 29893,
+      "incCumval": 218643,
+      "stkEndval": 305.29,
+      "stkYoy": 10.32,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-10-31",
+      "period": "202109",
+      "incMonth": 29026,
+      "incCumval": 247669,
+      "stkEndval": 308.05,
+      "stkYoy": 10,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-11-30",
+      "period": "202110",
+      "incMonth": 16176,
+      "incCumval": 263845,
+      "stkEndval": 309.45,
+      "stkYoy": 10.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2021-12-31",
+      "period": "202111",
+      "incMonth": 25983,
+      "incCumval": 289828,
+      "stkEndval": 311.9,
+      "stkYoy": 10.11,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2021-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-01-31",
+      "period": "202112",
+      "incMonth": 23580,
+      "incCumval": 313408,
+      "stkEndval": 314.12,
+      "stkYoy": 10.31,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-02-28",
+      "period": "202201",
+      "incMonth": 61759,
+      "incCumval": 61759,
+      "stkEndval": 320.03,
+      "stkYoy": 10.45,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-03-31",
+      "period": "202202",
+      "incMonth": 12170,
+      "incCumval": 73929,
+      "stkEndval": 321.12,
+      "stkYoy": 10.21,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-04-30",
+      "period": "202203",
+      "incMonth": 46565,
+      "incCumval": 120494,
+      "stkEndval": 325.63,
+      "stkYoy": 10.55,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-05-31",
+      "period": "202204",
+      "incMonth": 9327,
+      "incCumval": 129821,
+      "stkEndval": 326.47,
+      "stkYoy": 10.24,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-06-30",
+      "period": "202205",
+      "incMonth": 28415,
+      "incCumval": 158236,
+      "stkEndval": 329.2,
+      "stkYoy": 10.48,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-07-31",
+      "period": "202206",
+      "incMonth": 51926,
+      "incCumval": 210162,
+      "stkEndval": 334.28,
+      "stkYoy": 10.85,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-08-31",
+      "period": "202207",
+      "incMonth": 7785,
+      "incCumval": 217947,
+      "stkEndval": 334.9,
+      "stkYoy": 10.72,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-09-30",
+      "period": "202208",
+      "incMonth": 24712,
+      "incCumval": 242659,
+      "stkEndval": 337.22,
+      "stkYoy": 10.46,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-10-31",
+      "period": "202209",
+      "incMonth": 35411,
+      "incCumval": 278070,
+      "stkEndval": 340.65,
+      "stkYoy": 10.58,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-11-30",
+      "period": "202210",
+      "incMonth": 9134,
+      "incCumval": 287204,
+      "stkEndval": 341.42,
+      "stkYoy": 10.33,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2022-12-31",
+      "period": "202211",
+      "incMonth": 19837,
+      "incCumval": 307041,
+      "stkEndval": 343.19,
+      "stkYoy": 10.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2022-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-01-31",
+      "period": "202212",
+      "incMonth": 13063,
+      "incCumval": 320104,
+      "stkEndval": 344.21,
+      "stkYoy": 9.58,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-02-28",
+      "period": "202301",
+      "incMonth": 59956,
+      "incCumval": 59956,
+      "stkEndval": 350.93,
+      "stkYoy": 9.66,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-03-31",
+      "period": "202302",
+      "incMonth": 31610,
+      "incCumval": 91566,
+      "stkEndval": 353.97,
+      "stkYoy": 10.23,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-04-30",
+      "period": "202303",
+      "incMonth": 53867,
+      "incCumval": 145433,
+      "stkEndval": 359.02,
+      "stkYoy": 10.25,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-05-31",
+      "period": "202304",
+      "incMonth": 12249,
+      "incCumval": 157682,
+      "stkEndval": 359.95,
+      "stkYoy": 10.26,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-06-30",
+      "period": "202305",
+      "incMonth": 15560,
+      "incCumval": 173242,
+      "stkEndval": 361.42,
+      "stkYoy": 9.79,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-07-31",
+      "period": "202306",
+      "incMonth": 42265,
+      "incCumval": 215507,
+      "stkEndval": 365.45,
+      "stkYoy": 9.32,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-08-31",
+      "period": "202307",
+      "incMonth": 5366,
+      "incCumval": 220873,
+      "stkEndval": 365.77,
+      "stkYoy": 9.22,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-09-30",
+      "period": "202308",
+      "incMonth": 31279,
+      "incCumval": 252152,
+      "stkEndval": 368.61,
+      "stkYoy": 9.31,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-10-31",
+      "period": "202309",
+      "incMonth": 41326,
+      "incCumval": 293478,
+      "stkEndval": 372.5,
+      "stkYoy": 9.35,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-11-30",
+      "period": "202310",
+      "incMonth": 18441,
+      "incCumval": 311919,
+      "stkEndval": 374.17,
+      "stkYoy": 9.59,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2023-12-31",
+      "period": "202311",
+      "incMonth": 24554,
+      "incCumval": 336473,
+      "stkEndval": 376.39,
+      "stkYoy": 9.67,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2023-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-01-31",
+      "period": "202312",
+      "incMonth": 19326,
+      "incCumval": 355799,
+      "stkEndval": 378.08,
+      "stkYoy": 9.84,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-02-29",
+      "period": "202401",
+      "incMonth": 64734,
+      "incCumval": 64734,
+      "stkEndval": 384.32,
+      "stkYoy": 9.51,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-02-29",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-03-31",
+      "period": "202402",
+      "incMonth": 14959,
+      "incCumval": 79693,
+      "stkEndval": 385.71,
+      "stkYoy": 8.97,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-04-30",
+      "period": "202403",
+      "incMonth": 48335,
+      "incCumval": 128028,
+      "stkEndval": 390.32,
+      "stkYoy": 8.72,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-05-31",
+      "period": "202404",
+      "incMonth": -658,
+      "incCumval": 127370,
+      "stkEndval": 389.93,
+      "stkYoy": 8.33,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-06-30",
+      "period": "202405",
+      "incMonth": 20623,
+      "incCumval": 147993,
+      "stkEndval": 391.93,
+      "stkYoy": 8.44,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-07-31",
+      "period": "202406",
+      "incMonth": 32985,
+      "incCumval": 180978,
+      "stkEndval": 395.1,
+      "stkYoy": 8.11,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-08-31",
+      "period": "202407",
+      "incMonth": 7707,
+      "incCumval": 188685,
+      "stkEndval": 395.72,
+      "stkYoy": 8.19,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-09-30",
+      "period": "202408",
+      "incMonth": 30323,
+      "incCumval": 219008,
+      "stkEndval": 398.56,
+      "stkYoy": 8.13,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-10-31",
+      "period": "202409",
+      "incMonth": 37635,
+      "incCumval": 256643,
+      "stkEndval": 402.19,
+      "stkYoy": 7.97,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-11-30",
+      "period": "202410",
+      "incMonth": 14120,
+      "incCumval": 270763,
+      "stkEndval": 403.45,
+      "stkYoy": 7.83,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2024-12-31",
+      "period": "202411",
+      "incMonth": 23288,
+      "incCumval": 294051,
+      "stkEndval": 405.6,
+      "stkYoy": 7.76,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2024-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-01-31",
+      "period": "202412",
+      "incMonth": 28537,
+      "incCumval": 322558,
+      "stkEndval": 408.34,
+      "stkYoy": 8,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-02-28",
+      "period": "202501",
+      "incMonth": 70546,
+      "incCumval": 70546,
+      "stkEndval": 415.19,
+      "stkYoy": 8.03,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-03-31",
+      "period": "202502",
+      "incMonth": 22331,
+      "incCumval": 92877,
+      "stkEndval": 417.29,
+      "stkYoy": 8.19,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-04-30",
+      "period": "202503",
+      "incMonth": 58961,
+      "incCumval": 151838,
+      "stkEndval": 422.97,
+      "stkYoy": 8.36,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-05-31",
+      "period": "202504",
+      "incMonth": 11599,
+      "incCumval": 163437,
+      "stkEndval": 424,
+      "stkYoy": 8.74,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-06-30",
+      "period": "202505",
+      "incMonth": 22899,
+      "incCumval": 186336,
+      "stkEndval": 426.16,
+      "stkYoy": 8.73,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-07-31",
+      "period": "202506",
+      "incMonth": 42251,
+      "incCumval": 228588,
+      "stkEndval": 430.24,
+      "stkYoy": 8.89,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-08-31",
+      "period": "202507",
+      "incMonth": 11307,
+      "incCumval": 239895,
+      "stkEndval": 431.25,
+      "stkYoy": 8.98,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-08-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-09-30",
+      "period": "202508",
+      "incMonth": 25660,
+      "incCumval": 265555,
+      "stkEndval": 433.65,
+      "stkYoy": 8.8,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-09-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-10-31",
+      "period": "202509",
+      "incMonth": 35299,
+      "incCumval": 300854,
+      "stkEndval": 437.08,
+      "stkYoy": 8.68,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-10-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-11-30",
+      "period": "202510",
+      "incMonth": 8178,
+      "incCumval": 309032,
+      "stkEndval": 437.71,
+      "stkYoy": 8.49,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-11-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2025-12-31",
+      "period": "202511",
+      "incMonth": 24926,
+      "incCumval": 333958,
+      "stkEndval": 440.07,
+      "stkYoy": 8.5,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2025-12-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-01-31",
+      "period": "202512",
+      "incMonth": 22075,
+      "incCumval": 356033,
+      "stkEndval": 442.12,
+      "stkYoy": 8.27,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-01-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-02-28",
+      "period": "202601",
+      "incMonth": 72185,
+      "incCumval": 72185,
+      "stkEndval": 449.11,
+      "stkYoy": 8.17,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-02-28",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-03-31",
+      "period": "202602",
+      "incMonth": 23837,
+      "incCumval": 96022,
+      "stkEndval": 451.4,
+      "stkYoy": 8.17,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-03-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-04-30",
+      "period": "202603",
+      "incMonth": 52240,
+      "incCumval": 148262,
+      "stkEndval": 456.46,
+      "stkYoy": 7.92,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-04-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-05-31",
+      "period": "202604",
+      "incMonth": 6238,
+      "incCumval": 154500,
+      "stkEndval": 456.88,
+      "stkYoy": 7.75,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-05-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-06-30",
+      "period": "202605",
+      "incMonth": 20293,
+      "incCumval": 174793,
+      "stkEndval": 458.81,
+      "stkYoy": 7.66,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-06-30",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    },
+    {
+      "indicatorId": "L3",
+      "asOf": "2026-07-31",
+      "period": "202606",
+      "incMonth": 33671,
+      "incCumval": 208464,
+      "stkEndval": 462.06,
+      "stkYoy": 7.4,
+      "units": {
+        "incMonth": "100m_cny",
+        "incCumval": "100m_cny",
+        "stkEndval": "trillion_cny",
+        "stkYoy": "pct"
+      },
+      "source": "tushare",
+      "dataset": "sf_month",
+      "sourceFields": [
+        "inc_month",
+        "inc_cumval",
+        "stk_endval"
+      ],
+      "derivedFields": {
+        "stkYoy": "(stkEndval / stkEndvalLag12 - 1) * 100"
+      },
+      "missingFields": [],
+      "dataStatus": "complete",
+      "releaseDate": "2026-07-31",
+      "releaseDateQuality": "conservative_proxy",
+      "pitScope": "release_lag_only",
+      "valueVintage": "latest_available_snapshot"
+    }
+  ]
+}

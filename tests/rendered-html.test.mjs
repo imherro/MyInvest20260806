@@ -148,6 +148,14 @@ async function l2HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l2.json", import.meta.url)), "utf8"));
 }
 
+async function l3HistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-history-l3.mjs", import.meta.url).href);
+}
+
+async function l3HistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l3.json", import.meta.url)), "utf8"));
+}
+
 async function f4HistoryGenerator() {
   return import(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url).href);
 }
@@ -1321,6 +1329,49 @@ test("repaired L2 exactly preserves the three legacy cn_m series and PIT metadat
 
 test("missing-token L2 failure preserves L2 and all completed histories", async () => {
   const paths = ["../public/data/market-research/history/l2.json", "../public/data/market-research/history/l1.json", "../public/data/market-research/history/l5.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/f4.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url))); const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN; const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l2.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("L3 partial history normalizes continuous sf_month rows while preserving real null stock", async () => {
+  const { normalizeSfMonthRows } = await l3HistoryGenerator();
+  const rows = normalizeSfMonthRows([{ month: "201402", inc_month: "3", inc_cumval: "6", stk_endval: 101 }, { month: "201401", inc_month: 2, inc_cumval: 3, stk_endval: null }, { month: "201312", inc_month: 1, inc_cumval: 1, stk_endval: 100 }], "201312", "201402");
+  assert.deepEqual(rows, [{ month: "201312", inc_month: 1, inc_cumval: 1, stk_endval: 100 }, { month: "201401", inc_month: 2, inc_cumval: 3, stk_endval: null }, { month: "201402", inc_month: 3, inc_cumval: 6, stk_endval: 101 }]);
+  assert.throws(() => normalizeSfMonthRows(rows.slice(1), "201312", "201402"), /missing or non-contiguous/); assert.throws(() => normalizeSfMonthRows([rows[0], rows[0]], "201312", "201312"), /duplicate/);
+  for (const field of ["inc_month", "inc_cumval"]) for (const value of [null, "", Number.NaN, Infinity, "bad"]) assert.throws(() => normalizeSfMonthRows([{ month: "201312", inc_month: 1, inc_cumval: 1, stk_endval: 100, [field]: value }], "201312", "201312"), new RegExp(`invalid ${field}`));
+  for (const value of ["", 0, -1, Number.NaN, Infinity, "bad"]) assert.throws(() => normalizeSfMonthRows([{ month: "201312", inc_month: 1, inc_cumval: 1, stk_endval: value }], "201312", "201312"), /invalid stk_endval/);
+});
+
+test("L3 stock yoy uses only p-minus-12, rounds to two decimals and preserves missingness", async () => {
+  const { roundTwo, stockYoy } = await l3HistoryGenerator();
+  assert.equal(stockYoy(122.86, 107.46), 14.33); assert.equal(stockYoy(100, 100), 0); assert.equal(stockYoy(null, 100), null); assert.equal(stockYoy(100, null), null); assert.equal(roundTwo(-0.001), 0);
+  for (const value of [0, -1, Number.NaN, Infinity]) assert.throws(() => stockYoy(value, 100), /positive finite/);
+});
+
+test("builds deterministic 139-point joint-ineligible L3 partial history", async () => {
+  const { buildL3MonthlyHistory, shiftMonth } = await l3HistoryGenerator(); const b3 = await b3HistoryData();
+  const rows = Array.from({ length: 151 }, (_, index) => ({ month: shiftMonth("201312", index), inc_month: index + 1, inc_cumval: index + 10, stk_endval: 100 + index })); rows[13].stk_endval = null;
+  const first = buildL3MonthlyHistory(b3, [...rows].reverse(), "2026-08-17"); const second = buildL3MonthlyHistory(b3, rows, "2026-08-17"); assert.equal(JSON.stringify(first), JSON.stringify(second)); assert.equal(first.points.length, 139); assert.equal(first.sourceRows.length, 151); assert.equal(first.points[0].period, "201412"); assert.equal(first.points.at(-1).period, "202606"); assert.equal(first.points.some(point => point.period === "201312"), false);
+  assert.deepEqual(first.sourceQuery, { api: "sf_month", startM: "201312", endM: "202606", fields: ["month", "inc_month", "inc_cumval", "stk_endval"] }); assert.equal(first.historyStatus, "partial_field_coverage"); assert.equal(first.scoreEligible, false); assert.equal(first.jointEligible, false);
+  const currentMissing = first.points.find(point => point.period === "201501"); assert.equal(currentMissing.stkEndval, null); assert.equal(currentMissing.stkYoy, null); assert.deepEqual(currentMissing.missingFields, ["stkEndval", "stkYoy"]); assert.equal(currentMissing.dataStatus, "partial");
+  const lagMissing = first.points.find(point => point.period === "201601"); assert.ok(Number.isFinite(lagMissing.stkEndval)); assert.equal(lagMissing.stkYoy, null); assert.deepEqual(lagMissing.missingFields, ["stkYoy"]); assert.equal(lagMissing.releaseDate, "2016-02-29");
+  assert.equal(first.points.some(point => "value" in point), false); assert.equal(first.fieldCoverage.incMonth.present, 139); assert.equal(first.fieldCoverage.incCumval.present, 139); assert.equal(first.fieldCoverage.stkEndval.present, 138); assert.equal(first.fieldCoverage.stkYoy.present, 137);
+});
+
+test("L3 partial revision protection catches changed and newly filled raw source fields", async () => {
+  const { assertNoSilentRevision } = await l3HistoryGenerator(); const existing = { sourceRows: [{ month: "201312", inc_month: 1, inc_cumval: 1, stk_endval: 100 }, { month: "201401", inc_month: 2, inc_cumval: 3, stk_endval: null }] };
+  assert.doesNotThrow(() => assertNoSilentRevision(existing, structuredClone(existing.sourceRows))); const filled = structuredClone(existing.sourceRows); filled[1].stk_endval = 101; assert.throws(() => assertNoSilentRevision(existing, filled), /201401\.stk_endval/); const changed = structuredClone(existing.sourceRows); changed[0].inc_month = 9; assert.throws(() => assertNoSilentRevision(existing, changed), /201312\.inc_month/);
+});
+
+test("checked-in L3 partial history reports exact field coverage and remains outside joint", async () => {
+  const { sourceSnapshotSha256 } = await l3HistoryGenerator(); const [l3, b3, joint] = await Promise.all([l3HistoryData(), b3HistoryData(), jointHistoryData()]); assert.equal(l3.points.length, 139); assert.equal(l3.sourceRows.length, 151); assert.equal(l3.sourceSnapshotSha256, sourceSnapshotSha256(l3.sourceRows)); assert.equal(l3.historyStatus, "partial_field_coverage"); assert.equal(l3.scoreEligible, false); assert.equal(l3.jointEligible, false);
+  assert.deepEqual(l3.fieldCoverage, { incMonth: { present: 139, required: 139 }, incCumval: { present: 139, required: 139 }, stkEndval: { present: 131, required: 139 }, stkYoy: { present: 120, required: 139 } });
+  for (let index = 0; index < l3.points.length; index += 1) { const point = l3.points[index]; assert.equal(point.asOf, b3.points[index].asOf); assert.ok(point.releaseDate <= point.asOf); assert.ok(Number.isFinite(point.incMonth)); assert.ok(Number.isFinite(point.incCumval)); assert.equal(point.dataStatus, point.missingFields.length ? "partial" : "complete"); assert.equal("value" in point, false); }
+  assert.deepEqual(joint.intentionallyMissing, ["L3", "L4"]); assert.equal(joint.includedIndicators.includes("L3"), false); assert.equal(joint.snapshots.every(snapshot => snapshot.indicators.L3 === undefined && Object.keys(snapshot.indicators).length === 12), true);
+});
+
+test("L3 partial generator requests one exact sf_month range and fails atomically without a token", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-history-l3.mjs", import.meta.url)), "utf8"); assert.equal((source.match(/callTushare\("sf_month"/g) ?? []).length, 1); assert.match(source, /\{ start_m: sourceStartPeriod, end_m: endPeriod \}, FIELDS, token/); assert.match(source, /const FIELDS = "month,inc_month,inc_cumval,stk_endval"/); assert.doesNotMatch(source, /forward.?fill|backward.?fill|interpolat|nearest|stk_yoy/i);
+  const output = fileURLToPath(new URL("../public/data/market-research/history/l3.json", import.meta.url)); const joint = fileURLToPath(new URL("../public/data/market-research/history/joint.json", import.meta.url)); const before = await Promise.all([readFile(output), readFile(joint)]); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-l3.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all([readFile(output), readFile(joint)]), before); assert.equal((await readdir(path.dirname(output))).some(name => name.startsWith("l3.json.tmp-")), false);
 });
 
 test("builds F4 month ends from L plus D candidates on strictly prior index dates", async () => {
