@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-19T00:00:00.000Z",
+  "requestedAsOf": "2026-08-17",
+  "baselineCommit": "32a940324cd614dbf497643a76d4359f140ac1f3",
+  "auditStatus": "frozen_pre_scoring_inputs",
+  "scoreEligible": false,
+  "jointEligible": false,
+  "masterTimeline": {
+    "indicatorId": "B3",
+    "startAsOf": "2015-01-31",
+    "endAsOf": "2026-07-31",
+    "pointCount": 139
+  },
+  "hashPolicy": "utf8_lf_with_exactly_one_terminal_newline",
+  "releaseDateRule": "non_null_release_date_must_be_lte_as_of",
+  "summary": {
+    "requiredIndicators": 14,
+    "presentArtifacts": 14,
+    "hashVerified": 14,
+    "timelineAligned": 14,
+    "releaseDateViolations": 0,
+    "structurallyFrozen": true,
+    "scoringDefined": false,
+    "jointRebuildAllowed": false
+  },
+  "indicators": {
+    "B1": {
+      "path": "public/data/market-research/history/b1.json",
+      "canonicalSha256": "c1ab44c3102be20d707e489483cfab20dd928317600cbcb05b0e8e7712d750d3",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "B2": {
+      "path": "public/data/market-research/history/b2.json",
+      "canonicalSha256": "127b725f76b29f1d372d0a924ebaac4113096a1052073ff99d9dada69765b08a",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "B3": {
+      "path": "public/data/market-research/history/b3.json",
+      "canonicalSha256": "ac2c394276b24eb7d890ee81d5b8dd3658bb51c8640e4c26a27bbef4f44290e4",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "B4": {
+      "path": "public/data/market-research/history/b4.json",
+      "canonicalSha256": "9cf87be60d0440803285798c208c7050034cbe89c63dbba12ab8b72915f5e879",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "B5": {
+      "path": "public/data/market-research/history/b5.json",
+      "canonicalSha256": "d78315eff01d0d1b89ee5fff07f72154e09c4a393a12a03efbcbe92819676ca8",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "F1": {
+      "path": "public/data/market-research/history/f1.json",
+      "canonicalSha256": "51cf895b699b10a1756063ad542bed02a898547e079b3faf6a1f7c3e8a553982",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 92,
+      "releaseDateUnavailable": 47,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "F2": {
+      "path": "public/data/market-research/history/f2.json",
+      "canonicalSha256": "b068234dfc97e3545bbe40ab1744c2f787578b7067121d09db4eb4b0407ac74a",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 92,
+      "releaseDateUnavailable": 47,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "F3": {
+      "path": "public/data/market-research/history/f3.json",
+      "canonicalSha256": "1df3db59655ccfa66ebe0653faf67eeccc0a3120ba95523431286d341db4f6f7",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "F4": {
+      "path": "public/data/market-research/history/f4.json",
+      "canonicalSha256": "9bb8e11f9c533efa80f29781c2f0383905ef64428cb3b1ab96b87f4b7fc301f3",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "L1": {
+      "path": "public/data/market-research/history/l1.json",
+      "canonicalSha256": "1dd3cfd7ee59590bcff001e7909d52a29fe6fbd6bbf61394f24d25a068c35e37",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "L2": {
+      "path": "public/data/market-research/history/l2.json",
+      "canonicalSha256": "c7d09a1dad57b61626c609b457dc8246603dbea67a1ec1edc01a18aa9cb21001",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    },
+    "L3": {
+      "path": "public/data/market-research/history/l3.json",
+      "canonicalSha256": "49468c3e6abb40cb55ac91c09ce6e710e442dafdb91acf891f4088c1d340609d",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": "partial_field_coverage",
+        "scoreEligible": false,
+        "jointEligible": false
+      }
+    },
+    "L4": {
+      "path": "public/data/market-research/history/l4.json",
+      "canonicalSha256": "c2400698d819aad82b0b19b5d5efc3c7324801d414a1ec8224c4abffb7444b8c",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 117,
+      "releaseDateUnavailable": 22,
+      "declared": {
+        "historyStatus": "partial_official_pit",
+        "scoreEligible": false,
+        "jointEligible": false
+      }
+    },
+    "L5": {
+      "path": "public/data/market-research/history/l5.json",
+      "canonicalSha256": "db293c0b26fd28cf0928332146c33c1345c02c37cfa1889f870ada4d5349b989",
+      "schemaVersion": 1,
+      "pointCount": 139,
+      "startAsOf": "2015-01-31",
+      "endAsOf": "2026-07-31",
+      "releaseDatePresent": 139,
+      "releaseDateUnavailable": 0,
+      "declared": {
+        "historyStatus": null,
+        "scoreEligible": null,
+        "jointEligible": null
+      }
+    }
+  },
+  "blockingPolicy": [
+    "scoring_contract_not_defined",
+    "calibration_not_run",
+    "joint_not_rebuilt_in_this_task"
+  ]
+}

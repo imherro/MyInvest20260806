@@ -181,6 +181,14 @@ async function l4HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4.json", import.meta.url)), "utf8"));
 }
 
+async function historyInputFreezeGenerator() {
+  return import(new URL("../scripts/audit-market-research-history-inputs.mjs", import.meta.url).href);
+}
+
+async function historyInputFreezeData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/input-freeze.json", import.meta.url)), "utf8"));
+}
+
 async function f4HistoryGenerator() {
   return import(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url).href);
 }
@@ -2078,6 +2086,101 @@ test("L4 input drift fails atomically without network fallback", async () => {
     await writeFile(path.join(historyDirectory, "l4-field-audit.json"), Buffer.concat([auditBytes.subarray(0, -2), Buffer.from(" \n")]));
     await assert.rejects(generator.generate({ root, argv: ["--as-of", "2026-08-17"] }), /CANONICAL_HASH_MISMATCH/);
     assert.deepEqual(await readFile(path.join(historyDirectory, "l4.json")), valid);
+  } finally {
+    globalThis.fetch = originalFetch;
+    if (previousToken === undefined) delete process.env.TUSHARE_TOKEN; else process.env.TUSHARE_TOKEN = previousToken;
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("freezes all 14 pre-scoring history inputs on the exact B3 PIT timeline", async () => {
+  const generator = await historyInputFreezeGenerator(); const histories = {}; const digests = {};
+  assert.deepEqual(generator.INDICATOR_IDS, ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L3", "L4", "L5"]);
+  assert.equal(generator.EXPECTED_INPUT_SHA256.L3, "49468c3e6abb40cb55ac91c09ce6e710e442dafdb91acf891f4088c1d340609d");
+  for (const id of generator.INDICATOR_IDS) {
+    const bytes = await readFile(fileURLToPath(new URL(`../public/data/market-research/history/${id.toLowerCase()}.json`, import.meta.url)));
+    const checked = generator.canonicalInput(bytes, generator.EXPECTED_INPUT_SHA256[id], id); histories[id] = checked.data; digests[id] = checked.digest;
+    assert.equal(checked.digest, generator.EXPECTED_INPUT_SHA256[id]);
+    const crlf = Buffer.from(new TextDecoder().decode(bytes).replace(/\r\n?|\n/g, "\r\n"), "utf8");
+    assert.equal(generator.canonicalInput(crlf, generator.EXPECTED_INPUT_SHA256[id], id).digest, checked.digest);
+  }
+  const l3Bytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/l3.json", import.meta.url)));
+  assert.throws(() => generator.canonicalInput(Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), l3Bytes]), generator.EXPECTED_INPUT_SHA256.L3, "L3"), /BOM/);
+  assert.throws(() => generator.canonicalInput(Buffer.from([0xc3, 0x28]), generator.EXPECTED_INPUT_SHA256.L3, "L3"), /UTF8/);
+  assert.throws(() => generator.canonicalInput(Buffer.from("{}"), generator.EXPECTED_INPUT_SHA256.L3, "L3"), /TERMINAL_NEWLINE/);
+  assert.throws(() => generator.canonicalInput(Buffer.from("{}\n\n"), generator.EXPECTED_INPUT_SHA256.L3, "L3"), /TERMINAL_NEWLINE/);
+  assert.throws(() => generator.canonicalInput(Buffer.concat([l3Bytes.subarray(0, -2), Buffer.from(" \n")]), generator.EXPECTED_INPUT_SHA256.L3, "L3"), /HASH_MISMATCH/);
+
+  const result = generator.buildFreeze(histories, digests);
+  assert.deepEqual(result.summary, { requiredIndicators: 14, presentArtifacts: 14, hashVerified: 14, timelineAligned: 14, releaseDateViolations: 0, structurallyFrozen: true, scoringDefined: false, jointRebuildAllowed: false });
+  assert.equal(result.auditStatus, "frozen_pre_scoring_inputs"); assert.equal(result.scoreEligible, false); assert.equal(result.jointEligible, false);
+  assert.deepEqual(Object.keys(result.indicators), generator.INDICATOR_IDS);
+  assert.deepEqual(result.masterTimeline, { indicatorId: "B3", startAsOf: "2015-01-31", endAsOf: "2026-07-31", pointCount: 139 });
+  for (const id of generator.INDICATOR_IDS) {
+    const item = result.indicators[id]; assert.equal(item.path, `public/data/market-research/history/${id.toLowerCase()}.json`);
+    assert.equal(item.canonicalSha256, generator.EXPECTED_INPUT_SHA256[id]); assert.equal(item.pointCount, 139);
+    assert.equal(item.releaseDatePresent + item.releaseDateUnavailable, 139);
+    histories[id].points.forEach((point, index) => {
+      assert.equal(point.asOf, histories.B3.points[index].asOf); assert.ok(Object.hasOwn(point, "releaseDate"));
+      if (point.releaseDate !== null) assert.ok(point.releaseDate <= point.asOf);
+    });
+    assert.deepEqual(item.declared, {
+      historyStatus: histories[id].historyStatus ?? null,
+      scoreEligible: histories[id].scoreEligible ?? null,
+      jointEligible: histories[id].jointEligible ?? null,
+    });
+  }
+  assert.equal(result.indicators.L4.releaseDatePresent, 117); assert.equal(result.indicators.L4.releaseDateUnavailable, 22);
+  assert.equal(histories.L4.points.filter(point => point.sourceStatus === "official_report_not_yet_released" && point.releaseDate === null).length, 2);
+  const forbidden = new Set(["score", "normalizedScore", "aggregateScore", "zScore", "percentile", "jointState", "signal", "value"]);
+  const visit = value => { if (Array.isArray(value)) value.forEach(visit); else if (value && typeof value === "object") for (const [key, child] of Object.entries(value)) { assert.equal(forbidden.has(key), false); visit(child); } };
+  visit(result); assert.deepEqual(await historyInputFreezeData(), result);
+
+  for (const mutate of [
+    clone => { clone.B1.schemaVersion = 2; },
+    clone => { clone.B1.indicator.id = "X"; },
+    clone => { clone.B1.points = {}; },
+    clone => { clone.B1.points.pop(); },
+    clone => { clone.B1.points.push(structuredClone(clone.B1.points.at(-1))); },
+    clone => { clone.B1.points[70].asOf = "2020-12-30"; },
+    clone => { delete clone.B1.points[0].releaseDate; },
+    clone => { clone.B1.points[0].releaseDate = "2015-02-31"; },
+    clone => { clone.B1.points[0].releaseDate = 1; },
+    clone => { clone.B1.points[0].releaseDate = "2015-02-01"; },
+    clone => { clone.B1.scoreEligible = "false"; },
+  ]) {
+    const clone = structuredClone(histories); mutate(clone); assert.throws(() => generator.buildFreeze(clone, digests));
+  }
+  const b3NotMonthEnd = structuredClone(histories); b3NotMonthEnd.B3.points[0].asOf = "2015-01-30";
+  assert.throws(() => generator.buildFreeze(b3NotMonthEnd, digests), /MASTER_TIMELINE|TIMELINE_MISMATCH/);
+  assert.deepEqual(generator.buildFreeze(histories, digests), generator.buildFreeze(histories, digests));
+});
+
+test("history input freeze is offline and preserves its artifact on atomic failure", async () => {
+  const generator = await historyInputFreezeGenerator(); const root = await mkdtemp(path.join(os.tmpdir(), "history-freeze-"));
+  const directory = path.join(root, "public/data/market-research/history"); await mkdir(directory, { recursive: true });
+  const beforeInputs = {};
+  for (const id of generator.INDICATOR_IDS) {
+    const bytes = await readFile(fileURLToPath(new URL(`../public/data/market-research/history/${id.toLowerCase()}.json`, import.meta.url)));
+    beforeInputs[id] = bytes; await writeFile(path.join(directory, `${id.toLowerCase()}.json`), bytes);
+  }
+  const jointBefore = await readFile(fileURLToPath(new URL("../public/data/market-research/history/joint.json", import.meta.url)));
+  await writeFile(path.join(directory, "joint.json"), jointBefore);
+  const originalFetch = globalThis.fetch; globalThis.fetch = async () => { throw new Error("network forbidden"); };
+  const previousToken = process.env.TUSHARE_TOKEN; delete process.env.TUSHARE_TOKEN;
+  try {
+    const first = await generator.audit({ root, argv: ["--as-of", "2026-08-17"] });
+    const firstBytes = await readFile(path.join(directory, "input-freeze.json"));
+    const second = await generator.audit({ root, argv: ["--as-of", "2026-08-17"] });
+    const valid = await readFile(path.join(directory, "input-freeze.json"));
+    assert.deepEqual(valid, firstBytes); assert.equal(second.sha256, first.sha256);
+    for (const id of generator.INDICATOR_IDS) assert.deepEqual(await readFile(path.join(directory, `${id.toLowerCase()}.json`)), beforeInputs[id]);
+    assert.deepEqual(await readFile(path.join(directory, "joint.json")), jointBefore);
+    const b1Path = path.join(directory, "b1.json"); const b1 = await readFile(b1Path); await writeFile(b1Path, Buffer.concat([b1.subarray(0, -2), Buffer.from(" \n")]));
+    await assert.rejects(generator.audit({ root, argv: ["--as-of", "2026-08-17"] }), /HASH_MISMATCH/);
+    await assert.rejects(generator.audit({ root, argv: [] }), /Usage/);
+    assert.deepEqual(await readFile(path.join(directory, "input-freeze.json")), valid);
+    assert.equal((await readdir(directory)).some(name => name.includes(".tmp-")), false);
   } finally {
     globalThis.fetch = originalFetch;
     if (previousToken === undefined) delete process.env.TUSHARE_TOKEN; else process.env.TUSHARE_TOKEN = previousToken;
