@@ -164,6 +164,14 @@ async function l4SourceAuditData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url)), "utf8"));
 }
 
+async function l4FieldAuditGenerator() {
+  return import(new URL("../scripts/audit-market-research-history-l4-fields.mjs", import.meta.url).href);
+}
+
+async function l4FieldAuditData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-field-audit.json", import.meta.url)), "utf8"));
+}
+
 async function f4HistoryGenerator() {
   return import(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url).href);
 }
@@ -1434,6 +1442,39 @@ test("checked-in L4 source audit is a deterministic official coverage-only artif
 test("L4 source audit validates Chrome before network and preserves its artifact on failure", async () => {
   const output = fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url)); const before = await readFile(output); const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/audit-market-research-history-l4-source.mjs", import.meta.url)), "--as-of", "2026-08-19"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /--chrome-path absolute executable path is required/); assert.deepEqual(await readFile(output), before); assert.equal((await readdir(path.dirname(output))).some(name => name.startsWith("l4-source-audit.json.tmp-")), false);
   const source = await readFile(fileURLToPath(new URL("../scripts/audit-market-research-history-l4-source.mjs", import.meta.url)), "utf8"); assert.doesNotMatch(source, /ignore-certificate-errors|shell:\s*true|puppeteer|playwright/i); assert.match(source, /finally\s*\{\s*await rm\(profile, \{ recursive: true, force: true \}\)/);
+});
+
+test("L4 field audit validates the F0 artifact with a cross-platform canonical hash before network", async () => {
+  const { EXPECTED_F0_SHA256, main, validateF0Input } = await l4FieldAuditGenerator();
+  const bytes = await readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url))); const lf = bytes.toString("utf8").replace(/\r\n?/g, "\n");
+  assert.equal(createHash("sha256").update(lf).digest("hex"), EXPECTED_F0_SHA256);
+  for (const text of [lf, lf.replace(/\n/g, "\r\n"), lf.replace(/\n/g, "\r")]) assert.equal(validateF0Input(Buffer.from(text)).reports.length, 119);
+  for (const invalid of [Buffer.from(lf.slice(0, -1)), Buffer.from(`${lf}\n`), Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), Buffer.from(lf)]), Buffer.from([0xff])]) assert.throws(() => validateF0Input(invalid));
+  for (const changed of [lf.replace('"schemaVersion": 1', '"schemaVersion": 2'), lf.replace('  "schemaVersion": 1,\n  "indicatorId": "L4",', '  "indicatorId": "L4",\n  "schemaVersion": 1,'), lf.replace('"schemaVersion": 1', '"schemaVersion" : 1'), lf.replace('"title": "', '"title": "changed ')]) assert.throws(() => validateF0Input(Buffer.from(changed)), /SHA-256 drift/);
+  let networkCount = 0; let writeCount = 0; await assert.rejects(main({ readInput: async () => Buffer.from(lf.replace('"schemaVersion": 1', '"schemaVersion": 2')), fetchHtml: async () => { networkCount += 1; }, writeOutput: async () => { writeCount += 1; } }), /SHA-256 drift/); assert.equal(networkCount, 0); assert.equal(writeCount, 0);
+});
+
+test("L4 field audit re-fetches only frozen reports and rejects transport or content drift", async () => {
+  const { fetchStrictHtml, normalizedContentSha256 } = await l4FieldAuditGenerator(); const html = "<html><body>财政收支</body></html>\n"; const report = { period: "202606", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/202607/t.htm", contentSha256: normalizedContentSha256(html) };
+  const response = (body = html, init = {}) => new Response(body, { status: init.status ?? 200, headers: { "content-type": init.contentType ?? "text/html; charset=utf-8", ...(init.headers ?? {}) } });
+  let requested; assert.equal(await fetchStrictHtml(report, async (url, options) => { requested = { url, options }; return response(); }), html); assert.equal(requested.url, report.normalizedUrl); assert.equal(requested.options.redirect, "manual");
+  await assert.rejects(fetchStrictHtml(report, async () => response("", { status: 302 })), /redirect/); await assert.rejects(fetchStrictHtml(report, async () => response(html, { contentType: "application/json" })), /not HTML/); await assert.rejects(fetchStrictHtml(report, async () => response("changed")), /SOURCE_REVISION_DETECTED/); await assert.rejects(fetchStrictHtml(report, async () => response(Buffer.from([0xef, 0xbb, 0xbf, 0x61]))), /BOM/); await assert.rejects(fetchStrictHtml(report, async () => response(Buffer.from([0xff]))), /encoded data/);
+});
+
+test("L4 field extraction preserves explicit natural and adjusted candidates without deriving values", async () => {
+  const { amountToYi, auditReportFields } = await l4FieldAuditGenerator(); assert.equal(amountToYi("1.25", "万亿元"), "12500"); assert.equal(amountToYi("140350", "亿元"), "140350");
+  const report = { title: "2026年上半年财政收支情况", normalizedUrl: "https://gks.mof.gov.cn/tongjishuju/202607/t.htm", publicationDate: "2026-07-20" }; const html = `<html><head><meta name="ArticleTitle" content="${report.title}"></head><body><div class="laiyuan">发布日期：2026年7月20日</div><p>全国一般公共预算收入100亿元，同比增长5%。全国一般公共预算收入600亿元，同比增长6%。全国一般公共预算收入主要项目情况如下：国内增值税50亿元，同比增长99%。全国一般公共预算支出1.25万亿元，同比增长4%，同口径增长3%。</p></body></html>`;
+  const fields = auditReportFields(html, report); assert.equal(fields.revenueCumYi.status, "ambiguous_multiple_candidates"); assert.deepEqual(fields.revenueCumYi.candidates.map(candidate => candidate.value), ["100", "600"]); assert.deepEqual(fields.revenueYoyPct.candidates.map(candidate => candidate.value), ["5", "6"]); assert.equal(fields.revenueYoyPct.candidates.some(candidate => candidate.value === "99"), false); assert.equal(fields.expenditureCumYi.candidates[0].value, "12500"); assert.deepEqual(fields.expenditureYoyPct.candidates.map(candidate => candidate.value), ["4", "3"]);
+  for (const field of Object.values(fields)) for (const candidate of field.candidates) { assert.equal(typeof candidate.basis, "string"); assert.equal(typeof candidate.evidenceSentence, "string"); assert.equal(candidate.evidenceSha256, createHash("sha256").update(candidate.evidenceSentence).digest("hex")); assert.deepEqual(Object.keys(candidate), ["value", "unit", "basis", "evidenceSentence", "evidenceSha256", "url", "publicationDate"]); }
+});
+
+test("checked-in L4 field audit is deterministic coverage-only evidence and remains outside joint", async () => {
+  const { buildFieldAudit, requiredPeriods, validateF0Input } = await l4FieldAuditGenerator(); const [audit, f0Bytes, joint] = await Promise.all([l4FieldAuditData(), readFile(fileURLToPath(new URL("../public/data/market-research/history/l4-source-audit.json", import.meta.url))), jointHistoryData()]); const f0 = validateF0Input(f0Bytes);
+  assert.deepEqual(audit.sourceAudit, { path: "public/data/market-research/history/l4-source-audit.json", canonicalSha256: "684a8061c57275f740d9d9cf208dabdb71c521f89a44fe7bf7842caa25c79e3f", hashNormalization: "utf8_lf_with_exactly_one_terminal_newline" }); assert.equal(audit.auditStatus, "field_coverage_only"); assert.equal(audit.scoreEligible, false); assert.equal(audit.jointEligible, false); assert.equal(audit.fieldContractStatus, "needs_field_contract_resolution"); assert.equal(audit.months.length, 139); assert.deepEqual(audit.months.map(month => month.period), requiredPeriods()); assert.equal(audit.reportCount, 119); assert.equal(audit.missingOfficialReportCount, 20);
+  assert.deepEqual(audit.coverage, { revenueCumYi: { unique: 91, missing: 20, ambiguous_multiple_candidates: 28, invalid: 0 }, revenueYoyPct: { unique: 85, missing: 20, ambiguous_multiple_candidates: 34, invalid: 0 }, expenditureCumYi: { unique: 90, missing: 20, ambiguous_multiple_candidates: 29, invalid: 0 }, expenditureYoyPct: { unique: 89, missing: 20, ambiguous_multiple_candidates: 30, invalid: 0 } }); assert.equal(audit.months.filter(month => month.monthStatus === "complete_unique").length, 79); assert.equal(audit.months.filter(month => month.monthStatus === "ambiguous_fields").length, 40);
+  for (const month of audit.months) { if (month.sourceStatus === "missing_official_report") { assert.equal(month.monthStatus, "missing_official_report"); for (const field of Object.values(month.fields)) assert.deepEqual(field, { status: "missing", candidates: [] }); } else { assert.equal(month.releaseDateQuality, "official_report_date"); assert.equal(month.pitScope, "release_lag_only"); assert.equal(month.valueVintage, "latest_available_snapshot"); for (const field of Object.values(month.fields)) for (const candidate of field.candidates) assert.equal(typeof candidate.basis, "string"); } for (const forbidden of ["value", "pulse", "direction", "threshold", "score"]) assert.equal(Object.hasOwn(month, forbidden), false); }
+  const reportResults = audit.months.filter(month => month.sourceStatus === "official_report").map(month => ({ period: month.period, report: f0.reports.find(report => report.period === month.period), fields: month.fields })); assert.deepEqual(buildFieldAudit(f0, reportResults), audit); assert.deepEqual(joint.intentionallyMissing, ["L3", "L4"]); assert.equal(joint.includedIndicators.includes("L4"), false);
+  const source = await readFile(fileURLToPath(new URL("../scripts/audit-market-research-history-l4-fields.mjs", import.meta.url)), "utf8"); assert.doesNotMatch(source, /child_process|\bgit\b|puppeteer|playwright|chrom(e|ium)/i);
 });
 
 test("builds F4 month ends from L plus D candidates on strictly prior index dates", async () => {
