@@ -35,6 +35,13 @@ export function decodeUtf8Strict(bytes) {
   return new TextDecoder("utf-8", { fatal: true }).decode(buffer);
 }
 
+function decodeSourceAuditUtf8(bytes) {
+  const buffer = Buffer.from(bytes);
+  if (buffer.length >= 3 && buffer[0] === 0xef && buffer[1] === 0xbb && buffer[2] === 0xbf) throw new Error("SOURCE_AUDIT_BOM_FORBIDDEN");
+  try { return new TextDecoder("utf-8", { fatal: true }).decode(buffer); }
+  catch { throw new Error("SOURCE_AUDIT_ENCODING_INVALID"); }
+}
+
 export function normalizedContentSha256(text) {
   return sha256(text.replace(/\r\n?/g, "\n"));
 }
@@ -68,18 +75,21 @@ function assertHttpsReportUrl(value) {
 }
 
 export function validateF0Input(bytes) {
-  const buffer = Buffer.from(bytes);
-  const decoded = decodeUtf8Strict(buffer); const canonical = decoded.replace(/\r\n?/g, "\n");
-  if (!canonical.endsWith("\n") || canonical.endsWith("\n\n")) throw new Error("F0 canonical input must end with exactly one LF");
+  const decoded = decodeSourceAuditUtf8(bytes); const canonical = decoded.replace(/\r\n?/g, "\n");
+  if (!canonical.endsWith("\n") || canonical.endsWith("\n\n")) throw new Error("SOURCE_AUDIT_TERMINAL_NEWLINE_INVALID");
   const digest = sha256(Buffer.from(canonical, "utf8"));
-  if (digest !== EXPECTED_F0_SHA256) throw new Error(`F0 artifact SHA-256 drift: expected ${EXPECTED_F0_SHA256}, received ${digest}`);
-  const f0 = JSON.parse(canonical); const required = requiredPeriods();
-  if (f0?.schemaVersion !== 1 || f0.indicatorId !== "L4" || f0.auditStatus !== "source_coverage_only" || f0.scoreEligible !== false || f0.jointEligible !== false) throw new Error("F0 identity drift");
-  if (f0?.requiredRange?.startPeriod !== START_PERIOD || f0.requiredRange.endPeriod !== END_PERIOD || f0.requiredRange.count !== 139 || required.length !== 139) throw new Error("F0 required range drift");
-  if (!Array.isArray(f0.reports) || f0.reports.length !== 119 || new Set(f0.reports.map(report => report.period)).size !== 119 || new Set(f0.reports.map(report => report.normalizedUrl)).size !== 119) throw new Error("F0 report coverage drift");
-  if (f0?.coverage?.uniqueCoveredPeriods?.length !== 119 || f0.coverage.missingPeriods?.length !== 20 || f0.coverage.ambiguousPeriods?.length !== 0 || f0.coverage.missingPublicationDatePeriods?.length !== 0 || f0.coverage.duplicateOrRevisionPeriods?.length !== 0) throw new Error("F0 coverage status drift");
-  const union = [...f0.coverage.uniqueCoveredPeriods, ...f0.coverage.missingPeriods].sort();
-  if (JSON.stringify(union) !== JSON.stringify(required) || f0.reports.some(report => !validDate(report.publicationDate) || assertHttpsReportUrl(report.normalizedUrl) !== report.normalizedUrl || !/^[a-f\d]{64}$/.test(report.contentSha256))) throw new Error("F0 period or report provenance drift");
+  if (digest !== EXPECTED_F0_SHA256) throw new Error(`SOURCE_AUDIT_CANONICAL_HASH_MISMATCH expected ${EXPECTED_F0_SHA256}, received ${digest}`);
+  let f0;
+  try { f0 = JSON.parse(canonical); } catch { throw new Error("SOURCE_AUDIT_JSON_INVALID"); }
+  try {
+    const required = requiredPeriods();
+    if (f0?.schemaVersion !== 1 || f0.indicatorId !== "L4" || f0.auditStatus !== "source_coverage_only" || f0.scoreEligible !== false || f0.jointEligible !== false) throw new Error();
+    if (f0?.requiredRange?.startPeriod !== START_PERIOD || f0.requiredRange.endPeriod !== END_PERIOD || f0.requiredRange.count !== 139 || required.length !== 139) throw new Error();
+    if (!Array.isArray(f0.reports) || f0.reports.length !== 119 || new Set(f0.reports.map(report => report.period)).size !== 119 || new Set(f0.reports.map(report => report.normalizedUrl)).size !== 119) throw new Error();
+    if (f0?.coverage?.uniqueCoveredPeriods?.length !== 119 || f0.coverage.missingPeriods?.length !== 20 || f0.coverage.ambiguousPeriods?.length !== 0 || f0.coverage.missingPublicationDatePeriods?.length !== 0 || f0.coverage.duplicateOrRevisionPeriods?.length !== 0) throw new Error();
+    const union = [...f0.coverage.uniqueCoveredPeriods, ...f0.coverage.missingPeriods].sort();
+    if (JSON.stringify(union) !== JSON.stringify(required) || f0.reports.some(report => !validDate(report.publicationDate) || assertHttpsReportUrl(report.normalizedUrl) !== report.normalizedUrl || !/^[a-f\d]{64}$/.test(report.contentSha256))) throw new Error();
+  } catch { throw new Error("SOURCE_AUDIT_CONTRACT_MISMATCH"); }
   return f0;
 }
 
@@ -108,13 +118,8 @@ function signedPercent(numberText, direction) {
   return formatScaled(signed, parsed.scale);
 }
 
-function minimalClause(text, anchorIndex) {
-  const remainder = text.slice(anchorIndex); const end = remainder.search(/[；。]/);
-  return (end >= 0 ? remainder.slice(0, end + 1) : remainder.slice(0, 320)).trim();
-}
-
-function candidate(value, unit, basis, evidenceSentence, report) {
-  return { value, unit, basis, evidenceSentence, evidenceSha256: sha256(evidenceSentence), url: report.normalizedUrl, publicationDate: report.publicationDate };
+function candidate(value, unit, basis, scope, evidenceSentence, report) {
+  return { value, unit, basis, scopeType: "cumulative", scopeGranularity: scope.scopeGranularity, scopeSource: scope.scopeSource, scopeEndPeriod: scope.scopeEndPeriod, evidenceSentence, evidenceSha256: sha256(evidenceSentence), url: report.normalizedUrl, publicationDate: report.publicationDate };
 }
 
 function field(status, candidates) {
@@ -122,7 +127,7 @@ function field(status, candidates) {
 }
 
 function dedupeCandidates(values) {
-  return [...new Map(values.map(value => [`${value.value}\0${value.basis}\0${value.evidenceSha256}`, value])).values()];
+  return [...new Map(values.map(value => [`${value.value}\0${value.basis}\0${value.scopeEndPeriod}\0${value.evidenceSha256}`, value])).values()];
 }
 
 const SCOPE_PATTERNS = {
@@ -130,20 +135,74 @@ const SCOPE_PATTERNS = {
   expenditure: ["全国一般公共预算支出", "全国一般公共财政支出", "全国公共财政支出"],
 };
 
-function findScopeClause(text, kind) {
-  const matches = [];
-  for (const label of SCOPE_PATTERNS[kind]) {
-    let start = 0;
-    while ((start = text.indexOf(label, start)) >= 0) { matches.push({ label, index: start, clause: minimalClause(text, start) }); start += label.length; }
+export function extractVisibleBlocks(html) {
+  const body = String(html).match(/<body\b[^>]*>([\s\S]*)<\/body>/i)?.[1] ?? String(html);
+  const delimiter = "\u0000";
+  const segmented = body.replace(/<script\b[\s\S]*?<\/script>/gi, "").replace(/<style\b[\s\S]*?<\/style>/gi, "")
+    .replace(/<br\s*\/?>/gi, delimiter).replace(/<\/?(?:h[1-6]|p|li|tr|title)\b[^>]*>/gi, delimiter);
+  return segmented.split(delimiter).map(htmlToText).filter(Boolean);
+}
+
+function scopeMarkers(block, report) {
+  const markers = []; const month = Number(report.period.slice(4, 6)); const year = Number(report.period.slice(0, 4));
+  const add = (regex, resolve) => { for (const match of block.matchAll(regex)) markers.push({ index: match.index, end: match.index + match[0].length, scopeText: match[0], ...resolve(match) }); };
+  add(/1\s*(?:[-—–]|至)\s*(\d{1,2})\s*月(?:\s*累计)?/g, match => ({ scopeType: "cumulative", scopeGranularity: "year_to_month", scopeSource: "explicit_body_range", scopeEndPeriod: `${year}${String(Number(match[1])).padStart(2, "0")}`, valid: Number(match[1]) === month }));
+  add(/前\s*(\d{1,2})\s*个?月/g, match => ({ scopeType: "cumulative", scopeGranularity: "year_to_month", scopeSource: "explicit_body_range", scopeEndPeriod: `${year}${String(Number(match[1])).padStart(2, "0")}`, valid: Number(match[1]) === month }));
+  for (const [regex, endMonth, granularity] of [[/一季度/g, 3, "quarter"], [/上半年/g, 6, "half_year"], [/前三季度/g, 9, "three_quarters"], [/全年(?:累计)?/g, 12, "full_year"]]) add(regex, () => ({ scopeType: "cumulative", scopeGranularity: granularity, scopeSource: "explicit_body_period", scopeEndPeriod: `${year}${String(endMonth).padStart(2, "0")}`, valid: month === endMonth }));
+  for (const match of block.matchAll(/(\d{4})\s*年/g)) { const before = block.slice(Math.max(0, match.index - 3), match.index); const after = block.slice(match.index + match[0].length, match.index + match[0].length + 3); const comparisonReference = /(?:比|与|较)\s*$/.test(before) || /^\s*(?:相比|同期)/.test(after); markers.push({ index: match.index, end: match.index + match[0].length, scopeText: match[0], scopeType: comparisonReference ? "comparison_reference" : "cumulative", scopeGranularity: "full_year", scopeSource: "explicit_body_year", scopeEndPeriod: `${match[1]}12`, valid: !comparisonReference && month === 12 && Number(match[1]) === year, sameSubclauseRequired: true }); }
+  add(/(?:\d{1,2}\s*月份|\d{1,2}\s*月当月|当月|本月|单月)/g, () => ({ scopeType: "single_month", scopeGranularity: "single_month", scopeSource: "explicit_body_single_month", scopeEndPeriod: report.period, valid: false }));
+  return markers.sort((left, right) => left.index - right.index || right.end - left.end);
+}
+
+function isChapterBoundary(block) {
+  return /^(?:[一二三四五六七八九十]+[、.]|（[一二三四五六七八九十]+）)/.test(block) || /^(?:全国)?(?:一般公共预算|一般公共财政|公共财政)(?:收支|收入|支出)情况[。.]?$/.test(block);
+}
+
+function blockSegments(block) {
+  const segments = []; let start = 0;
+  for (const match of block.matchAll(/[。；;]/g)) { segments.push({ start, end: match.index + 1 }); start = match.index + 1; }
+  if (start < block.length) segments.push({ start, end: block.length });
+  return segments;
+}
+
+function evidenceForAnchor(block, anchorIndex, scope, allMarkers, allAnchors) {
+  const sentenceEnd = block.indexOf("。", anchorIndex); const laterBoundaries = [...allMarkers.map(marker => marker.index), ...allAnchors].filter(index => index > anchorIndex);
+  const nextBoundary = laterBoundaries.length ? Math.min(...laterBoundaries) : Number.POSITIVE_INFINITY; const end = Math.min(sentenceEnd >= 0 ? sentenceEnd + 1 : block.length, nextBoundary, anchorIndex + 640);
+  const prefix = scope.index >= 0 ? block.slice(scope.index, anchorIndex) : `${scope.scopeText}，`;
+  return `${prefix}${block.slice(anchorIndex, end)}`.trim();
+}
+
+function endForAnchor(block, anchorIndex, allMarkers, allAnchors) {
+  const sentenceEnd = block.indexOf("。", anchorIndex); const laterBoundaries = [...allMarkers.map(marker => marker.index), ...allAnchors].filter(index => index > anchorIndex);
+  return Math.min(sentenceEnd >= 0 ? sentenceEnd + 1 : block.length, laterBoundaries.length ? Math.min(...laterBoundaries) : Number.POSITIVE_INFINITY, anchorIndex + 640);
+}
+
+function findScopeClauses(blocks, kind, report) {
+  const matches = []; let inheritedScope = null;
+  for (const block of blocks) {
+    if (isChapterBoundary(block)) inheritedScope = null;
+    const markers = scopeMarkers(block, report); const segments = blockSegments(block); const anchors = [];
+    for (const label of SCOPE_PATTERNS[kind]) { let index = 0; while ((index = block.indexOf(label, index)) >= 0) { anchors.push({ label, index }); index += label.length; } }
+    anchors.sort((left, right) => left.index - right.index);
+    for (const anchor of anchors) {
+      const segment = segments.find(value => value.start <= anchor.index && anchor.index < value.end); const sameSegment = markers.filter(marker => segment && segment.start <= marker.index && marker.index < anchor.index); const earlierInBlock = markers.filter(marker => marker.index < anchor.index && !marker.sameSubclauseRequired);
+      const scope = sameSegment.at(-1) ?? earlierInBlock.at(-1) ?? inheritedScope;
+      if (!scope || scope.scopeType !== "cumulative" || !scope.valid || scope.scopeEndPeriod !== report.period) continue;
+      const clause = block.slice(anchor.index, endForAnchor(block, anchor.index, markers, anchors.map(value => value.index))).trim();
+      if (!/^\s*[\d\s]+(?:\.\s*\d+)?\s*(?:万?亿元)/.test(clause.slice(anchor.label.length))) continue;
+      matches.push({ ...anchor, clause, scope, evidenceSentence: evidenceForAnchor(block, anchor.index, scope, markers, anchors.map(value => value.index)) });
+    }
+    const lastMarker = markers.at(-1); const trailing = lastMarker ? block.slice(lastMarker.end).trim() : "";
+    inheritedScope = lastMarker && /^[，,:：]?$/.test(trailing) ? { ...lastMarker, index: -1, end: -1 } : null;
   }
-  return matches.filter(match => /^\s*[\d\s]+(?:\.\s*\d+)?\s*(?:万?亿元)/.test(match.clause.slice(match.label.length)));
+  return matches;
 }
 
 function amountCandidates(clauses, report) {
   const values = [];
   for (const item of clauses) {
     const match = item.clause.slice(item.label.length).match(/^\s*([\d\s]+(?:\.\s*\d+)?)\s*(万?亿元)/);
-    if (match) values.push(candidate(amountToYi(match[1], match[2]), "亿元", item.label, item.clause, report));
+    if (match) values.push(candidate(amountToYi(match[1], match[2]), "亿元", `${item.label}:cumulative_reported`, item.scope, item.evidenceSentence, report));
   }
   return dedupeCandidates(values);
 }
@@ -158,14 +217,15 @@ function yoyCandidates(clauses, report) {
     { label: "natural_basis", regex: /(按自然口径计算)\s*(增长|下降)\s*([\d\s]+(?:\.\s*\d+)?)\s*%/g },
   ];
   for (const item of clauses) {
-    if (/同比\s*持平/.test(item.clause)) values.push(candidate("0", "pct", `${item.label}:reported_yoy`, item.clause, report));
-    for (const pattern of patterns) for (const match of item.clause.matchAll(pattern.regex)) {
+    const comparisonText = item.clause.split("其中")[0];
+    if (/同比\s*持平/.test(comparisonText)) values.push(candidate("0", "pct", `${item.label}:cumulative_reported_yoy`, item.scope, item.evidenceSentence, report));
+    for (const pattern of patterns) for (const match of comparisonText.matchAll(pattern.regex)) {
       const offset = pattern.label === "reported_yoy" || pattern.label === "reported_prior_period" ? 0 : 1;
-      values.push(candidate(signedPercent(match[2 + offset], match[1 + offset]), "pct", `${item.label}:${pattern.label}`, item.clause, report));
+      values.push(candidate(signedPercent(match[2 + offset], match[1 + offset]), "pct", `${item.label}:cumulative_${pattern.label}`, item.scope, item.evidenceSentence, report));
     }
-    if (!values.some(value => value.evidenceSha256 === sha256(item.clause)) && /比(?:去年|上年)(?:同期)?[^，；。]{0,30}?增加[\d.]+亿元\s*[，,]\s*(增长|下降)\s*([\d.]+)\s*%/.test(item.clause)) {
-      const match = item.clause.match(/比(?:去年|上年)(?:同期)?[^，；。]{0,30}?增加[\d.]+亿元\s*[，,]\s*(增长|下降)\s*([\d.]+)\s*%/);
-      values.push(candidate(signedPercent(match[2], match[1]), "pct", `${item.label}:reported_prior_period_continuation`, item.clause, report));
+    if (!values.some(value => value.evidenceSha256 === sha256(item.evidenceSentence)) && /比(?:去年|上年)(?:同期)?[^，；。]{0,30}?增加[\d.]+亿元\s*[，,]\s*(增长|下降)\s*([\d.]+)\s*%/.test(comparisonText)) {
+      const match = comparisonText.match(/比(?:去年|上年)(?:同期)?[^，；。]{0,30}?增加[\d.]+亿元\s*[，,]\s*(增长|下降)\s*([\d.]+)\s*%/);
+      values.push(candidate(signedPercent(match[2], match[1]), "pct", `${item.label}:cumulative_reported_prior_period_continuation`, item.scope, item.evidenceSentence, report));
     }
   }
   return dedupeCandidates(values);
@@ -180,9 +240,9 @@ function statusForCandidates(candidates, invalid = false) {
 export function auditReportFields(html, report) {
   const title = parseArticleTitle(html); const publicationDate = parsePublicationDate(html);
   if (title !== report.title || publicationDate !== report.publicationDate) throw new Error(`F0 article identity drift for ${report.normalizedUrl}`);
-  const text = htmlToText(html); const output = {};
+  const blocks = extractVisibleBlocks(html); const output = {};
   for (const [kind, amountField, yoyField] of [["revenue", "revenueCumYi", "revenueYoyPct"], ["expenditure", "expenditureCumYi", "expenditureYoyPct"]]) {
-    const clauses = findScopeClause(text, kind); let amounts = []; let yoys = []; let invalid = false;
+    const clauses = findScopeClauses(blocks, kind, report); let amounts = []; let yoys = []; let invalid = false;
     try { amounts = amountCandidates(clauses, report); yoys = yoyCandidates(clauses, report); } catch { invalid = true; }
     output[amountField] = field(statusForCandidates(amounts, invalid), amounts);
     output[yoyField] = field(statusForCandidates(yoys, invalid), yoys);
