@@ -12,10 +12,10 @@
     "F4",
     "L1",
     "L2",
+    "L3",
     "L5"
   ],
   "intentionallyMissing": [
-    "L3",
     "L4"
   ],
   "masterTimeline": "B3",
@@ -56,15 +56,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -207,6 +206,20 @@
           "value": 3.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201412",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-01-31",
           "periodDate": "2015-01-30",
@@ -236,15 +249,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -387,6 +399,20 @@
           "value": 10.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201501",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-02-28",
           "periodDate": "2015-02-27",
@@ -416,15 +442,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -567,6 +592,20 @@
           "value": 5.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201502",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-03-31",
           "periodDate": "2015-03-30",
@@ -596,15 +635,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -747,6 +785,20 @@
           "value": 2.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201503",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-04-30",
           "periodDate": "2015-04-29",
@@ -776,15 +828,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -927,6 +978,20 @@
           "value": 3.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201504",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-05-31",
           "periodDate": "2015-05-29",
@@ -956,15 +1021,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -1107,6 +1171,20 @@
           "value": 4.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201505",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-06-30",
           "periodDate": "2015-06-29",
@@ -1136,15 +1214,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -1287,6 +1364,20 @@
           "value": 4.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201506",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-07-31",
           "periodDate": "2015-07-30",
@@ -1316,15 +1407,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -1467,6 +1557,20 @@
           "value": 6.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201507",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-08-31",
           "periodDate": "2015-08-28",
@@ -1496,15 +1600,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -1647,6 +1750,20 @@
           "value": 9.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201508",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-09-30",
           "periodDate": "2015-09-29",
@@ -1676,15 +1793,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -1827,6 +1943,20 @@
           "value": 11.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201509",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-10-31",
           "periodDate": "2015-10-30",
@@ -1856,15 +1986,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2007,6 +2136,20 @@
           "value": 14,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201510",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-11-30",
           "periodDate": "2015-11-27",
@@ -2036,15 +2179,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2187,6 +2329,20 @@
           "value": 15.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2015-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201511",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2015-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2015-12-31",
           "periodDate": "2015-12-30",
@@ -2216,15 +2372,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2367,6 +2522,20 @@
           "value": 15.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201512",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-01-31",
           "periodDate": "2016-01-29",
@@ -2396,15 +2565,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2547,6 +2715,20 @@
           "value": 18.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-02-29",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201601",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-02-29",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 14,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-02-29",
           "periodDate": "2016-02-26",
@@ -2576,15 +2758,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2727,6 +2908,20 @@
           "value": 17.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201602",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-03-31",
           "periodDate": "2016-03-30",
@@ -2756,15 +2951,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -2907,6 +3101,20 @@
           "value": 22.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201603",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 13.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-04-30",
           "periodDate": "2016-04-29",
@@ -2936,15 +3144,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3087,6 +3294,20 @@
           "value": 22.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201604",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-05-31",
           "periodDate": "2016-05-27",
@@ -3116,15 +3337,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3267,6 +3487,20 @@
           "value": 23.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201605",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-06-30",
           "periodDate": "2016-06-29",
@@ -3296,15 +3530,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3447,6 +3680,20 @@
           "value": 24.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201606",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-07-31",
           "periodDate": "2016-07-29",
@@ -3476,15 +3723,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3627,6 +3873,20 @@
           "value": 25.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201607",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-08-31",
           "periodDate": "2016-08-30",
@@ -3656,15 +3916,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3807,6 +4066,20 @@
           "value": 25.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201608",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-09-30",
           "periodDate": "2016-09-29",
@@ -3836,15 +4109,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -3987,6 +4259,20 @@
           "value": 24.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201609",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-10-31",
           "periodDate": "2016-10-28",
@@ -4016,15 +4302,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -4167,6 +4452,20 @@
           "value": 23.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201610",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-11-30",
           "periodDate": "2016-11-29",
@@ -4196,15 +4495,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -4347,6 +4645,20 @@
           "value": 22.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2016-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201611",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2016-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2016-12-31",
           "periodDate": "2016-12-30",
@@ -4376,15 +4688,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -4527,6 +4838,20 @@
           "value": 21.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201612",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-01-31",
           "periodDate": "2017-01-30",
@@ -4556,15 +4881,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -4707,6 +5031,20 @@
           "value": 14.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201701",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-02-28",
           "periodDate": "2017-02-27",
@@ -4736,15 +5074,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -4887,6 +5224,20 @@
           "value": 21.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201702",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.45,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-03-31",
           "periodDate": "2017-03-30",
@@ -4916,15 +5267,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5067,6 +5417,20 @@
           "value": 18.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201703",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.12,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-04-30",
           "periodDate": "2017-04-28",
@@ -5096,15 +5460,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5247,6 +5610,20 @@
           "value": 18.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201704",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.84,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-05-31",
           "periodDate": "2017-05-30",
@@ -5276,15 +5653,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5427,6 +5803,20 @@
           "value": 17,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201705",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.13,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-06-30",
           "periodDate": "2017-06-29",
@@ -5456,15 +5846,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5607,6 +5996,20 @@
           "value": 15,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201706",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-07-31",
           "periodDate": "2017-07-28",
@@ -5636,15 +6039,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5787,6 +6189,20 @@
           "value": 15.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201707",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.89,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-08-31",
           "periodDate": "2017-08-30",
@@ -5816,15 +6232,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -5967,6 +6382,20 @@
           "value": 14,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201708",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.56,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-09-30",
           "periodDate": "2017-09-29",
@@ -5996,15 +6425,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -6147,6 +6575,20 @@
           "value": 14,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201709",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.98,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-10-31",
           "periodDate": "2017-10-30",
@@ -6176,15 +6618,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -6327,6 +6768,20 @@
           "value": 13,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201710",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.88,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-11-30",
           "periodDate": "2017-11-29",
@@ -6356,15 +6811,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -6507,6 +6961,20 @@
           "value": 12.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2017-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201711",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2017-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.11,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2017-12-31",
           "periodDate": "2017-12-29",
@@ -6536,15 +7004,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -6687,6 +7154,20 @@
           "value": 11.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201712",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.07,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-01-31",
           "periodDate": "2018-01-30",
@@ -6716,15 +7197,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -6867,6 +7347,20 @@
           "value": 15,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201801",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-02-28",
           "periodDate": "2018-02-27",
@@ -6896,15 +7390,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7047,6 +7540,20 @@
           "value": 8.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201802",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-03-31",
           "periodDate": "2018-03-29",
@@ -7076,15 +7583,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7227,6 +7733,20 @@
           "value": 7.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201803",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-04-30",
           "periodDate": "2018-04-27",
@@ -7256,15 +7776,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7407,6 +7926,20 @@
           "value": 7.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201804",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-05-31",
           "periodDate": "2018-05-30",
@@ -7436,15 +7969,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7587,6 +8119,20 @@
           "value": 6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201805",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-06-30",
           "periodDate": "2018-06-29",
@@ -7616,15 +8162,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7767,6 +8312,20 @@
           "value": 6.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201806",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-07-31",
           "periodDate": "2018-07-30",
@@ -7796,15 +8355,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -7947,6 +8505,20 @@
           "value": 5.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201807",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-08-31",
           "periodDate": "2018-08-30",
@@ -7976,15 +8548,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -8127,6 +8698,20 @@
           "value": 3.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201808",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-09-30",
           "periodDate": "2018-09-28",
@@ -8156,15 +8741,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -8307,6 +8891,20 @@
           "value": 4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201809",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-10-31",
           "periodDate": "2018-10-30",
@@ -8336,15 +8934,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -8487,6 +9084,20 @@
           "value": 2.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201810",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-11-30",
           "periodDate": "2018-11-29",
@@ -8516,15 +9127,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -8667,6 +9277,20 @@
           "value": 1.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2018-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201811",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2018-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2018-12-31",
           "periodDate": "2018-12-28",
@@ -8696,15 +9320,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -8847,6 +9470,20 @@
           "value": 1.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201812",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-01-31",
           "periodDate": "2019-01-30",
@@ -8876,15 +9513,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9027,6 +9663,20 @@
           "value": 0.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201901",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-02-28",
           "periodDate": "2019-02-27",
@@ -9056,15 +9706,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9207,6 +9856,20 @@
           "value": 1.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201902",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-03-31",
           "periodDate": "2019-03-29",
@@ -9236,15 +9899,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9387,6 +10049,20 @@
           "value": 4.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201903",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-04-30",
           "periodDate": "2019-04-29",
@@ -9416,15 +10092,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9567,6 +10242,20 @@
           "value": 2.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201904",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-05-31",
           "periodDate": "2019-05-30",
@@ -9596,15 +10285,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9747,6 +10435,20 @@
           "value": 3.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201905",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-06-30",
           "periodDate": "2019-06-28",
@@ -9776,15 +10478,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -9927,6 +10628,20 @@
           "value": 4.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201906",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-07-31",
           "periodDate": "2019-07-30",
@@ -9956,15 +10671,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -10107,6 +10821,20 @@
           "value": 3.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201907",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-08-31",
           "periodDate": "2019-08-30",
@@ -10136,15 +10864,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -10287,6 +11014,20 @@
           "value": 3.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201908",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-09-30",
           "periodDate": "2019-09-27",
@@ -10316,15 +11057,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -10467,6 +11207,20 @@
           "value": 3.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201909",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-10-31",
           "periodDate": "2019-10-30",
@@ -10496,15 +11250,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -10647,6 +11400,20 @@
           "value": 3.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201910",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-11-30",
           "periodDate": "2019-11-29",
@@ -10676,15 +11443,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -10827,6 +11593,20 @@
           "value": 3.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2019-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201911",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2019-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2019-12-31",
           "periodDate": "2019-12-30",
@@ -10856,15 +11636,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11007,6 +11786,20 @@
           "value": 4.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "201912",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-01-31",
           "periodDate": "2020-01-30",
@@ -11036,15 +11829,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11187,6 +11979,20 @@
           "value": 0,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-02-29",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202001",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-02-29",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-02-29",
           "periodDate": "2020-02-28",
@@ -11216,15 +12022,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11367,6 +12172,20 @@
           "value": 4.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202002",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-03-31",
           "periodDate": "2020-03-30",
@@ -11396,15 +12215,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11547,6 +12365,20 @@
           "value": 5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202003",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-04-30",
           "periodDate": "2020-04-29",
@@ -11576,15 +12408,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11727,6 +12558,20 @@
           "value": 5.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202004",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-05-31",
           "periodDate": "2020-05-29",
@@ -11756,15 +12601,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -11907,6 +12751,20 @@
           "value": 6.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202005",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-06-30",
           "periodDate": "2020-06-29",
@@ -11936,15 +12794,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12087,6 +12944,20 @@
           "value": 6.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202006",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-07-31",
           "periodDate": "2020-07-30",
@@ -12116,15 +12987,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12267,6 +13137,20 @@
           "value": 6.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202007",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-08-31",
           "periodDate": "2020-08-28",
@@ -12296,15 +13180,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12447,6 +13330,20 @@
           "value": 8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202008",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-09-30",
           "periodDate": "2020-09-29",
@@ -12476,15 +13373,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12627,6 +13523,20 @@
           "value": 8.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202009",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-10-31",
           "periodDate": "2020-10-30",
@@ -12656,15 +13566,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12807,6 +13716,20 @@
           "value": 9.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202010",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-11-30",
           "periodDate": "2020-11-27",
@@ -12836,15 +13759,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -12987,6 +13909,20 @@
           "value": 10,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2020-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202011",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2020-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2020-12-31",
           "periodDate": "2020-12-30",
@@ -13016,15 +13952,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -13167,6 +14102,20 @@
           "value": 8.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202012",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-01-31",
           "periodDate": "2021-01-29",
@@ -13196,15 +14145,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -13347,6 +14295,20 @@
           "value": 14.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202101",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-02-28",
           "periodDate": "2021-02-26",
@@ -13376,15 +14338,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -13527,6 +14488,20 @@
           "value": 7.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202102",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-03-31",
           "periodDate": "2021-03-30",
@@ -13556,15 +14531,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -13707,6 +14681,20 @@
           "value": 7.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202103",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-04-30",
           "periodDate": "2021-04-29",
@@ -13736,15 +14724,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -13887,6 +14874,20 @@
           "value": 6.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202104",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-05-31",
           "periodDate": "2021-05-28",
@@ -13916,15 +14917,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14067,6 +15067,20 @@
           "value": 6.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202105",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-06-30",
           "periodDate": "2021-06-29",
@@ -14096,15 +15110,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14247,6 +15260,20 @@
           "value": 5.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202106",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-07-31",
           "periodDate": "2021-07-30",
@@ -14276,15 +15303,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14427,6 +15453,20 @@
           "value": 4.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202107",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-08-31",
           "periodDate": "2021-08-30",
@@ -14456,15 +15496,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14607,6 +15646,20 @@
           "value": 4.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202108",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-09-30",
           "periodDate": "2021-09-29",
@@ -14636,15 +15689,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14787,6 +15839,20 @@
           "value": 3.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202109",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-10-31",
           "periodDate": "2021-10-29",
@@ -14816,15 +15882,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -14967,6 +16032,20 @@
           "value": 2.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202110",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-11-30",
           "periodDate": "2021-11-29",
@@ -14996,15 +16075,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -15147,6 +16225,20 @@
           "value": 3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2021-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202111",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2021-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2021-12-31",
           "periodDate": "2021-12-30",
@@ -15176,15 +16268,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -15327,6 +16418,20 @@
           "value": 3.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202112",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-01-31",
           "periodDate": "2022-01-28",
@@ -15356,15 +16461,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -15507,6 +16611,20 @@
           "value": -1.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202201",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-02-28",
           "periodDate": "2022-02-25",
@@ -15536,15 +16654,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -15687,6 +16804,20 @@
           "value": 4.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202202",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-03-31",
           "periodDate": "2022-03-30",
@@ -15716,15 +16847,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -15867,6 +16997,20 @@
           "value": 4.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202203",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-04-30",
           "periodDate": "2022-04-29",
@@ -15896,15 +17040,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16047,6 +17190,20 @@
           "value": 5.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202204",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-05-31",
           "periodDate": "2022-05-27",
@@ -16076,15 +17233,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16227,6 +17383,20 @@
           "value": 4.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202205",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-06-30",
           "periodDate": "2022-06-29",
@@ -16256,15 +17426,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16407,6 +17576,20 @@
           "value": 5.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202206",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-07-31",
           "periodDate": "2022-07-29",
@@ -16436,15 +17619,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16587,6 +17769,20 @@
           "value": 6.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202207",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-08-31",
           "periodDate": "2022-08-30",
@@ -16616,15 +17812,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16767,6 +17962,20 @@
           "value": 6.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202208",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-09-30",
           "periodDate": "2022-09-29",
@@ -16796,15 +18005,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -16947,6 +18155,20 @@
           "value": 6.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202209",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-10-31",
           "periodDate": "2022-10-28",
@@ -16976,15 +18198,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -17127,6 +18348,20 @@
           "value": 5.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202210",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-11-30",
           "periodDate": "2022-11-29",
@@ -17156,15 +18391,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -17307,6 +18541,20 @@
           "value": 4.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2022-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202211",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2022-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2022-12-31",
           "periodDate": "2022-12-30",
@@ -17336,15 +18584,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -17487,6 +18734,20 @@
           "value": 3.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202212",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-01-31",
           "periodDate": "2023-01-30",
@@ -17516,15 +18777,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -17667,6 +18927,20 @@
           "value": 6.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202301",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-02-28",
           "periodDate": "2023-02-27",
@@ -17696,15 +18970,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -17847,6 +19120,20 @@
           "value": 5.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202302",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-03-31",
           "periodDate": "2023-03-30",
@@ -17876,15 +19163,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18027,6 +19313,20 @@
           "value": 5.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202303",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-04-30",
           "periodDate": "2023-04-28",
@@ -18056,15 +19356,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18207,6 +19506,20 @@
           "value": 5.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202304",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 12.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-05-31",
           "periodDate": "2023-05-30",
@@ -18236,15 +19549,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18387,6 +19699,20 @@
           "value": 4.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202305",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-06-30",
           "periodDate": "2023-06-29",
@@ -18416,15 +19742,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18567,6 +19892,20 @@
           "value": 3.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202306",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 11.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-07-31",
           "periodDate": "2023-07-28",
@@ -18596,15 +19935,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18747,6 +20085,20 @@
           "value": 2.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202307",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-08-31",
           "periodDate": "2023-08-30",
@@ -18776,15 +20128,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -18927,6 +20278,20 @@
           "value": 2.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202308",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-09-30",
           "periodDate": "2023-09-29",
@@ -18956,15 +20321,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -19107,6 +20471,20 @@
           "value": 2.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202309",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-10-31",
           "periodDate": "2023-10-30",
@@ -19136,15 +20514,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -19287,6 +20664,20 @@
           "value": 1.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202310",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-11-30",
           "periodDate": "2023-11-29",
@@ -19316,15 +20707,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -19467,6 +20857,20 @@
           "value": 1.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2023-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202311",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2023-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 10,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2023-12-31",
           "periodDate": "2023-12-29",
@@ -19496,15 +20900,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -19647,6 +21050,20 @@
           "value": 1.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202312",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-01-31",
           "periodDate": "2024-01-30",
@@ -19676,15 +21093,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -19827,6 +21243,20 @@
           "value": 5.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-02-29",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202401",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-02-29",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-02-29",
           "periodDate": "2024-02-28",
@@ -19856,15 +21286,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20007,6 +21436,20 @@
           "value": 1.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202402",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-03-31",
           "periodDate": "2024-03-28",
@@ -20036,15 +21479,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20187,6 +21629,20 @@
           "value": 1.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202403",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-04-30",
           "periodDate": "2024-04-29",
@@ -20216,15 +21672,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20367,6 +21822,20 @@
           "value": -1.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202404",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-05-31",
           "periodDate": "2024-05-30",
@@ -20396,15 +21865,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20547,6 +22015,20 @@
           "value": -4.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202405",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-06-30",
           "periodDate": "2024-06-28",
@@ -20576,15 +22058,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20727,6 +22208,20 @@
           "value": -5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202406",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 6.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-07-31",
           "periodDate": "2024-07-30",
@@ -20756,15 +22251,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -20907,6 +22401,20 @@
           "value": -6.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202407",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 6.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-08-31",
           "periodDate": "2024-08-30",
@@ -20936,15 +22444,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21087,6 +22594,20 @@
           "value": -7.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202408",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 6.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-09-30",
           "periodDate": "2024-09-27",
@@ -21116,15 +22637,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21267,6 +22787,20 @@
           "value": -7.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202409",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 6.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-10-31",
           "periodDate": "2024-10-30",
@@ -21296,15 +22830,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21447,6 +22980,20 @@
           "value": -6.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202410",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-11-30",
           "periodDate": "2024-11-29",
@@ -21476,15 +23023,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21627,6 +23173,20 @@
           "value": -3.7,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2024-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202411",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2024-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7.1,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2024-12-31",
           "periodDate": "2024-12-30",
@@ -21656,15 +23216,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21807,6 +23366,20 @@
           "value": 1.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202412",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-01-31",
           "periodDate": "2025-01-30",
@@ -21836,15 +23409,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -21987,6 +23559,20 @@
           "value": 0.4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202501",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-02-28",
           "periodDate": "2025-02-27",
@@ -22016,15 +23602,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -22167,6 +23752,20 @@
           "value": 0.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202502",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-03-31",
           "periodDate": "2025-03-28",
@@ -22196,15 +23795,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -22347,6 +23945,20 @@
           "value": 1.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202503",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-04-30",
           "periodDate": "2025-04-29",
@@ -22376,15 +23988,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -22527,6 +24138,20 @@
           "value": 1.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202504",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-05-31",
           "periodDate": "2025-05-30",
@@ -22556,15 +24181,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -22707,6 +24331,20 @@
           "value": 2.3,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202505",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 7.9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-06-30",
           "periodDate": "2025-06-27",
@@ -22736,15 +24374,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -22887,6 +24524,20 @@
           "value": 4.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202506",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.3,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-07-31",
           "periodDate": "2025-07-30",
@@ -22916,15 +24567,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23067,6 +24717,20 @@
           "value": 5.6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-08-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202507",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-08-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-08-31",
           "periodDate": "2025-08-29",
@@ -23096,15 +24760,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23247,6 +24910,20 @@
           "value": 6,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-09-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202508",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-09-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-09-30",
           "periodDate": "2025-09-29",
@@ -23276,15 +24953,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23427,6 +25103,20 @@
           "value": 7.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-10-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202509",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-10-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.4,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-10-31",
           "periodDate": "2025-10-30",
@@ -23456,15 +25146,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23607,6 +25296,20 @@
           "value": 6.2,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-11-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202510",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-11-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.2,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-11-30",
           "periodDate": "2025-11-28",
@@ -23636,15 +25339,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23787,6 +25489,20 @@
           "value": 4.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2025-12-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202511",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2025-12-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2025-12-31",
           "periodDate": "2025-12-30",
@@ -23816,15 +25532,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -23967,6 +25682,20 @@
           "value": 3.8,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-01-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202512",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-01-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-01-31",
           "periodDate": "2026-01-30",
@@ -23996,15 +25725,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -24147,6 +25875,20 @@
           "value": 4.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-02-28",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202601",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-02-28",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-02-28",
           "periodDate": "2026-02-27",
@@ -24176,15 +25918,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -24327,6 +26068,20 @@
           "value": 5.9,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-03-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202602",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-03-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 9,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-03-31",
           "periodDate": "2026-03-30",
@@ -24356,15 +26111,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -24507,6 +26261,20 @@
           "value": 5.1,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-04-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202603",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-04-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.5,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-04-30",
           "periodDate": "2026-04-29",
@@ -24536,15 +26304,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -24687,6 +26454,20 @@
           "value": 5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-05-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202604",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-05-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-05-31",
           "periodDate": "2026-05-29",
@@ -24716,15 +26497,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -24867,6 +26647,20 @@
           "value": 5.5,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-06-30",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202605",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-06-30",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8.6,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-06-30",
           "periodDate": "2026-06-29",
@@ -24896,15 +26690,14 @@
         },
         "L": {
           "missing": [
-            "L3",
             "L4"
           ],
-          "present": 3,
+          "present": 4,
           "required": 5,
           "status": "incomplete"
         },
         "overall": {
-          "present": 12,
+          "present": 13,
           "required": 14,
           "status": "incomplete"
         }
@@ -25047,6 +26840,20 @@
           "value": 4,
           "valueVintage": "latest_available_snapshot"
         },
+        "L3": {
+          "asOf": "2026-07-31",
+          "dataset": "cn_m",
+          "indicatorId": "L3",
+          "period": "202606",
+          "pitScope": "release_lag_only",
+          "releaseDate": "2026-07-31",
+          "releaseDateQuality": "conservative_proxy",
+          "source": "tushare",
+          "sourceField": "m2_yoy",
+          "unit": "pct",
+          "value": 8,
+          "valueVintage": "latest_available_snapshot"
+        },
         "L5": {
           "asOf": "2026-07-31",
           "periodDate": "2026-07-30",
@@ -25062,51 +26869,56 @@
   "sourceFiles": {
     "B1": {
       "path": "public/data/market-research/history/b1.json",
-      "sha256": "5a6423ba8390b427bba940a75f0ff5d6f0acd32863e8d5f7e5bdf2f2821514f9"
+      "sha256": "c1ab44c3102be20d707e489483cfab20dd928317600cbcb05b0e8e7712d750d3"
     },
     "B2": {
       "path": "public/data/market-research/history/b2.json",
-      "sha256": "c73008b60c3be64294e8c14784894df91e1050b07308cc813b55e8779d220b5e"
+      "sha256": "127b725f76b29f1d372d0a924ebaac4113096a1052073ff99d9dada69765b08a"
     },
     "B3": {
       "path": "public/data/market-research/history/b3.json",
-      "sha256": "e0e9a46060aec7c09e80f7fd14b3106831539084a8ada2f3eba6b6d53967290c"
+      "sha256": "ac2c394276b24eb7d890ee81d5b8dd3658bb51c8640e4c26a27bbef4f44290e4"
     },
     "B4": {
       "path": "public/data/market-research/history/b4.json",
-      "sha256": "344d7c264a07a0fa649b178fe89a4f291bcb14d4d23a4ac8eb1357d80618e201"
+      "sha256": "9cf87be60d0440803285798c208c7050034cbe89c63dbba12ab8b72915f5e879"
     },
     "B5": {
       "path": "public/data/market-research/history/b5.json",
-      "sha256": "07e7c44751fc8e0f2c99ed740f776a88f1672ac56e2a985ec3ca5c71e938a6a3"
+      "sha256": "d78315eff01d0d1b89ee5fff07f72154e09c4a393a12a03efbcbe92819676ca8"
     },
     "F1": {
       "path": "public/data/market-research/history/f1.json",
-      "sha256": "3fb965eebc7c39d00ca707a01f3e552ea62d84f3fb272f99eede87409a61b708"
+      "sha256": "51cf895b699b10a1756063ad542bed02a898547e079b3faf6a1f7c3e8a553982"
     },
     "F2": {
       "path": "public/data/market-research/history/f2.json",
-      "sha256": "7762699a46b5b22a3b80fd8c039a8dbaa18c524624a4fbb573f576fc7c7767b3"
+      "sha256": "b068234dfc97e3545bbe40ab1744c2f787578b7067121d09db4eb4b0407ac74a"
     },
     "F3": {
       "path": "public/data/market-research/history/f3.json",
-      "sha256": "cc9428a35145d97d8a436d27973bb37cc2e6134caabd0c8b44f1739df22399a4"
+      "sha256": "1df3db59655ccfa66ebe0653faf67eeccc0a3120ba95523431286d341db4f6f7"
     },
     "F4": {
       "path": "public/data/market-research/history/f4.json",
-      "sha256": "fe46c001243b0760f7bdd54b7efe61da814f59a6f26e270f817239d8dc865993"
+      "sha256": "9bb8e11f9c533efa80f29781c2f0383905ef64428cb3b1ab96b87f4b7fc301f3"
     },
     "L1": {
       "path": "public/data/market-research/history/l1.json",
-      "sha256": "5128e28d1c200f33485d3b4c1b11d4022a92327b4c8a8cf495d6413013e929eb"
+      "sha256": "1dd3cfd7ee59590bcff001e7909d52a29fe6fbd6bbf61394f24d25a068c35e37"
     },
     "L2": {
       "path": "public/data/market-research/history/l2.json",
       "sha256": "4bee5b8490933643bc4e9c72a10a18dae857c9748ba115f28d5e803baaffd596"
     },
+    "L3": {
+      "path": "public/data/market-research/history/l3.json",
+      "sha256": "cc73729fd4b7a6c20eb98b745c9f2175f4a10d1e3d9003c1ac906651b7bad29a"
+    },
     "L5": {
       "path": "public/data/market-research/history/l5.json",
-      "sha256": "4bc7bac963c3c1a86d384d91d61421b1b181f8e8be8738e4ee867df75352a5eb"
+      "sha256": "db293c0b26fd28cf0928332146c33c1345c02c37cfa1889f870ada4d5349b989"
     }
-  }
+  },
+  "sourceHashPolicy": "utf8_lf_normalized"
 }

@@ -4,8 +4,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const REQUIRED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L3", "L4", "L5"];
-export const INCLUDED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L5"];
-export const INTENTIONALLY_MISSING = ["L3", "L4"];
+export const INCLUDED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L3", "L5"];
+export const INTENTIONALLY_MISSING = ["L4"];
 const OUTPUT = "public/data/market-research/history/joint.json";
 const SOURCE_PATHS = Object.fromEntries(INCLUDED_INDICATORS.map(id => [id, `public/data/market-research/history/${id.toLowerCase()}.json`]));
 
@@ -23,6 +23,21 @@ export function canonicalize(value) {
 
 export function sha256(value) {
   return createHash("sha256").update(value).digest("hex");
+}
+
+export function normalizeSourceText(bytes) {
+  const raw = Buffer.from(bytes);
+  if (raw.length >= 3 && raw[0] === 0xef && raw[1] === 0xbb && raw[2] === 0xbf) throw new Error("Source JSON must not contain a UTF-8 BOM");
+  let text;
+  try { text = new TextDecoder("utf-8", { fatal: true }).decode(raw); }
+  catch { throw new Error("Source JSON is not valid UTF-8"); }
+  const normalized = text.replace(/\r\n?/g, "\n");
+  try { JSON.parse(normalized); } catch { throw new Error("Source JSON is invalid"); }
+  return normalized;
+}
+
+export function sourceFileSha256(bytes) {
+  return sha256(Buffer.from(normalizeSourceText(bytes), "utf8"));
 }
 
 export function validateHistoryArtifact(id, artifact, masterAsOf, cutoff) {
@@ -54,17 +69,17 @@ export function buildJointHistory(inputs, sourceFiles, cutoff = "2026-08-17") {
       asOf,
       indicators,
       coverage: {
-        overall: { present: 12, required: 14, status: "incomplete" },
+        overall: { present: 13, required: 14, status: "incomplete" },
         B: { present: 5, required: 5, status: "complete", missing: [] },
         F: { present: 4, required: 4, status: "complete", missing: [] },
-        L: { present: 3, required: 5, status: "incomplete", missing: [...INTENTIONALLY_MISSING] },
+        L: { present: 4, required: 5, status: "incomplete", missing: [...INTENTIONALLY_MISSING] },
       },
       scoreStatus: "not_computed_incomplete_inputs",
       aggregateScore: null,
       jointState: null,
     };
   });
-  return canonicalize({ schemaVersion: 1, asOfCutoff: cutoff, masterTimeline: "B3", requiredIndicators: REQUIRED_INDICATORS, includedIndicators: INCLUDED_INDICATORS, intentionallyMissing: INTENTIONALLY_MISSING, scorePolicy: "require_14_of_14", sourceFiles, snapshots });
+  return canonicalize({ schemaVersion: 1, asOfCutoff: cutoff, masterTimeline: "B3", requiredIndicators: REQUIRED_INDICATORS, includedIndicators: INCLUDED_INDICATORS, intentionallyMissing: INTENTIONALLY_MISSING, scorePolicy: "require_14_of_14", sourceHashPolicy: "utf8_lf_normalized", sourceFiles, snapshots });
 }
 
 function parseAsOf(argv) {
@@ -87,12 +102,13 @@ export async function main(argv = process.argv.slice(2)) {
   for (const id of INCLUDED_INDICATORS) {
     const relative = SOURCE_PATHS[id];
     const bytes = await readFile(path.resolve(relative));
-    inputs[id] = JSON.parse(bytes.toString("utf8"));
-    sourceFiles[id] = { path: relative, sha256: sha256(bytes) };
+    const normalized = normalizeSourceText(bytes);
+    inputs[id] = JSON.parse(normalized);
+    sourceFiles[id] = { path: relative, sha256: sha256(Buffer.from(normalized, "utf8")) };
   }
   const joint = buildJointHistory(inputs, sourceFiles, cutoff);
   await writeAtomically(path.resolve(OUTPUT), joint);
-  console.log(`Generated ${OUTPUT}: ${joint.snapshots.length} offline snapshots; coverage 12/14; scores disabled`);
+  console.log(`Generated ${OUTPUT}: ${joint.snapshots.length} offline snapshots; coverage 13/14; scores disabled`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(error => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });
