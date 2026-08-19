@@ -4,8 +4,8 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 export const REQUIRED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L3", "L4", "L5"];
-export const INCLUDED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L5"];
-export const INTENTIONALLY_MISSING = ["L2", "L3", "L4"];
+export const INCLUDED_INDICATORS = ["B1", "B2", "B3", "B4", "B5", "F1", "F2", "F3", "F4", "L1", "L2", "L5"];
+export const INTENTIONALLY_MISSING = ["L3", "L4"];
 const OUTPUT = "public/data/market-research/history/joint.json";
 const SOURCE_PATHS = Object.fromEntries(INCLUDED_INDICATORS.map(id => [id, `public/data/market-research/history/${id.toLowerCase()}.json`]));
 
@@ -54,10 +54,10 @@ export function buildJointHistory(inputs, sourceFiles, cutoff = "2026-08-17") {
       asOf,
       indicators,
       coverage: {
-        overall: { present: 11, required: 14, status: "incomplete" },
+        overall: { present: 12, required: 14, status: "incomplete" },
         B: { present: 5, required: 5, status: "complete", missing: [] },
         F: { present: 4, required: 4, status: "complete", missing: [] },
-        L: { present: 2, required: 5, status: "incomplete", missing: [...INTENTIONALLY_MISSING] },
+        L: { present: 3, required: 5, status: "incomplete", missing: [...INTENTIONALLY_MISSING] },
       },
       scoreStatus: "not_computed_incomplete_inputs",
       aggregateScore: null,
@@ -92,7 +92,7 @@ export async function main(argv = process.argv.slice(2)) {
   }
   const joint = buildJointHistory(inputs, sourceFiles, cutoff);
   await writeAtomically(path.resolve(OUTPUT), joint);
-  console.log(`Generated ${OUTPUT}: ${joint.snapshots.length} offline snapshots; coverage 11/14; scores disabled`);
+  console.log(`Generated ${OUTPUT}: ${joint.snapshots.length} offline snapshots; coverage 12/14; scores disabled`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main().catch(error => { console.error(error instanceof Error ? error.message : String(error)); process.exitCode = 1; });
