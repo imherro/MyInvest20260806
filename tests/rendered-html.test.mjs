@@ -148,6 +148,14 @@ async function f4HistoryData() {
   return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/f4.json", import.meta.url)), "utf8"));
 }
 
+async function jointHistoryGenerator() {
+  return import(new URL("../scripts/generate-market-research-joint-history.mjs", import.meta.url).href);
+}
+
+async function jointHistoryData() {
+  return JSON.parse(await readFile(fileURLToPath(new URL("../public/data/market-research/history/joint.json", import.meta.url)), "utf8"));
+}
+
 test("renders the MY INVEST application shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -1310,6 +1318,43 @@ test("missing-token F4 failure preserves F4, L1, L5, F1-F3, B1-B5 and current fi
   const paths = ["../public/data/market-research/history/f4.json", "../public/data/market-research/history/l1.json", "../public/data/market-research/history/l5.json", "../public/data/market-research/history/f1.json", "../public/data/market-research/history/f2.json", "../public/data/market-research/history/f3.json", "../public/data/market-research/history/b1.json", "../public/data/market-research/history/b2.json", "../public/data/market-research/history/b3.json", "../public/data/market-research/history/b4.json", "../public/data/market-research/history/b5.json", "../public/data/market-research/current.json"].map(value => fileURLToPath(new URL(value, import.meta.url)));
   const before = await Promise.all(paths.map(value => readFile(value))); const env = { ...process.env }; delete env.TUSHARE_TOKEN;
   const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-history-f4.mjs", import.meta.url)), "--as-of", "2026-08-17"], { cwd: fileURLToPath(new URL("..", import.meta.url)), env, encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /TUSHARE_TOKEN is required/); assert.deepEqual(await Promise.all(paths.map(value => readFile(value))), before);
+});
+
+test("offline joint history builds deterministic incomplete 11-of-14 snapshots", async () => {
+  const { INCLUDED_INDICATORS, INTENTIONALLY_MISSING, buildJointHistory } = await jointHistoryGenerator();
+  const inputs = {}; const sourceFiles = {};
+  for (const id of INCLUDED_INDICATORS) { const relative = `public/data/market-research/history/${id.toLowerCase()}.json`; const bytes = await readFile(fileURLToPath(new URL(`../${relative}`, import.meta.url))); inputs[id] = JSON.parse(bytes); sourceFiles[id] = { path: relative, sha256: createHash("sha256").update(bytes).digest("hex") }; }
+  const first = buildJointHistory(inputs, sourceFiles); const second = buildJointHistory(inputs, sourceFiles);
+  assert.equal(first.snapshots.length, 139); assert.equal(JSON.stringify(first), JSON.stringify(second)); assert.deepEqual(first.intentionallyMissing, ["L2", "L3", "L4"]); assert.deepEqual(INTENTIONALLY_MISSING, ["L2", "L3", "L4"]); assert.equal(first.scorePolicy, "require_14_of_14");
+  for (let index = 0; index < first.snapshots.length; index += 1) { const snapshot = first.snapshots[index]; assert.equal(Object.keys(snapshot.indicators).length, 11); assert.deepEqual(Object.keys(snapshot.indicators), [...INCLUDED_INDICATORS].sort()); assert.equal(snapshot.indicators.B3.asOf, snapshot.asOf); assert.equal(snapshot.indicators.F1.medianNetProfitYoy, inputs.F1.points[index].medianNetProfitYoy); assert.deepEqual(snapshot.coverage, { B: { missing: [], present: 5, required: 5, status: "complete" }, F: { missing: [], present: 4, required: 4, status: "complete" }, L: { missing: ["L2", "L3", "L4"], present: 2, required: 5, status: "incomplete" }, overall: { present: 11, required: 14, status: "incomplete" } }); assert.equal(snapshot.scoreStatus, "not_computed_incomplete_inputs"); assert.equal(snapshot.aggregateScore, null); assert.equal(snapshot.jointState, null); for (const missing of ["L2", "L3", "L4"]) assert.ok(!(missing in snapshot.indicators)); }
+  const changedFiles = structuredClone(sourceFiles); changedFiles.B1.sha256 = createHash("sha256").update("changed").digest("hex"); assert.notEqual(buildJointHistory(inputs, changedFiles).sourceFiles.B1.sha256, first.sourceFiles.B1.sha256);
+});
+
+test("joint history validation rejects incomplete, malformed and misaligned inputs", async () => {
+  const { INCLUDED_INDICATORS, buildJointHistory } = await jointHistoryGenerator(); const inputs = {}; const sourceFiles = {};
+  for (const id of INCLUDED_INDICATORS) { const relative = `public/data/market-research/history/${id.toLowerCase()}.json`; const bytes = await readFile(fileURLToPath(new URL(`../${relative}`, import.meta.url))); inputs[id] = JSON.parse(bytes); sourceFiles[id] = { path: relative, sha256: createHash("sha256").update(bytes).digest("hex") }; }
+  const attempt = mutate => { const copy = structuredClone(inputs); mutate(copy); return () => buildJointHistory(copy, sourceFiles); };
+  assert.throws(() => buildJointHistory({ ...inputs, L1: undefined }, sourceFiles), /Missing included history L1/); assert.throws(attempt(copy => { copy.F4.indicator.id = "L2"; }), /Invalid F4 history identity/);
+  assert.throws(attempt(copy => { copy.B1.points.pop(); }), /exactly 139/); assert.throws(attempt(copy => { copy.B1.points.push(structuredClone(copy.B1.points.at(-1))); }), /exactly 139/);
+  assert.throws(attempt(copy => { copy.B2.points[1].asOf = copy.B2.points[0].asOf; }), /duplicate or unordered/); assert.throws(attempt(copy => { [copy.F1.points[0], copy.F1.points[1]] = [copy.F1.points[1], copy.F1.points[0]]; }), /duplicate or unordered/);
+  assert.throws(attempt(copy => { copy.F2.points[0].asOf = "2015-02-30"; }), /invalid, duplicate/); assert.throws(attempt(copy => { copy.L5.points[0].asOf = "2015-01-30"; }), /does not match the B3 timeline/); assert.throws(attempt(copy => { copy.B3.points.at(-1).asOf = "2026-08-18"; }), /invalid, duplicate/);
+  assert.throws(() => buildJointHistory(inputs, { ...sourceFiles, B1: { ...sourceFiles.B1, path: "l2.json" } }), /Invalid source provenance/);
+});
+
+test("offline joint history generator is network-free and reads only frozen inputs", async () => {
+  const source = await readFile(fileURLToPath(new URL("../scripts/generate-market-research-joint-history.mjs", import.meta.url)), "utf8");
+  assert.doesNotMatch(source, /TUSHARE_TOKEN|callTushare|pbc|https?:|\bfetch\b|l2\.json|l3\.json|l4\.json/i); assert.match(source, /INCLUDED_INDICATORS\.map/); assert.match(source, /readFile\(path\.resolve\(relative\)\)/); assert.doesNotMatch(source, /readdir|glob|forward.?fill|backward.?fill/i);
+});
+
+test("checked-in offline joint history preserves 139 exact snapshots without scores", async () => {
+  const joint = await jointHistoryData(); assert.equal(joint.snapshots.length, 139); assert.equal(joint.asOfCutoff, "2026-08-17"); assert.equal(joint.masterTimeline, "B3"); assert.deepEqual(joint.intentionallyMissing, ["L2", "L3", "L4"]);
+  for (const snapshot of joint.snapshots) { assert.equal(Object.keys(snapshot.indicators).length, 11); assert.equal(snapshot.aggregateScore, null); assert.equal(snapshot.jointState, null); assert.equal(snapshot.coverage.overall.status, "incomplete"); }
+  for (const source of Object.values(joint.sourceFiles)) { assert.match(source.path, /history\/(?:b[1-5]|f[1-4]|l[15])\.json$/); assert.match(source.sha256, /^[a-f0-9]{64}$/); }
+});
+
+test("joint history invalid cutoff failure preserves the checked-in output", async () => {
+  const output = fileURLToPath(new URL("../public/data/market-research/history/joint.json", import.meta.url)); const before = await readFile(output);
+  const result = spawnSync(process.execPath, [fileURLToPath(new URL("../scripts/generate-market-research-joint-history.mjs", import.meta.url)), "--as-of", "2026-08-18"], { cwd: fileURLToPath(new URL("..", import.meta.url)), encoding: "utf8" }); assert.notEqual(result.status, 0); assert.match(result.stderr, /requestedAsOf/); assert.deepEqual(await readFile(output), before);
 });
 
 test("builds F1 from latest disclosed company records and validates median inputs", async () => {
