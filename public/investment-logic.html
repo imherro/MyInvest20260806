@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>投资系统逻辑｜把市场想象成一辆车</title>
+  <style>
+    :root {
+      --bg: #07101c;
+      --panel: #0d1929;
+      --panel-2: #112238;
+      --line: rgba(164, 190, 218, .18);
+      --text: #f3f7fb;
+      --muted: #aebed0;
+      --engine: #48d7a0;
+      --fuel: #4eb7ff;
+      --rpm: #ffb457;
+      --danger: #ff6f78;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .26);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 82% -10%, rgba(78,183,255,.18), transparent 38%),
+        radial-gradient(circle at 5% 28%, rgba(72,215,160,.11), transparent 30%),
+        var(--bg);
+      font: 18px/1.65 Inter, "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    }
+    button, a { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 76px;
+      padding: 12px clamp(20px, 4vw, 72px);
+      background: rgba(7,16,28,.84);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: .02em; }
+    .brand-mark {
+      display: grid; place-items: center; width: 38px; height: 38px;
+      border-radius: 12px; color: #06131c; background: linear-gradient(135deg, var(--engine), var(--fuel));
+      box-shadow: 0 0 30px rgba(72,215,160,.22);
+    }
+    .nav { display: flex; align-items: center; gap: 6px; overflow-x: auto; white-space: nowrap; }
+    .nav { scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav a { padding: 9px 13px; border-radius: 10px; color: var(--muted); font-size: 15px; }
+    .nav a:hover { color: var(--text); background: rgba(255,255,255,.06); }
+
+    main { overflow: hidden; }
+    .wrap { width: min(1440px, calc(100% - 40px)); margin: 0 auto; }
+    .hero {
+      min-height: calc(100vh - 76px);
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      align-items: center;
+      gap: clamp(28px, 6vw, 96px);
+      padding: 70px 0 60px;
+    }
+    .eyebrow { color: #85a2bd; font-size: 14px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 14px 0 24px; font-size: clamp(46px, 4.7vw, 78px); line-height: 1.04; letter-spacing: -.055em; }
+    h1 span { display: block; color: transparent; background: linear-gradient(90deg, #fff, #8cdcbc 52%, #79c6ff); background-clip: text; }
+    .lead { max-width: 680px; margin: 0 0 34px; color: #c6d3e0; font-size: clamp(19px, 1.5vw, 24px); }
+    .hero-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tag { padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,.035); font-size: 15px; }
+
+    .car-stage {
+      position: relative;
+      padding: clamp(16px, 3vw, 42px);
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: linear-gradient(145deg, rgba(19,38,61,.9), rgba(8,18,31,.82));
+      box-shadow: var(--shadow);
+    }
+    .car-stage:before {
+      content: ""; position: absolute; inset: 12% 10%; border-radius: 50%;
+      background: radial-gradient(circle, rgba(78,183,255,.13), transparent 65%); filter: blur(14px);
+    }
+    .car-svg { position: relative; display: block; width: 100%; height: auto; }
+    .hotspot { cursor: pointer; transition: transform .2s ease, opacity .2s ease; transform-box: fill-box; transform-origin: center; }
+    .hotspot:hover, .hotspot.active { transform: translateY(-3px) scale(1.025); }
+    .hotspot:not(.active) { opacity: .66; }
+    .car-caption {
+      position: relative; display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: center;
+      margin-top: 4px; padding: 18px; border-radius: 18px; background: rgba(4,11,20,.6); border: 1px solid var(--line);
+    }
+    .caption-symbol { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; font-size: 24px; font-weight: 900; background: var(--accent); color: #07121c; }
+    .car-caption strong { display: block; font-size: 20px; }
+    .car-caption p { margin: 2px 0 0; color: var(--muted); font-size: 15px; }
+
+    section { padding: 105px 0; }
+    .section-head { display: grid; grid-template-columns: .7fr 1.3fr; gap: 40px; align-items: end; margin-bottom: 42px; }
+    .section-head h2 { margin: 8px 0 0; font-size: clamp(34px, 4vw, 62px); line-height: 1.12; letter-spacing: -.04em; }
+    .section-head p { margin: 0; max-width: 760px; color: var(--muted); font-size: 19px; }
+
+    .three-core { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .core-card {
+      position: relative; overflow: hidden; min-height: 420px; padding: 28px;
+      border: 1px solid var(--line); border-radius: 26px; background: var(--panel); box-shadow: var(--shadow);
+    }
+    .core-card:after { content: ""; position: absolute; width: 220px; height: 220px; right: -90px; top: -90px; border-radius: 50%; background: var(--accent); opacity: .1; filter: blur(10px); }
+    .core-card.engine { --accent: var(--engine); }
+    .core-card.fuel { --accent: var(--fuel); }
+    .core-card.rpm { --accent: var(--rpm); }
+    .core-title { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+    .core-code { color: var(--accent); font-size: 14px; font-weight: 900; letter-spacing: .12em; }
+    .core-title h3 { margin: 5px 0 0; font-size: 30px; line-height: 1.15; }
+    .core-icon { display: grid; place-items: center; flex: 0 0 auto; width: 52px; height: 52px; border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent); border-radius: 17px; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); font-size: 25px; }
+    .core-explain { min-height: 60px; margin: 18px 0 22px; color: var(--muted); }
+    .metrics { display: grid; gap: 9px; }
+    .metric { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 13px; border-radius: 12px; background: rgba(255,255,255,.045); font-size: 15px; }
+    .metric b { color: var(--accent); font-size: 13px; letter-spacing: .05em; }
+    .question { margin: 22px 0 0; padding-top: 17px; border-top: 1px solid var(--line); color: #dce7f2; font-weight: 700; }
+
+    .logic-board { border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(150deg, var(--panel-2), #091522); box-shadow: var(--shadow); overflow: hidden; }
+    .logic-tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); }
+    .logic-tab { padding: 20px; border: 0; border-right: 1px solid var(--line); background: transparent; cursor: pointer; color: var(--muted); font-weight: 800; }
+    .logic-tab:last-child { border-right: 0; }
+    .logic-tab.active { color: #07121c; background: var(--accent); }
+    .logic-panel { display: none; grid-template-columns: .8fr 1.2fr; gap: 40px; padding: clamp(26px, 5vw, 60px); }
+    .logic-panel.active { display: grid; }
+    .logic-panel h3 { margin: 0 0 14px; font-size: 32px; }
+    .logic-panel p { color: var(--muted); }
+    .signal-list { display: grid; gap: 12px; }
+    .signal { display: grid; grid-template-columns: 46px 1fr; gap: 14px; padding: 15px; background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 16px; }
+    .signal span { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-weight: 900; }
+    .signal strong { display: block; }
+    .signal small { display: block; margin-top: 2px; color: var(--muted); font-size: 14px; }
+
+    .decision-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: stretch; }
+    .state-builder, .action-result { padding: clamp(24px, 4vw, 42px); border: 1px solid var(--line); border-radius: 28px; background: var(--panel); box-shadow: var(--shadow); }
+    .state-builder h3, .action-result h3 { margin: 0 0 8px; font-size: 27px; }
+    .state-builder > p, .action-result > p { color: var(--muted); margin-top: 0; }
+    .control { margin: 26px 0; }
+    .control-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 800; }
+    .control-label b { color: var(--accent); }
+    .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .choice { border: 1px solid var(--line); border-radius: 11px; padding: 10px 8px; background: rgba(255,255,255,.035); color: var(--muted); cursor: pointer; font-size: 15px; }
+    .choice.active { border-color: var(--accent); color: #07121c; background: var(--accent); font-weight: 900; }
+    .result-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 999px; background: rgba(72,215,160,.12); color: var(--engine); font-weight: 800; font-size: 14px; }
+    .action-result { display: flex; flex-direction: column; justify-content: center; background: linear-gradient(145deg, #10243a, #0b1726); }
+    .action-result h3 { margin-top: 18px; font-size: clamp(31px, 4vw, 50px); line-height: 1.1; }
+    .action-list { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+    .action-list li { display: flex; gap: 12px; color: #c9d6e4; }
+    .action-list li:before { content: "✓"; color: var(--engine); font-weight: 900; }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: step; }
+    .step { position: relative; min-height: 210px; padding: 25px; border: 1px solid var(--line); border-radius: 22px; background: rgba(13,25,41,.82); }
+    .step:before { counter-increment: step; content: "0" counter(step); display: block; margin-bottom: 35px; color: #5f7b96; font-weight: 900; letter-spacing: .1em; }
+    .step:not(:last-child):after { content: "→"; position: absolute; z-index: 2; right: -22px; top: 46%; color: #69839d; font-size: 27px; }
+    .step strong { display: block; font-size: 21px; }
+    .step span { display: block; margin-top: 7px; color: var(--muted); font-size: 15px; }
+
+    .boundary { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .boundary-card { padding: 30px; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); }
+    .boundary-card h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 20px; font-size: 25px; }
+    .boundary-card ul { padding: 0; list-style: none; margin: 0; display: grid; gap: 14px; }
+    .boundary-card li { display: grid; grid-template-columns: 26px 1fr; gap: 9px; color: var(--muted); }
+    .done li:before { content: "✓"; color: var(--engine); font-weight: 900; }
+    .todo li:before { content: "○"; color: var(--rpm); font-weight: 900; }
+    .note { margin-top: 18px; padding: 18px 20px; border-left: 4px solid var(--rpm); border-radius: 10px; color: #c7d3df; background: rgba(255,180,87,.08); }
+
+    footer { padding: 50px 0 70px; color: #8095aa; text-align: center; font-size: 14px; border-top: 1px solid var(--line); }
+
+    @media (min-width: 1001px) { h1 span { white-space: nowrap; } }
+
+    @media (max-width: 1000px) {
+      .hero, .section-head, .logic-panel { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .three-core { grid-template-columns: 1fr; }
+      .core-card { min-height: auto; }
+      .steps { grid-template-columns: repeat(2, 1fr); }
+      .step:nth-child(2):after { display: none; }
+    }
+    @media (max-width: 720px) {
+      body { font-size: 17px; }
+      .topbar { align-items: flex-start; flex-direction: column; gap: 6px; min-height: auto; }
+      .nav { width: 100%; }
+      .wrap { width: min(100% - 24px, 1440px); }
+      section { padding: 76px 0; }
+      .hero { padding-top: 48px; }
+      h1 { font-size: 42px; }
+      .decision-layout, .boundary { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .step:after { display: none; }
+      .logic-tabs { grid-template-columns: 1fr; }
+      .logic-tab { border-right: 0; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top"><span class="brand-mark">M</span><span>MyInvest · 投资逻辑</span></a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#model">三大系统</a><a href="#signals">14项指标</a><a href="#decision">情景推演</a><a href="#routine">使用方法</a><a href="#status">当前进度</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="wrap">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Market research framework</div>
+          <h1>把市场想象成<span>一辆正在行驶的车</span></h1>
+          <p class="lead">判断市场，不靠猜明天涨跌。先看发动机是否健康，再看油够不够，最后看转速是否过热。</p>
+          <div class="hero-tags"><span class="tag">长牛底座 = 发动机</span><span class="tag">信用 / 货币 = 汽油</span><span class="tag">估值 / 泡沫 = 转速表</span></div>
+        </div>
+
+        <div class="car-stage" aria-label="市场汽车模型，点击三个彩色区域可切换说明">
+          <svg class="car-svg" viewBox="0 0 720 410" role="img" aria-label="由发动机、油箱和转速表构成的市场汽车">
+            <defs>
+              <linearGradient id="body" x1="0" x2="1"><stop stop-color="#223e5d"/><stop offset="1" stop-color="#14283f"/></linearGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <path d="M95 272c10-52 35-89 83-104l83-80h231c52 0 93 21 132 80l31 16c28 15 39 39 39 72v45H50v-35c0-27 18-46 45-54z" fill="url(#body)" stroke="#42617f" stroke-width="3"/>
+            <path d="M276 105h204c37 0 67 18 99 63H228z" fill="#091724" stroke="#42617f" stroke-width="3"/>
+            <path d="M400 105v63M272 105l-44 63" stroke="#42617f" stroke-width="3"/>
+            <circle cx="178" cy="302" r="59" fill="#07101c" stroke="#5c7590" stroke-width="8"/><circle cx="178" cy="302" r="25" fill="#29445f"/>
+            <circle cx="566" cy="302" r="59" fill="#07101c" stroke="#5c7590" stroke-width="8"/><circle cx="566" cy="302" r="25" fill="#29445f"/>
+
+            <g class="hotspot active" data-part="engine" tabindex="0" role="button" aria-label="发动机：长牛底座">
+              <rect x="92" y="186" width="174" height="85" rx="18" fill="#48d7a0" filter="url(#glow)"/>
+              <text x="179" y="222" text-anchor="middle" font-size="17" font-weight="900" fill="#07161b">F · 发动机</text>
+              <text x="179" y="247" text-anchor="middle" font-size="14" font-weight="700" fill="#0a3329">长牛底座</text>
+            </g>
+            <g class="hotspot" data-part="fuel" tabindex="0" role="button" aria-label="油箱：信用与货币">
+              <rect x="286" y="196" width="156" height="75" rx="18" fill="#4eb7ff" filter="url(#glow)"/>
+              <text x="364" y="226" text-anchor="middle" font-size="17" font-weight="900" fill="#07161b">L · 油箱</text>
+              <text x="364" y="249" text-anchor="middle" font-size="14" font-weight="700" fill="#082d48">信用 / 货币</text>
+            </g>
+            <g class="hotspot" data-part="rpm" tabindex="0" role="button" aria-label="转速表：估值与泡沫">
+              <circle cx="535" cy="138" r="53" fill="#ffb457" stroke="#ffe0a4" stroke-width="3" filter="url(#glow)"/>
+              <path d="M535 138l30-22" stroke="#542c00" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="535" cy="138" r="7" fill="#542c00"/>
+              <text x="535" y="164" text-anchor="middle" font-size="13" font-weight="900" fill="#542c00">B · 转速</text>
+            </g>
+          </svg>
+          <div class="car-caption" style="--accent:var(--engine)"><span class="caption-symbol">F</span><div><strong>先看发动机：企业能否持续创造价值？</strong><p>决定这辆车有没有长期行驶的根基。</p></div></div>
+        </div>
+      </section>
+    </div>
+
+    <section id="model">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">01 · The model</div><h2>三组问题，代替一个“涨不涨”</h2></div><p>市场不是一个数字。F 看长期质量，L 看当下动力，B 看风险温度。三者组合起来，才决定仓位和节奏。</p></div>
+        <div class="three-core">
+          <article class="core-card engine"><div class="core-title"><div><div class="core-code">F · FOUNDATION</div><h3>长牛底座<br>发动机</h3></div><span class="core-icon">⚙</span></div><p class="core-explain">盈利、质量与股东回报，决定行情有没有长期基本面支撑。</p><div class="metrics"><div class="metric"><span>盈利趋势</span><b>F1</b></div><div class="metric"><span>盈利扩散 / 质量</span><b>F2</b></div><div class="metric"><span>股东回报</span><b>F3</b></div><div class="metric"><span>长期资金</span><b>F4</b></div></div><p class="question">核心问题：车本身好不好？</p></article>
+          <article class="core-card fuel"><div class="core-title"><div><div class="core-code">L · LIQUIDITY</div><h3>信用货币<br>汽油</h3></div><span class="core-icon">⛽</span></div><p class="core-explain">利率、货币和信用环境，决定资金是否愿意流进风险资产。</p><div class="metrics"><div class="metric"><span>利率条件</span><b>L1</b></div><div class="metric"><span>M1 / M2 活化</span><b>L2</b></div><div class="metric"><span>信用扩张</span><b>L3</b></div><div class="metric"><span>财政力度</span><b>L4</b></div><div class="metric"><span>外部金融条件</span><b>L5</b></div></div><p class="question">核心问题：现在跑得动吗？</p></article>
+          <article class="core-card rpm"><div class="core-title"><div><div class="core-code">B · BUBBLE</div><h3>估值泡沫<br>转速表</h3></div><span class="core-icon">◴</span></div><p class="core-explain">估值、换手和市值规模，提醒我们市场是否过热、代价是否太高。</p><div class="metrics"><div class="metric"><span>盈利收益率</span><b>B1</b></div><div class="metric"><span>股息率</span><b>B2</b></div><div class="metric"><span>PE / PB</span><b>B3</b></div><div class="metric"><span>总市值</span><b>B4</b></div><div class="metric"><span>换手热度</span><b>B5</b></div></div><p class="question">核心问题：是不是踩得太猛？</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="signals">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">02 · Signals</div><h2>14 项指标，各司其职</h2></div><p>点击 F、L、B 切换查看。第一阶段先用可验证的代理指标建立稳定历史，再进行评分和校准。</p></div>
+        <div class="logic-board">
+          <div class="logic-tabs"><button class="logic-tab active" data-panel="f" style="--accent:var(--engine)">F · 发动机（4项）</button><button class="logic-tab" data-panel="l" style="--accent:var(--fuel)">L · 汽油（5项）</button><button class="logic-tab" data-panel="b" style="--accent:var(--rpm)">B · 转速表（5项）</button></div>
+          <div class="logic-panel active" data-panel="f" style="--accent:var(--engine)"><div><h3>先确认长期价值</h3><p>如果企业盈利质量和股东回报不能改善，单靠资金推动的行情通常缺乏耐久度。</p></div><div class="signal-list"><div class="signal"><span>F1</span><div><strong>盈利趋势</strong><small>观察企业利润增速的中位数</small></div></div><div class="signal"><span>F2</span><div><strong>盈利扩散与质量</strong><small>观察盈利改善是否覆盖更多公司</small></div></div><div class="signal"><span>F3</span><div><strong>股东回报</strong><small>以现金分红收益率作为首阶段代理</small></div></div><div class="signal"><span>F4</span><div><strong>长期资金</strong><small>跟踪沪深300相关 ETF 规模变化</small></div></div></div></div>
+          <div class="logic-panel" data-panel="l" style="--accent:var(--fuel)"><div><h3>再判断资金动力</h3><p>油多不一定代表发动机好，但缺油时，再好的发动机也很难高速行驶。</p></div><div class="signal-list"><div class="signal"><span>L1</span><div><strong>利率条件</strong><small>SHIBOR 3个月与期限利差</small></div></div><div class="signal"><span>L2</span><div><strong>货币活化</strong><small>M1、M2 增速与两者差值</small></div></div><div class="signal"><span>L3</span><div><strong>信用扩张</strong><small>社会融资规模存量同比</small></div></div><div class="signal"><span>L4</span><div><strong>财政力度</strong><small>财政收入和支出的累计变化</small></div></div><div class="signal"><span>L5</span><div><strong>外部金融条件</strong><small>以美国10年期实际利率作为首阶段代理</small></div></div></div></div>
+          <div class="logic-panel" data-panel="b" style="--accent:var(--rpm)"><div><h3>最后检查价格温度</h3><p>好公司也可能太贵。转速越高，未来回报对预期落空就越敏感。</p></div><div class="signal-list"><div class="signal"><span>B1</span><div><strong>盈利收益率</strong><small>观察指数价格相对盈利的吸引力</small></div></div><div class="signal"><span>B2</span><div><strong>股息率</strong><small>观察加权股息回报水平</small></div></div><div class="signal"><span>B3</span><div><strong>PE / PB</strong><small>沪深300与创业板估值水平</small></div></div><div class="signal"><span>B4</span><div><strong>总市值</strong><small>观察市场整体规模变化</small></div></div><div class="signal"><span>B5</span><div><strong>换手热度</strong><small>观察投机交易是否升温</small></div></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="decision">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">03 · Decision lab</div><h2>组合状态，得到行动</h2></div><p>试着点选三个状态。这里展示的是框架化的风险应对，不是对某一天指数涨跌的预测。</p></div>
+        <div class="decision-layout">
+          <div class="state-builder">
+            <h3>市场状态选择器</h3><p>发动机 → 汽油 → 转速，依次判断。</p>
+            <div class="control" style="--accent:var(--engine)" data-control="f"><div class="control-label"><span>F · 发动机</span><b>强</b></div><div class="choices"><button class="choice active" data-value="strong">强</button><button class="choice" data-value="mid">一般</button><button class="choice" data-value="weak">弱</button></div></div>
+            <div class="control" style="--accent:var(--fuel)" data-control="l"><div class="control-label"><span>L · 汽油</span><b>充足</b></div><div class="choices"><button class="choice active" data-value="strong">充足</button><button class="choice" data-value="mid">中性</button><button class="choice" data-value="weak">紧张</button></div></div>
+            <div class="control" style="--accent:var(--rpm)" data-control="b"><div class="control-label"><span>B · 转速</span><b>适中</b></div><div class="choices"><button class="choice" data-value="low">偏低</button><button class="choice active" data-value="mid">适中</button><button class="choice" data-value="high">过热</button></div></div>
+          </div>
+          <div class="action-result" aria-live="polite"><span class="result-badge" id="resultBadge">较有利环境</span><h3 id="resultTitle">稳步行驶，分批配置</h3><p id="resultText">长期质量和资金环境互相配合，估值尚未过热，可以让核心仓位工作。</p><ul class="action-list" id="resultList"><li>核心资产或宽基 ETF 分批布局</li><li>保持组合分散，不因单一信号满仓</li><li>继续监测转速是否快速升高</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="routine">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">04 · Daily routine</div><h2>每次只做四步</h2></div><p>这套系统的价值，是把复杂数据压缩成稳定的观察顺序，减少情绪化决策。</p></div>
+        <div class="steps"><div class="step"><strong>看 F</strong><span>长期质量是强、稳定，还是转弱？</span></div><div class="step"><strong>看 L</strong><span>资金环境正在宽松、中性，还是收紧？</span></div><div class="step"><strong>看 B</strong><span>价格处于低温、合理，还是过热？</span></div><div class="step"><strong>定行动</strong><span>决定仓位、加减节奏和风险预算。</span></div></div>
+      </div>
+    </section>
+
+    <section id="status">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">05 · Reality check</div><h2>哪些已完成，哪些还没有</h2></div><p>这里明确区分“已有真实数据”与“已经形成投资信号”，避免把原始数据误读成最终结论。</p></div>
+        <div class="boundary">
+          <article class="boundary-card done"><h3><span style="color:var(--engine)">●</span> 已完成的地基</h3><ul><li>F、L、B 共14项历史输入已形成</li><li>历史数据按当时可获得时间检查，避免偷看未来</li><li>数据完整性、日期语义和输入冻结已经验证</li><li>页面和接口可继续接入评分结果</li></ul></article>
+          <article class="boundary-card todo"><h3><span style="color:var(--rpm)">●</span> 尚未完成的上层</h3><ul><li>14项指标的最终评分规则与阈值校准</li><li>F、L、B 联合状态的正式计算</li><li>历史回测、稳定性检验和仓位映射</li><li>部分首阶段代理指标的经济口径升级</li></ul></article>
+        </div>
+        <div class="note"><strong>一句话边界：</strong>现在已经有经过检查的“仪表传感器”，但正式的“驾驶评分”和“自动导航”仍在开发中。本文只解释投资研究框架，不构成投资建议。</div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap">MyInvest 市场研究框架 · 用结构化判断代替情绪化预测</div></footer>
+
+  <script>
+    const carCopy = {
+      engine: { accent: 'var(--engine)', symbol: 'F', title: '先看发动机：企业能否持续创造价值？', body: '决定这辆车有没有长期行驶的根基。' },
+      fuel: { accent: 'var(--fuel)', symbol: 'L', title: '再看油箱：资金环境能否提供动力？', body: '决定好发动机现在能不能跑起来。' },
+      rpm: { accent: 'var(--rpm)', symbol: 'B', title: '最后看转速：价格是否已经过热？', body: '决定现在加速的风险和未来回报空间。' }
+    };
+    const caption = document.querySelector('.car-caption');
+    function selectCar(part) {
+      document.querySelectorAll('.hotspot').forEach(el => el.classList.toggle('active', el.dataset.part === part));
+      const item = carCopy[part];
+      caption.style.setProperty('--accent', item.accent);
+      caption.querySelector('.caption-symbol').textContent = item.symbol;
+      caption.querySelector('strong').textContent = item.title;
+      caption.querySelector('p').textContent = item.body;
+    }
+    document.querySelectorAll('.hotspot').forEach(el => {
+      el.addEventListener('click', () => selectCar(el.dataset.part));
+      el.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') selectCar(el.dataset.part); });
+    });
+
+    document.querySelectorAll('.logic-tab').forEach(tab => tab.addEventListener('click', () => {
+      document.querySelectorAll('.logic-tab').forEach(item => item.classList.toggle('active', item === tab));
+      document.querySelectorAll('.logic-panel').forEach(panel => panel.classList.toggle('active', panel.dataset.panel === tab.dataset.panel));
+    }));
+
+    const state = { f: 'strong', l: 'strong', b: 'mid' };
+    const labels = { f: { strong:'强', mid:'一般', weak:'弱' }, l:{ strong:'充足', mid:'中性', weak:'紧张' }, b:{ low:'偏低', mid:'适中', high:'过热' } };
+    function decision() {
+      if (state.b === 'high') return { badge:'过热警报', color:'var(--danger)', title:'先降温，不追高', text:'无论发动机和油量如何，过高转速都会放大预期落空的风险。', list:['降低追涨和高估值暴露','保留优质底仓，分批兑现过热部分','等待估值或情绪回到合理区间'] };
+      if (state.f === 'weak' && state.l === 'weak') return { badge:'高风险环境', color:'var(--danger)', title:'靠边慢行，优先防守', text:'基本面和资金面同时缺乏支撑，此时首要目标不是抢反弹，而是保存风险预算。', list:['降低总仓位与组合波动','偏向现金、低波动或防御配置','等待 F 或 L 出现明确改善'] };
+      if (state.f === 'strong' && state.l === 'strong') return { badge:'较有利环境', color:'var(--engine)', title:'稳步行驶，分批配置', text:'长期质量和资金环境互相配合，估值尚未过热，可以让核心仓位工作。', list:['核心资产或宽基 ETF 分批布局','保持组合分散，不因单一信号满仓','继续监测转速是否快速升高'] };
+      if (state.f === 'strong' && state.l === 'weak') return { badge:'好车缺油', color:'var(--fuel)', title:'耐心等待，慢速定投', text:'长期结构仍好，但短期资金动力不足，适合延长建仓周期而不是强行加速。', list:['控制加仓速度，避免杠杆','用定投代替一次性押注','观察利率、信用和货币活化改善'] };
+      if (state.f === 'weak' && state.l === 'strong') return { badge:'流动性行情', color:'var(--rpm)', title:'可做反弹，不当长牛', text:'资金推动可能带来交易机会，但尚缺长期盈利支撑，仓位和持有期都应更克制。', list:['以交易仓位参与，不替代核心配置','设定退出条件和风险上限','等待盈利扩散确认后再升级判断'] };
+      return { badge:'中性观察', color:'#9cb4ca', title:'保持均衡，等待共振', text:'三组信号尚未形成一致方向，最合理的动作通常是保持分散、少做极端判断。', list:['维持中性仓位与资产分散','把新增资金拆成多批','等待至少两个系统同向改善'] };
+    }
+    function renderDecision() {
+      const result = decision();
+      const badge = document.getElementById('resultBadge');
+      badge.textContent = result.badge; badge.style.color = result.color; badge.style.background = `color-mix(in srgb, ${result.color} 12%, transparent)`;
+      document.getElementById('resultTitle').textContent = result.title;
+      document.getElementById('resultText').textContent = result.text;
+      document.getElementById('resultList').innerHTML = result.list.map(item => `<li>${item}</li>`).join('');
+    }
+    document.querySelectorAll('.control').forEach(control => control.querySelectorAll('.choice').forEach(choice => choice.addEventListener('click', () => {
+      control.querySelectorAll('.choice').forEach(item => item.classList.toggle('active', item === choice));
+      const key = control.dataset.control; state[key] = choice.dataset.value;
+      control.querySelector('.control-label b').textContent = labels[key][state[key]];
+      renderDecision();
+    })));
+  </script>
+</body>
+</html>
